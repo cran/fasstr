@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+<title>Computing Frequency Analyses with fasstr</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#header {
+text-align: center;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Computing Frequency Analyses with fasstr</h1>
+
+
+
+<p>The Flow Analysis Summary Statistics Tool for R (‘fasstr’) is a set of <a href="https://www.r-project.org/">R</a> functions to tidy, summarize, analyze, trend, and visualize streamflow data. This package summarizes continuous daily mean streamflow data into various daily, monthly, annual, and long-term statistics, completes annual trends and frequency analyses, in both table and plot formats.</p>
+<p>This vignette is a guide on the various volume frequency analysis functions found in ‘fasstr’ to plot frequency data and determine frequency quantile statistics. The methods for these analysis follow those used in the US Army Corps of Engineers HEC-SSP Statistical Software Package. See their <a href="http://www.hec.usace.army.mil/software/hec-ssp/">website</a> for more information on the software and links to their User Manual for more in-depth information. In this vignette you’ll learn what functions to use for specific analyses, arguments to customize analyses, and what results and outputs are produced.</p>
+<div id="overview" class="section level2">
+<h2>Overview</h2>
+<p>Computing a frequency analysis with ‘fasstr’ allows for options and customization of both the inputs and outputs. These functions plot probabilities of flow data using chosen plotting options and calculates frequency quantiles (ex. 7Q10) based on fitting data to distributions using selected fitting methods. There are four functions within ‘fasstr’ that conduct frequency analyses, each either their own purpose:</p>
+<ol style="list-style-type: decimal">
+<li><strong>compute_annual_frequencies()</strong> - conduct an annual frequency analysis from daily streamflow data (analysis calculates minimums/maximums and subsequently ranks that data).</li>
+<li><strong>compute_frequency_quantile()</strong> - conduct an annual frequency analysis from daily streamflow data and output a specific quantile based on a duration (rolling days) and return period (analysis calculates minimums/maximums and subsequently ranks that data).</li>
+<li><strong>compute_HYDAT_peak_frequencies()</strong> - conduct an annual frequency analysis from instantaneous peak data (minimum or maximum) for stations from a HYDAT database.</li>
+<li><strong>compute_frequency_analysis()</strong> - conduct a general frequency analysis with custom data (analysis ranks data provided; used within each of the previous functions).</li>
+</ol>
+<p>With the exception of the compute_frequency_quantile() function which only produces a quantile value, the frequency functions produce five outputs contained within a list. See the sections below for more information on each output and options. The five outputs include the following:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Freq_Analysis_Data</strong> - data used for analysis (either data provided in compute_frequency_analysis(), computed extremes in compute_annual_frequencies(), or HYDAT extracted extremes in compute_HYDAT_peak_frequencies()).</li>
+<li><strong>Freq_Plot_Data</strong> - data used to plot probabilities based on the selected plotting positions (weibull, hazen, or median), includes the event values, probability and return periods. Option to include/exclude the compute curve.</li>
+<li><strong>Freq_Plot</strong> - plot of event probabilities based on the selected plotting positions (weibull, hazen, or median).</li>
+<li><strong>Freq_Fitting</strong> - the fitdistplus::fitdist object that contains information on the computed curve based on the selected distribution (Pearson Type III (or log of) or weibull) and fitting methods (methods of moments or maximum likelihood estimation).</li>
+<li><strong>Freq_Fitted_Quantiles</strong> - the computed fitted quantiles based on the selected fitting options and selected quantile probabilities.</li>
+</ol>
+</div>
+<div id="functions-and-data-inputs" class="section level2">
+<h2>Functions and Data Inputs</h2>
+<div id="annual-daily-minimumsmaximums" class="section level4">
+<h4>Annual Daily Minimums/Maximums</h4>
+<ul>
+<li><strong>compute_annual_frequencies()</strong></li>
+<li><strong>compute_frequency_quantile()</strong></li>
+</ul>
+<p>To determine frequencies of annual daily minimum or daily maximum flows, or of any duration days, from a daily streamflow data set, the <code>compute_annual_frequencies()</code> and <code>compute_frequency_quantile()</code> functions will take daily data, either from HYDAT using the <code>station_number</code> argument or your own data frame of data using the <code>data</code> argument to complete an analysis. As with most ‘fasstr’ functions, options for rolling days, missing values, and date filtering can be completed using the function arguments (roll_days, water_year_start, etc).</p>
+<p>The <code>compute_annual_frequencies()</code> function will produce all five outputs from the analysis, as listed above, including the plotting data, plot, and computed quantiles. If just the quantile is desired, and assuming your data fits the selected distributions, the <code>compute_frequency_quantile()</code> function can be used. By supplying the desired duration (roll_days argument) and the desired return period (return_period argument) a single numeric quantile value will be returned from the data.</p>
+</div>
+<div id="annual-peak-minimumsmaximums-from-hydat" class="section level4">
+<h4>Annual Peak Minimums/Maximums from HYDAT</h4>
+<ul>
+<li><strong>compute_HYDAT_peak_frequencies()</strong></li>
+</ul>
+<p>To determine frequencies of annual instantaneous minimum or maximum flows from stations from HYDAT, the <code>compute_HYDAT_peak_frequencies()</code> function will extract the data, if available, and complete the analysis. As this data is extracted from HYDAT by listing the station using the <code>station_number</code> argument and no filtering is completed on the data, the <code>data</code> argument and most of the filtering arguments are not available for this function. If you have a data frame of your own instantaneous maximums or minimums, a custom analysis can be completed using the <code>compute_frequency_analysis()</code> function as described below.</p>
+</div>
+<div id="custom-data" class="section level4">
+<h4>Custom Data</h4>
+<ul>
+<li><strong>compute_frequency_analysis()</strong></li>
+</ul>
+<p>To complete a frequency analysis using custom data, like peaks-over-threshold analyses, the <code>compute_frequency_analysis()</code> function will take the provided data and complete the analysis. The data provided must contain three columns:</p>
+<ol style="list-style-type: decimal">
+<li><strong>events</strong> - the year or other label to identify the specific flow event (could have 1999a and 1999b if doing a peaks-over-threshold).</li>
+<li><strong>values</strong> - the flow value in cubic metres per second.</li>
+<li><strong>measures</strong> - the type of flow value/event (i.e. “Inst. Peak” or “7-Day Low”); can have multiple measures (ex. 3-day and 7-day) that will be plotted and computed.</li>
+</ol>
+<p>Here is an example of data the can be provided, wrangled from the annual lowflows function:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1">low_flows &lt;-<span class="st"> </span><span class="kw">calc_annual_lowflows</span>(<span class="dt">station_number =</span> <span class="st">&quot;08NM116&quot;</span>, </a>
+<a class="sourceLine" id="cb1-2" title="2">                                  <span class="dt">start_year =</span> <span class="dv">1980</span>, </a>
+<a class="sourceLine" id="cb1-3" title="3">                                  <span class="dt">end_year =</span> <span class="dv">2000</span>,</a>
+<a class="sourceLine" id="cb1-4" title="4">                                  <span class="dt">roll_days =</span> <span class="dv">7</span>)</a>
+<a class="sourceLine" id="cb1-5" title="5">low_flows &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">select</span>(low_flows, Year, <span class="dt">Value =</span> Min_<span class="dv">7</span>_Day)</a>
+<a class="sourceLine" id="cb1-6" title="6">low_flows &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(low_flows, <span class="dt">Measure =</span> <span class="st">&quot;7-Day&quot;</span>)</a>
+<a class="sourceLine" id="cb1-7" title="7">low_flows</a></code></pre></div>
+<pre><code># A tibble: 21 x 3
+    Year Value Measure
+   &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;  
+ 1  1980 0.655 7-Day  
+ 2  1981 0.885 7-Day  
+ 3  1982 1.05  7-Day  
+ 4  1983 0.634 7-Day  
+ 5  1984 0.784 7-Day  
+ 6  1985 0.589 7-Day  
+ 7  1986 0.719 7-Day  
+ 8  1987 0.355 7-Day  
+ 9  1988 0.186 7-Day  
+10  1989 0.577 7-Day  
+# … with 11 more rows</code></pre>
+<p>This data can then be applied to the <code>compute_frequency_analysis()</code> function. This example has the default column names in the data and this do not need to be listed, but are shown for demonstration.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw">compute_frequency_analysis</span>(<span class="dt">data =</span> low_flows,</a>
+<a class="sourceLine" id="cb3-2" title="2">                           <span class="dt">events =</span> Year,</a>
+<a class="sourceLine" id="cb3-3" title="3">                           <span class="dt">values =</span> Value,</a>
+<a class="sourceLine" id="cb3-4" title="4">                           <span class="dt">measures =</span> Measure)</a></code></pre></div>
+</div>
+</div>
+<div id="usage-options-and-outputs" class="section level2">
+<h2>Usage, Options, and Outputs</h2>
+<div id="analysis-data" class="section level3">
+<h3>Analysis Data</h3>
+<p>The returned <strong>Freq_Analysis_Data</strong> object provides the raw data used in the frequency analyses. Based on the selected frequency function used, this tibble will contain the respective data; the provided values with the custom analysis, the computed extremes with the annual analysis, and the HYDAT extreme peaks from HYDAT in the peak analysis. See each functions’ documentation for more information. This tibble object provides the analysis data as the annual and HYDAT peak data are calculated or extracted from HYDAT.</p>
+<p>To provide examples of the outputs, an annual analysis will be completed on a Mission Creek HYDAT station (the <code>plot_curve</code> argument is set to <code>FALSE</code> for the start of this example):</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">freq_analysis &lt;-<span class="st"> </span><span class="kw">compute_annual_frequencies</span>(<span class="dt">station_number =</span> <span class="st">&quot;08NM116&quot;</span>,</a>
+<a class="sourceLine" id="cb4-2" title="2">                                            <span class="dt">start_year =</span> <span class="dv">1981</span>,</a>
+<a class="sourceLine" id="cb4-3" title="3">                                            <span class="dt">end_year =</span> <span class="dv">2010</span>,</a>
+<a class="sourceLine" id="cb4-4" title="4">                                            <span class="dt">roll_days =</span> <span class="dv">7</span>,</a>
+<a class="sourceLine" id="cb4-5" title="5">                                            <span class="dt">plot_curve =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
+<p>The following is an example of the outputted <strong>Freq_Analysis_Data</strong> tibble:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1">freq_analysis<span class="op">$</span>Freq_Analysis_Data</a></code></pre></div>
+<pre><code># A tibble: 30 x 3
+    Year Measure Value
+   &lt;dbl&gt; &lt;fct&gt;   &lt;dbl&gt;
+ 1  1981 7-Day   0.885
+ 2  1982 7-Day   1.05 
+ 3  1983 7-Day   0.634
+ 4  1984 7-Day   0.784
+ 5  1985 7-Day   0.589
+ 6  1986 7-Day   0.719
+ 7  1987 7-Day   0.355
+ 8  1988 7-Day   0.186
+ 9  1989 7-Day   0.577
+10  1990 7-Day   0.958
+# … with 20 more rows</code></pre>
+</div>
+<div id="frequency-plotting" class="section level3">
+<h3>Frequency Plotting</h3>
+<p>Based on the analysis data in the <strong>Freq_Analysis_Data</strong> object, the data is ranked, by default for low-flow frequencies, from low to high with the lowest flow value ranked at 1. To complete high-flow analyses and rank the data from high to low, set the <code>use_max</code> argument to <code>TRUE</code>. The probabilities of each event are then determined using the following generalize plotting equation:</p>
+<ul>
+<li>P = (m - A) / (n + 1 - A - B)</li>
+</ul>
+<p>where:</p>
+<ul>
+<li>m is the rank of the value</li>
+<li>n the total number of events in the data</li>
+<li>A &amp; B are the constants depending on which plotting position is used (weibull, median, or hazen)</li>
+</ul>
+<p>The probability plotting positions (A and B constants) are selected using the <code>prob_plot_position</code> argument, listing <code>&#39;weibull&#39;</code> where A and B are 0, <code>&#39;median&#39;</code> where A and B are 0.3, or <code>&#39;hazen&#39;</code> where A and B are 0.5. The selected plotting position does not have an effect on the final computed curve. To plot the data on a logarithmic scale, set the <code>use_log</code> argument to <code>TRUE</code>.</p>
+<p>With these options set, the data used for plotting is outputted in the <strong>Freq_Plot_Data</strong> tibble object. The events are sorted by measure, and ranked by the event value, and provides the probability and the return period for each event, used for plotting. See the following for an example of this output:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1">freq_analysis<span class="op">$</span>Freq_Plot_Data</a></code></pre></div>
+<pre><code># A tibble: 30 x 5
+    Year Measure Value Probability `Return Period`
+   &lt;dbl&gt; &lt;fct&gt;   &lt;dbl&gt;       &lt;dbl&gt;           &lt;dbl&gt;
+ 1  1988 7-Day   0.186      0.0323           31   
+ 2  1993 7-Day   0.298      0.0645           15.5 
+ 3  2002 7-Day   0.331      0.0968           10.3 
+ 4  1987 7-Day   0.355      0.129             7.75
+ 5  2003 7-Day   0.363      0.161             6.2 
+ 6  2010 7-Day   0.454      0.194             5.17
+ 7  2007 7-Day   0.454      0.226             4.43
+ 8  2008 7-Day   0.463      0.258             3.88
+ 9  1994 7-Day   0.465      0.290             3.44
+10  2009 7-Day   0.502      0.323             3.1 
+# … with 20 more rows</code></pre>
+<p>This data is then used for plotting and outputted in the <strong>Freq_Plot</strong> ggplot2 object. See the example below. To change the probabilities/vertical lines shown on the x-axis, change the values using the <code>prob_scale_points</code> argument to list the breaks.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1">freq_analysis<span class="op">$</span>Freq_Plot</a></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+</div>
+<div id="frequency-analysis" class="section level3">
+<h3>Frequency Analysis</h3>
+<p>The ‘fasstr’ functions also compute frequency quantiles, like commonly used 7Q5, 7Q10, 5Q30, etc. This is done so by choosing the appropriate distribution to fit with the data, choosing either “PIII” (default) or “weibull” with the <code>fit_dist</code> argument. For the “PIII” distribution, the data will be fit using method of moments fitting or “MOM”, while “weibull” can use “MOM” or maximum likelihood “MLE” by selecting it using the <code>fit_distr_method</code> argument. Using these two arguments, the data will be fitted to your distribution of choice and compute the curve.</p>
+<p>To see how the computed curve fits against the plotted events, you can set the <code>plot_curve</code> argument to TRUE (default):</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1">freq_analysis &lt;-<span class="st"> </span><span class="kw">compute_annual_frequencies</span>(<span class="dt">station_number =</span> <span class="st">&quot;08NM116&quot;</span>,</a>
+<a class="sourceLine" id="cb10-2" title="2">                                            <span class="dt">roll_days =</span> <span class="dv">7</span>,</a>
+<a class="sourceLine" id="cb10-3" title="3">                                            <span class="dt">plot_curve =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb10-4" title="4">freq_analysis<span class="op">$</span>Freq_Plot</a></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<div id="curve-fitting-parameters" class="section level4">
+<h4>Curve Fitting Parameters</h4>
+<p>The computed curve is calculated using the <a href="https://CRAN.R-project.org/package=fitdistrplus">‘fitdistrplus’</a> package, and the results from the function are saved in the <strong>Freq_Fitting</strong> object in the list. The ‘fitdist’ object contains information regarding the fitting process, including the shape, location, and scale parameters, amongst other statistics. See the ‘fitdistrplus’ documentation for more information what is provided. As per the documentation, there are several ways to view the fitdist object, three of these including using the generic print(), summary() and plot() functions. See the following examples for how to view some of the fitting information.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1"><span class="kw">print</span>(freq_analysis<span class="op">$</span>Freq_Fitting<span class="op">$</span><span class="st">`</span><span class="dt">7-Day</span><span class="st">`</span>)</a></code></pre></div>
+<pre><code>Fitting of the distribution &#39; PIII &#39; by matching moments 
+Parameters:
+            estimate
+shape    11.28928876
+location  0.30390915
+scale    -0.04948906</code></pre>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1"><span class="kw">summary</span>(freq_analysis<span class="op">$</span>Freq_Fitting<span class="op">$</span><span class="st">`</span><span class="dt">7-Day</span><span class="st">`</span>)</a></code></pre></div>
+<pre><code>Fitting of the distribution &#39; PIII &#39; by matching moments 
+Parameters : 
+            estimate
+shape    11.28928876
+location  0.30390915
+scale    -0.04948906
+Loglikelihood:  20.56332   AIC:  -35.12663   BIC:  -29.33116 </code></pre>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1"><span class="kw">plot</span>(freq_analysis<span class="op">$</span>Freq_Fitting<span class="op">$</span><span class="st">`</span><span class="dt">7-Day</span><span class="st">`</span>)</a></code></pre></div>
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAqAAAAJACAMAAABlpiR1AAAA3lBMVEUAAAAAADoAAGYAOjoAOmYAOpAAZpAAZrY6AAA6ADo6AGY6OgA6Ojo6OmY6ZmY6ZpA6ZrY6kJA6kLY6kNtmAABmADpmAGZmOgBmOjpmOpBmZjpmZmZmkLZmkNtmtttmtv+QOgCQOjqQOmaQZgCQZjqQkDqQkGaQtpCQttuQ27aQ2/+2ZgC2Zjq2kDq2kGa2tma2tpC225C227a229u22/+2/7a2/9u2///bkDrbkGbbtmbbtpDbtrbb25Db29vb2//b/7bb////AAD/tmb/25D/27b/29v//7b//9v////xWOR/AAAACXBIWXMAAA7DAAAOwwHHb6hkAAAgAElEQVR4nO2dC3vktpWmobY1Uns346wlp5Osp0uZ8cYZyZ042c52jbOejKrkqPj//9AQV4IsEgRIXA5Y3/d0q6pAEAAPX+JOgDUQRFisdAIgyCUACpEWAIVIC4BCpAVAIdICoBBpAVCItAAoRFoAFCItAAqRFgCFSAuAQqQFQCHSAqAQaQFQiLQAKERaABQiLQAKkRYAhUgLgEKkBUAh0gKgEGkBUIi0AChEWgAUIi0ACpEWAIVIKwKgr/dM6s2nKS8vt/pY9238+ISOOvB/fL/jEe68U8dP8In06Ej+VnT64/9g7LP3DgelgcG4DUupMkBPDywMUHECABVqbSF0/TzloNU3jbBhKcUBdG36EwPqE+kFAPrErtrM8sdbdjfloLVZQF9ur757xz7/+NL++cQPfPOOXX31LC749f7q97dvfhCX3tqEfdk+tqfvmfhiDKId2lPffyv9NP9xyz7/o8RHPPJv/toe/L47ePUvIup3jH3+B54aHs1HdUCe8Gd3pFYMKjgr+p9/zcRtrF/6PplHcejQv1/GpNKGpZ7e2ICKIuMz/nFjyv4bBSgvTH7il77XBcuTdVwEoB26U5XnAaD6oPR/x40s9F6eef2sDliATkfaxaCD66JX38rlIPHUcXj1OOrQv1/GpFsAlKkb2wJ68/wjY7983jOB5PXH0wd29agAvXn+u/rGvV49vt7zrK71qVkxDvLUJ6ZOa23UL+KvPzYf5HkfGxP46QOzopEHTB3UFamOwQ5ORc/PaAk+q6VVqKO6ClNiDx1G7pcw6QaK+A7Q9naKP0fJyk5msOqCd7J2Y9VwTj/8ljHbRTlIz0dzaKQOyp3UQy4jkFHpg+qAAXQ60i4Gc1YXQ/vt6ss/bABPP0Ct+9WZdAOAWnXQHqC86OCXp+qgj5IGUwkStUGbFeNgMyiqQ7ejgO41UdJXe/RORrM/A3Q60i6G/TmgoiLGzloRNcqqau54Xez6R8tBftr3qzPp9gAVFZjzHFQDajKzI7v65j/5c9yxohzsHJSfNpGDmrLXzkEloOrAeQ56FmkXgznLArRp/tFmuKrWVrXERb38z/c/ijK8BfS/LAfj4SJy0A7Qtk63V5lVB2jr/tXzz+/Y3b5t65/+zWLFOPTK2Jvnn6066F1j09s2i35k/TqojEYdECe4I+1isIPrMnBVJtQv3qskyg9dox44DO+XVQctV4LErIPyB3MAqKmb2oCqAtjU+ezS9qyI77XiRbP96t+7g8NW/E43Sc0BfsJ3zkjHW/EqBtWXzXGuHlLdL2/yk4FD/351JhU2LHXxiQF9/63oVxwAKrskP8oOyL/cy1ajCEs72GWs1Q8q+ube/KU7ePqg+0H/1vWDcluaA/yEH9yRdjHos6zoT98y1WtaPaBqZPO3wgojDv371ZlU2PDjdLBJlXKySIQhJiiBXn69G3Ugeb8AKKRF8n4BUEiL5P3CfFCItAAoRFoAFCItAAqRFgCFSAuAQqQFQCHSAqAQaQFQiLQAKERaABQiLQAKkRYAhUgLgEKkBUAh0gKgEGkBUIi0AChEWgAUIi0ACpEWAIVIC4BCpAVAqYldlObNkcHkUIgu6o4A0Pp0AXekyzgBaH3a/h1h3UUC0Pq0+TvCzJ8tAxq3Jk5JdaV2gS4E0NWuVFVXapfoIop4AFqx8jSSyhag57EepLz8UlZdqV2lPP2gNACVaDL+ZdYvbdWV2hViLE8RTwFQnXMy+cPpl7rqSu1iMbut5PK3PqbVIayO1SDJ+j/H/JJXXaldKF22XwagHZBs6HDml77qSu0yZR1JKg6ohSM7d2pI3nK5IdPo/lgEUxtZVtPoEgA9jLkeRl3J6Ent9fZ0c36MXmrjqtdyvwBAJ1C0ncnd8tev1Z5gL1+cb8NOLrVxpLgcdCxtH9DJ2uZIwU9GFwio7FI66/fcPKCO5lBhQI988+Sp3RN10a6LelubBFT2KZ1f2tYBdXUonbXts+r0sHu93x1HABTaX0wjqevvHBs22jygo65Kg97RvGpL8TYPHSvC57QtQJnJPUeHNTcO6Nmo5mB8adQ1j9ocdH/9vJ/KQR3aFKA6+5yas7FtQM+H3YcDoGOumXTku5O/ndnB285h65y96lJ7KTr3nPQyH8j6ZKwOYWGs89NCSgK6WHWl1iFRuo813ft+5kNZn44CYiMF/Mgcp1FX2qortdNSpbu7RNgyoGNTP88APYy5ZtHpgV3/NNlGuoChzrnSvfO00ocQOYMyv6nJxQA9PdwdpxtJFzHUOVO6az+rfXDRMygb45MQoLyb6fp5optp2yNJTJMZZb68lzkIGnQ0Ax1Jy2HUNb1kDjo2UtSQtGcsMY2nX3fEZgEd53MM0EO5OihjU92gmx3qZE0HqJ//9T64yBn0MB7riGspQN3a6FCn6lkSvblZAaVm0EPtgDpUV2r7UjVPv9fh9AlrfaQPIVyHiVjHXKf8JtTrvR4VenNhY/G68uk7HrZRQCdzRSKArlJdqR0qcKg2NqA0xo6nGz6jrhPVAaqqK7VDBaZ+mznodNcREUBfv35UpfyFFfHBudUWAD1bq65tIU3l2+OAjndJUVWlgLK5YffxsyL44OKderwFX6IfNGR0aNwVgKZXSNO9d9p6H1y8H5T3gVIA1DUBZALQAoTKsY2LmVGvez4LFfHS2hOvMGQH1BHrhGt2QF9uVXXkQmbUy/K9NKDNcXT+WGZAnZOQqQBqjQ4Hqz5AZe5ZvIhv+HjSSKs0L6Du1zimXGuqhVYHKNNd80UbSYrQ8oA6YyUE6PFCupn0xLplyd5EN5P9Y+ZVYjqAvt7vFp5ZFaA631w6XLM9QN2xTrpmJ9RdBy3ZbRdPzFQ+F6d5a4DOrRZCB9BmP/LygVHJbrtY0uPci+qeJpAIPtKH4B/+3HpL0665CXUOdRbttosiPQ1jWdPICieCj/QheIc/u2IdHUCdKtptt1qKTKb6l1ald2uAzsVaCaBFu+3WScGpM8+1c9m2Bej8qskO19yE7l3dTCW77VaJNaZsX5t5qvDW+0gfgm/4NQEq1158GntHZkaUAZWtds1pjAC9fbzeu1qd6+JYJxO+x8YILkDzEsqnhP5qa8svMisDjRRigI8jm1wQeGUc66TD99m5w+WaF9DTw+70u8c5QOtqxTPTeo+WxsAinvcfBw+AZAPUI1Y6gDYvbx+P46/BzogwoBGzTh1kgA8+RWw3/ur7yjjWSYXvtTmX05VWQ/5M1NcHZf5vuwcE6u3j9V6BGVxtygWoT6zVAEpuMbY5dVPq4gYbwUf6EHzC99t/0w1oTkLdL83RW4xtUszK2aNnoFsC1CtWt2v+LPRpvEZPb62rUZkezwiD7lNRePug+w7NeCdRHYBWvfwiswht9Ohm9Dj8fFB+h2a8m70OQI9TRTy1xdhGZPfIJ2i/60h8fYS/Q5Or1SlG0qMAmpNQVQed6rQjthjbmJjV75kk95SRrPeRPoT58Gf38/BzpdSOnxQVQM24e8pMyBNQ0ku1MK/9PPxcSRE6UWiRATTWeLszigg+0ocwG36FgHqswEgc0CxDBtsA1Gs/Dy/XjDmoeOVjrJ/TiDKgKUaNRuPx9+HcPnpdHOvkueGMn2s2Qul22/kkQRXu6ZPiD+jM9tGr4lgnzw1n/FyzASqnJDtz0AmVBbRrFjFagNLdPtp3wxkv13xlvNjlY8kc24KAmoEjPfaePkZvH3S3j/bdcMbPlVQ7flTlADUd8lFeN/KM0tuH1/bRy+JYJf/9PLxcAeh0xHoVhlTDRmNxRvCRPgSnAGiueHsvxOWKNIKP9CG4FLLhjJcreULLAMq6cc2cCQgq4imOJB0AaPL4WNc4yv5wBLTiaa7GFrbhDAANiqhbFllDmivqLg3ePmiuCBy4I5KXawZCq9hpjnX/dM9Sppj7ifD14VyNbV0cyxW4IxIVQFcpX/vZrJ2Ya2BzNBWePkjOZjokAZQ4oVlA6V4xUv8KvUxadys+fMMZL9c8gDrXZnIpU/8468r3IoW7SchqH0JFXpNdsOGMj2sWQEmvzSSiYPnGi2ZS4ufj9MBGl6sUKvKa7CEVoDkIpbw2k4SSmW8FFTIWf3ecHIsv8xbiog1nfFxzAOq3NtOYkjNjVTxTR+WTFk8ffDbT9TOl12SX7efh45qljCe7NpMq38uNqdoKzUGnFmYq8Jrswg1nvFxJt+OTcqO7k0o2jGyF1UEdr8Xnf0126X4ePq6XCagZNirXq3SmeruZlm+X4OGaA1A+dXFshe9ZpUJHF+pZZyvNCYCOu6YntG0ktX9DJoAnfgfdNNoJ4RkAqCjg5xe+sRtJSQ26Yj8PH9f0gJJ7aU53LVHC0x/Qo1yjZR++vnJUgxrmD4duUYsIgJ5JhB8t2aMS7crg1YCbxEU8LTy9AZXlUcO3lipqUBPUqv08fFwnZ0lFk7vR6VCKdJktiYnx6Quos59zfRzBQa3cLsHDNT2gi5UgXYzIuNG56gR09Wr0Hq5TM/XLK1K6FI2mR55U28goEqDOCbjRAV2/XYKHa1JACSzGpjNN1fFJMffk8gV0dga4Y4mM+ID6hL8a0Im3RcsrSrp0j6f+IMpnvH7Q08PkqHJsQCNsl+DjmhjQwq/QDAClymdtHfU8qCir0Xu4ps5BJ/ZPmFf0Ip4snU2dgPqFvx7QtJ31xeqgGkfTSCKMZ42ARlrs28OV6oyRdfZk/QBo41khoCP5GgANPZn1f1JWbYCOlbupAB1fdzSKynUz9QClnn021QEacy3leVeiWWisIr4CPOsD1D/8GIDSJDROI6kKPGsDdLznJxmgaWuhRVdYrgTPygCdGNypE9DMa9T3iawFz7oAnVppMR2gKQnNO2G517lUTfbZVAXo5EJ2dQLqsU/ShBbY026714RnTYBOrxOWENCEhC5fgXEVoHXhWRWgk0HVCehyrSjia8OzHkBdyzAlBbQQoa/3d83L7Xgrf3EjqT48KwLUEVRKQBNmoa41//nkRdF+Gls1eKk9K8SzGkCdq9ykBTQVoc41/3kTX7AZb62rGrPPphZA3avcJAU0WRbqnLB8+t1jc4wJaKV4pgU01sINViZWAtBUhDrX/D9ePfJXvUffUwi3Z7V4VpGD2oQUADRZFured0r2Qo3ufh5qz4rxrAHQXg5WBNA0hGbbd6pmPCsAtI9HCUATZaGZXpqrOvts6APq8wp8ckDTEHr0GeVc2UiqHU/ygHq9YZwa0DRZaIYZ9fXjmRnQ80Xk3I38g98bxskBJTLgGdgrsgU8cwMaFoHv+3GbBHT1vlObwJM0oN7vx6UHNDqhooXEN/Gamg+6dt+pbWSfDWFAx1smxQCNTOgcoCu39dkMnnQBnSCiFKCxs9CkgG4IT6qATmZYxQCNTOh8Eb9436lN4UkT0PPGuzsxeQCNSugsoIv3ndoWnhQBdeBZEtC4hM4D6pDjjmws+2zoAerEsyigUQt5vxeSJkZDJ+/I9vCkBugMnoUBzd4bGgboFvGkBWgPz4BRp2SADtTbm8l7OGyFQgDdJp6EAD0cPOYtFc1BXW8+Z22bjMS1VTwjAuozNDd9bz1H3QsDOr12RGFAN4tnPEC9hubGgxrmnS6/hQGdXH2nKKDbzT6baID6jXyM3vGQMaPigE5urVAO0Ck8N4JtQUAPB0nnamayAhoySSCR7LgmMWQbKfijFfE+Q3N2e73LOSsDlAXUSNKoi2s6l2R9j/UqWiPJZ2iOKTIXt9dJADraXVsCUFchDkCXxDFe36wP0JGqcwFAGXPFiiJ+QRyJmCkAaDOopuQHlM3lkWgkjcpuJJ2NsjgGYirV4TBWaUks1uWe24DQpRw5KBRXzOSeF3BvAGh98mkkbUbRAHUMdUJxdQlcGkXrB3UMdUJxBUADfTQzI0ldUBuWl7XjqPSl5tW8OXxs5gmol/2D/SYKNpnfbFqcqOwnrjHf+qHORckAoOsFQC05hjoXJQOArhcATRgUAF0vAJowKAC6XgA0YVAAdL0AaMKgAOh6AdCEQQHQ9QKgEFRcABQiLQAKkRYAhUgLgEKkBUAh0gKgEGkBUIi0AChEWgAUIi0ACpFWFEBPD2a3gJdbduXcKd3y2351ToG2vM5umNFPAtv5JsC9HbF/qFkVYMPJE8O2IFlmiBBTTykKoE83+qWQ1/tds3empPPLXyB5eeug2fLa/nBfXz8JR8dDYifgZuY9Vf9QsyrAhpMnzlp04sQQQ4SYekoxAOXv1KnHkX9MbA5w5tfpr++1aY6fOZ93y+/x+rl9Xief8UECnNmIf6hZFWDDyRNnLTp1YoAhQkw9qRiAWlTypB9db9ZZfucSbMN++tc/O30PHgz+mPslwHmH/UPNqgAbTp44a9HJExtvQ4SYelKRAeV1DReftt/j9QdnbcYOdn/nvhUDA+yn07ACUEeoWRVgw8kTZy06eWLjbQiKgL7e37nroLZx29q9qzZjB/ub5xBAXSlYDqi7bp1RATacPHHWolMnNv6GIAHonrEb34QM/LpqMwOvTztHYTbw2zq47thiQJ2hZlOADZ0nOi3qOjHAECQA5VrYSOIfLuN2XtXel477YFfC3Q/4wkYSnfwzyIZTJ85bdCrGAEOQaSRZfQinh5kivtf10BZPLr+9romZy+v8zvW6LOtmCujLSa8AG06eGNbAWmYIKt1M/HnkRhIbUM911Ft+eSez6xm2vM6as/P7NJM3WKGqrzFCzaoAG06eGAboMkOEmHpKGOqESAuAQqQFQCHSAqAQaQFQiLQAKERaABQiLQAKkRYAhUgLgEKkBUAh0gKgEGkBUIi0AChEWgAUIi0ACpEWAIVIC4BCpAVAIdICoBBpAVCItAAoRFr1AMrXpQxZC/PiJA3Err7zeJ347JVjz3eQW2/L1l9YrIoA5Ybhaz/Zv6GehE18Vg30cxz1AkAnJA3TLaMBQM8FQAtKLSr09WNzbAuym9d7voSJ+Fo6ZXSkAP2TWPpDLeYh13p5+cW7N5+EizAc96jW8pYm1Ni1R//pYScOt//1sf/T1q30eWL5LRl0ezj5imq1AXp62KlFqKWhCC3MTUAS0NsbXtDwNcX218/CRG8+vdzuGuWi6OMH1IeyZiPX1jqyneWFH7sVC0Apx/afDppnFqnXTK0QUP6jtY155het6rdNSUDfPurGjDIT/5CO2qX9b6HVWVOtlqdzUHWsC1B+qICyrDhdG6BiHb9bpkop9bV00sjI1EE5RbxRf/WoVhDVZbou3r/4pJdJtqx5Bmh3rA+oDEgs4pia0doA5UVN+0DrjEB+LZ00MuoB2lux1coT+zmoZc1mCKht6WEOqhSw9uMyVQYo72biNnm6EgWP+lo6aWRkA8orQ7oeKSuQykWV2KIO+vZRW7NXB1W7CVnHuvO6oPUdSKqKAL1VC1PyJTG/eti1Hzv1tXTSyMgGtJH9HLoVLx9v/pUbrmvFKxNarfjP3+34ut//61efrGMCS3GeFTRa8VABUdkOSgqAQgMBUIi0ACgEeQuAQqQFQCHSAqAQaQFQiLQAKERaABQiLQAKkRYAhUgLgEKkBUAh0gKgEGkBUIi0AChEWgAUIi0ACpEWAIVIC4BCpAVAIdICoBBpAVCItAAoRFoAFCItAAqRFgCFSAuAQqQFQCHSAqAQaQFQiLQAKERaABQiLQAKkRYAhUgLgEKkBUAh0gKgEGkBUIi0AChEWgAUIi0ACpEWAIVIC4BCpAVAIdICoBBpAVCItNYD+nrPpN58mvLycquPdd/Gj0/oqAP/x/c7HqH/drz8hNlI//Zrxq6+/Giu5bNvnrvrunr0joy01PVc/fJ5/LfRwFzcggVVF6CnBxYGqDhhLtLvDYnmWq6ftwooYzfjv4365hIWLKgogK69gsSAzkR6ZFfv21z0tqVSBf3jLbuLcV2kJK/n9EE/ccPfRhsG9OX26rt37POPL+2fT/zAN+/Y1VfP4pJf769+f/vmB3HxLQDsy7ZkOfG868vnziTaoT31/bfST/Mft+zzP0pAW2O1GfVf24Pfdwev/kVE/Y6xz//AU8Oj+agOyBP+7Iy09XPHP/dtGa+vZc94gs11/cyrAO9XW6qs1PWYyxr87t8tY1BpQXf2kVSRAZVVuFtRcOgy5EYBykvOn/jF73Up+mQdFwFoh+5U5XkAqD4o/d/xXFDovTzz+lkdsACdjLR9qh6H18LduutSqak8P53JQft3yxh0G4AyxUkL6M3zj4z98lllQdcfhQEUoDfPf1ff7hQCPKtrfWpWjIM89Ymp01or9Yv464/NB3nex8YEfvrArGjkAVMHnY7ULtG67EQAai6rvYd7DnfNmqmDjtwtYdBNFPG9Oyn+HE0Zyf+qS95JGiwiTj/8ljHbRTlIz0dzaKQOyp3UYy4jkFHpg+qAAXQ60nlA229XX/6hbjz7PRQjv/t3qzPoJgC16qA9QHnhwS9Q1UEfJQ2mz+j0vSq9TXVQO9gMigrR7Sige82h9MVrkzKa/Rmg05HOF/GiPsZkTbVeDapi1//VbwT271Zn0C0CKqow5zmoBtRuPn/zn8e26NQuxsHOQflpEzmoKXbtHFQCqg6c56BnkepG0vEX/9dcS5d8pX+0uW7l/U2zgF5ODtoB2lb39iqz6gBt3b96/vkdu9u3bf3Tv1msGIeOQVEZ+tmqg941Nr1ts+hH1q+DymjUAXGCO9I21mE309/63UxtVI+9jLZKDbvNXs8A7d0tqw5atOiIWAfl1esBoKZuagOqCmBTheyyN+PQMdhrxYtm+9W/dweHrfidKqm6A/yE75yROjrq1Q0ULVm2gUbSDKDW3eoMKixY8NFMC+j7b0U35QBQ2SX5UXZx/uVethtFWNrBAtTuBxW1wTd/6Q6ePuh+0L91/aDcmuYAP+EHd6Ty5LGhTn0DT98y1e9aseYBte5WZ1BhwY95k2or4WSRrQ3FbFtU7xYAhYSo3i0ACglRvVuYDwqRFgCFSAuAQqQFQCHSAqAQaQFQiLQAKERaABQiLQAKkRYAhUgLgEKkBUAh0gKgEGkBUIi0AChEWgAUIi0ACpEWAIVIC4BCpAVAIdICoBBpAVCItNYDyi5KEUwOe1qaN8d6g64OoSLlADR9FDTE6QSgoZp5pgFoDAkji+sEoIGae6gBaAQxUY/RX+c9L43GuxpRiQ4OaT8JL3Zz9pySxSdy0BlJO3UQzhY7yEFXqrU4s8opAOqUMFSXPTYo4lNL556s+z1/xvo4a5R4lO3S2zg7z0qYonxRlBJTfHZGBqBT4qbqSvWQ01KrTnv6iPVzT+k0f9L6aCuUyDz9OuIG5/nqyDchWbK4e5X29JHOPgdu82etj7c2MZ15BjeZvf2fHnav97vjgo0XKrSnj1QHxcDiAHRMbfa5IPNUp3rq9evHNg99+SJ8l8v67OkjNj5yBEBH1PJp9cSFnuupNgfdXz/vkYNKicJqxOYAtC9hoQVtoy4Ab59Hvi3PW9RBJZTd4Obg6Pz561OwOoRskv2es52d7hBSqyJ7eoipfxM2B6C2mGkdLU4zAA1T1zAatzkAtcVU62hNEN4+Tw/s+qcFbaSK7Okhe9x94vh8COvTUIna/HNF5imD8PV4erg7opEk20ZOD/NBrE9ELWKHGXN5BOHrkXczXT9fejfT7PQsAGrrsKBnfqDAHPTpsnPQ/rj7qI/5MNanYnUIaWUstLz30wrM26fYw3vJDt7U7TmtoXHZXA0UgDa6n6MR+WezOrVoxU9rOA9EVaeyAPp6z978vzZLuFkcQikZGx3OLLg4uPWq157T6tPI9E/35cQC9GnXHPlmuPsRi9I2qG5Himmf61+n8Hyev35sEeR6M95Iqtee0+q12M3nzNVEArQ1uPjfjLVKiRuUmQw0UmgRVLM9p9Vll/4ZQUxAf/WpRoOq5zoSnzEBrdOe0zI5aEg5dfFFvH4rLlp4vh5FBjkKIFe19hxX7z33oPRfeiNJ2isant4X+3KrXiGe6Geq1Z7jUlQylYsGnrraR/oQUkm1JCPyGZqDJo2CgswkZFm2J3hDYcOAqse5DKCko4gmmWmqb0uSHhtQu05FfSUMVV+Pymesbiatmuw5IkUlM8ZeFsJKH+lDSCM1CzEqn8hBO1kjRSNvw/kGEsFH+hCSqNdDHzHU5CJqz6GYlXc2i1MdDdAnWfrcLQ8hs/RDHZdP/04Ppakivjp79sX0SKZepG5poqP1g6rukqda+u2Yeroj8xnrYquzZ192071ZNYIccSRJqJaRD9MlRxPQ6uzZ16BLfk2CLxZQlobPSK346uzZk36ReGXpLs+O4INLF0VjM8QpGjQVn9GK+MrsaYv1cs+VqY3WSNpXValn8gGPz2e0i63LnrZU9mn9WB3aSh/pQ4iu+CNIJmRvn+KVj7Gx9nhRlJCZiNyszz6bSwWUxR9B6oL21OmBw7m5l+as8j3KkNdFAqpaSGUBdU+3ixJFdunez4Xj7qNBRvCRPoTIkn1MSfgMuFgx1fNprJIZLYrMsns/Y80YuERAZRd9Gj6jjSStjiK/rN7PeBNaLhJQoaKAUo9iiazez4gpvExAo89hsgJPFG7eKBaoax1FnQ94gYCKEigVnyF10E0V8aZ1FHm66iUCmmYISYfu61HuoLCZRpIu2mMn7iIBTdZCasK6mV5/tZ1NFBjTw8eRw43gI30IMSUaSOmSFNBRvzv97nEjgKpVwBKk7AIB5V1MBABtXt4+HscH26NFkUssRe1TB73eR/oQIkqsIpIwRZfYipdN9zQv810aoKKBlPK9yMsCtFuiLtXLphcGqGhmpsxAL2s2kzUtJFWiLglQ9ZAn5fMyZjPpufLqT8p39S8IUP24p+tiUrH4qeLZTPakkPWLps/GtdpH+hBiSJs0LZ+XMJuJ2X9Sr3OSElBaS7WoLc0S85lyNhMRe/anzKdOzAXloOkmKfeiSR1BaXvaI5oZnhVPQJevFegVRwbJunxyPjcPqJkUkqthkPsAAAwKSURBVCkhIYAuqS/5xZFB6V6TG8Tj7bPCfZJ6G8fkqWpcCqAJX5MbRuSpCruZmByIiz/p0x2nj4/aAWVJJyn3YvL1WF83k1povltvPkukfj6qB1RYlhSg1eWgrFtMMWNHgi+gdb/klfQ1uWFUvqqsDsq63DNnAi6jm4nlacHLqLYQxWisqgs2b/SXAWi+DDS0Dpo0irhiWUaORmL18yEKpEUlEgFARQspTzL8Y3naJY8iphK90jEfrZ8Pse0ZfxNxgVUB6Jj8dvlYFUVUsSJ8+gJ6elBgHutpdfaTkInPDddBy8wCCB3qrKnfzkoBbyIRy0FJRzESKQBNKJGBUgO0qhn1Vido5oj9fNQNqJjERK2IVx31Cwgtg0mRGuiFdNS3DaRsxdMWhzpZ/v75Lu4IPtKHsFKHjE+/fzz7SnLQVIvaeMYewUf6EJZGLGM+6DwgS5y+HpcXSmkvZWgpPcOu3PCAn489N+Pxyj36sR/thCo2+0ZFfciZiKjxFLDnIKvsbfdeQr6A7uVj/nI7PqPJmR2UfPYY5zNn+RQnomL27MPYzZwvVwr6+TCt+KmOekkuqRxU7WbM809S08O8VMqevekgQ1BLKF43E89jSQGqHvw8c0TsSOOoiD31FuXie/HGLZf3UKcq2sdNJvR6f0MK0GxveQxijaUC9rR6k2jg6V8HVZXPvbOVdByf7VQKUGHuegHNbk+9y1HKOILl3830xBaOzBWdHpabT8+LpTjwwbo2O5Xss9lwP2jK3eSc8dYahRotYqTwjA+o3YgqulSLHD3OzmdserLZs5sNQgnP7eagGV+TG0bsK1Lb0JjZIKSyz2bTgGZ7T24QsadobUOjXomjhmdEQJ9k6TNm72JFfAE+g2YzubahyW1PZkbdaSkWoHoBgrHZOUVy0Db7zPWWRz9iX4/ubWgy25OZl4qpKRKgzpGmAtfNcs5R7sfs7dO1DU1me+oCPnrA67VNQOUUkVJViwjKa0/V9UmRz3hFvCqKxtYaKgAoS7vXjCvqOMFktCdLtYthFEVrJO0JNZJEB2ixGQC+aot4PYtxRNnsaQ0gUdQWu5lY4r265iL3k1xqwDH5Zn0UnoGxjC8cBGt7gDK52zZ5QIu/NKemhlDOPpsNAipKrHJ8BkT8VHZ9UKZsRZvPzQHKSjaQZAJ8VXZ90G5aCN3inWtzgJYaQTIJqCQKnXtS1xYBLTKCZBJQRxRkR46G2hygBXuYVAJ8xAfiiy6/CECjhhASWVk+q8lBibeNjLYG6OFQeMwusJspaRTTITBGdmxzoI0BeiiwzH9fAd1MxZYA16U7AI0Vgq8O5TMG/xy0VB3UdDDVwOfWAC1f9adeBxUPMCM9utnTpgA9EHiphjigume+Ejy3BeiBgulJdzPp4ffiVvLXhgA9kGibEs5Bu7pncSv5azuAHmhU/ekCqvo3zL86tBVA1T5d5av+gZNFcu3ywbr+t5oK+M0AqsePyhveOwVZd/lQZToRG4UoJaD5lr4R85doFFyBI0khE5aX29OAScNGIdpCDsoOchV6EgWXfxoy7fJhkDYt+Kq0AUDZgULjSCt0JCn1Lh9Mz5knYp9Q1Q+oLN7J5AzEWvG6bUTGPqGqHlC5wA0d89MC1OSf1ap2QAlMD+nLPynH5CNJpFdk8FTFgJq3O0jdgYA6aMLpdqZkp1T7WaR6AeV4kun97BTYzZQmCsMlOfMEq1pAWbeFHKkbENjNlCQKK9+kZp5g1QvoQa2vSKwEo1AHtVtGxMwTrFoBLf7u0ZQI1EHJrvW5RHUCesi8AWeAytdBq5ruOasaARVtI6qZREARn6YOSmFSbETVB+hBb/9O8x6EDnVGroPWPa45otoAPegXi6nmEkVHklh1E+ZnVRegh17PEsmbUBJQhWemZORRRYAedMcSxe5PI79UiRYS38Qr4gK2ZlYdWdssUS2AqjmfXfZAtZ1aCNCu63NTbfiIgKbdGe1glgSjnj3EAjTMnt0rHaSNs0CxAF24M5rPs344mIa77ykFFQlQH3t2ljDj7sSNs0CRAF248dT8Ey/hrKjeHwdQH3sa41W0FFi4igI6Y1eddTY1lV3ZAO1q401N9glVtCI+fGe06Qf/INX37JWM8vIEdO6FpHl7MrMOmPhVi31CFa2RFLwzGjPDHpbOyaxNsUCZtyczz/iWVaybSeaeysCHw0imWaeyddRXs8r8OhUC9NDX6ijoKCugW614WooNqF2pP1sJo0fkRuv1ka9p2p61v67pqYIjSdssn3LloBsbMJpULUOd1SgPoBfBplAlQ531KNbFuux5OXhmGuq8KAWZH/ac1ayp1o8khQUV7jdRsMn8esjHnsmSR8JG/p4BaGy/HgKgkQF1Ds0tiPTSAfWxJwE2SCRi/VDngkgvHlAPexJgg0QiIpoegMYUATZIJAKAxvYbSQTYIJEIABrbbyQRYINEIgBobL+RRIANEom4oFELqEYBUIi0AChEWgAUIi0ACpEWAIVIC4BCpAVAIdICoBBpAVCItAAoRFpRAD09mEWIXm7ZlXMDFstv+9U5w9TyOrsWbD8JzLFJUT8B7l0O/EONpmTJW2jNuZsUdPPtmGevTioKoE83eo44379q74y388vnk7+8dVyQ5bX94b6afhKODjvZCbgZfW1tSajRlCx5y6w5e5OCbj73oz3MXp1UDED5KzbqweAfzj2sLL9ze11ZXpvm+Jnzmbf8Hq+f26dzMjcZJMCZlfiHGk3JkrfQmrMbkoXcfP4mwT+rmGevTikGoFbCuJGOrheXLL9zybOv9/Svf3b6HtjGsRHhIAFOg/qHGk3JkrfQmrMMhdz8pvn/zzpAD5qFIgPKaxbOJFp+j9cfnPUmO9j9ndtSg8vdT6dhBQGOUKMpWfIWWnPuJgXdfO1/JPGTigzo6/2duxpiX3tb+XbVm+xgf/McAqgrBcsJmKteRVGy5C205txNCrr52v954qe1FtA9Yze+Rh34ddWbBl6fdo6yZuC3dfA0aBgBzlCjKVnyfK058DtbuQ1JsPbk7bkp2kjiH65r77yqJbUdZrKr3O6HeGErJE/+mTB5C605d5MCG0kdoDkbSVaPwelhLpe3ezDa0sPlt9cRMXMxnV93p8jSfpy5UKMpWfKWWXP2JgXdfDvmjN1M/Jnk6RL7Wsz11Vp+eR+ws2ek8zpr0s7v00z+YIWqvsYINZqSJW+ZNWdvUtDN1zF7XZ0Uhjoh0gKgEGkBUIi0AChEWgAUIi0ACpEWAIVIC4BCpAVAIdICoBBpAVCItAAoRFoAFCItAAqRFgCFSAuAQqQFQCHSAqAQaQFQiLQAKERaABQiLQAKkVY9gPIVMGeWqrxMScOwq+88lkE4e9148v3j/moN6lfrW/5znhpVFQHK7cGX/7F/Q0LCFj6rBfo5co0Cak7IZ/zKALVWuQCgnQAoAamFhb5+bI5tgXbzes9XsRBfS6esvBSgfxKLgKglO+QyHy+/ePfmk3ARBuMe1Wrh0nSKtNPvfi9+cd/yxNPD/xYVKulN/dJF/F91WCqu1lOqpdVqA7R9lNVy19I+mRbmJi4J6O0NL2B4Zre/fham4bTtGuUi4PziEz+gPpQVG25WTvAd961OPD2IMJQ39cvUQVVYOi6eayRaPLVCQPmP1iT2MmmXLgno20eVxWnz8A/pqF3a/xZJnRWFWfc3lm/hIlf36n4NAVV+Uy49XRugYtW+W6ZKGPW1dNKKy9RBOTS8UX/1qBb21GW6Lt6/+KQXYrasqAA9Xv/U/lInKmSVNw3wEFAZsljRMRGjtQHKS632MdcZgvxaOmnF1QO0t1inctQuXQ5qWbHpclDl2+SZd8qb/jWSgyq512hcrsoA5d1M3BRPV6LwUl9LJ624bEA5S7qO+eaTXoCW0yTLb1EHffuoragB1XVMuw7aVkmVN/WrA1SGZYUMQGV/9E6uWPkVL4PYTn0tnbTisgFtZP+GbsXLx1q2y5kp8XfaigZQ3UrXJyoXY+xeK/6TDkvFhVY8lFY5toBaJgAKNQAUIi4ACkGLBEAh0gKgEGkBUIi0AChEWgAUIi0ACpEWAIVIC4BCpAVAIdICoBBpAVCItAAoRFoAFCItAAqRFgCFSAuAQqT13xDoW1z38hUUAAAAAElFTkSuQmCC" /><!-- --></p>
+</div>
+<div id="fitted-quantiles" class="section level4">
+<h4>Fitted Quantiles</h4>
+<p>Based on the fitting the events to the distribution, flow events with specific probabilities/return periods (quantiles) can be extracted from the computed curve. The desired quantiles are selected by listing the probabilities in the <code>fit_quantiles</code> argument (defaults to <code>c(.975, .99, .98, .95, .90, .80, .50, .20, .10, .05, .01),</code>). The results are outputted in the <strong>Freq_Fitted_Quantiles</strong> tibble in the list. In the example below of the quantiles, the 7Q5 value would be the 7-day flow value with a 5-year return period, so 0.409 cms in this example.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1">freq_analysis<span class="op">$</span>Freq_Fitted_Quantiles</a></code></pre></div>
+<pre><code># A tibble: 11 x 4
+   Distribution Probability `Return Period` `7-Day`
+   &lt;chr&gt;              &lt;dbl&gt;           &lt;dbl&gt;   &lt;dbl&gt;
+ 1 PIII               0.01           100      0.194
+ 2 PIII               0.05            20      0.280
+ 3 PIII               0.1             10      0.334
+ 4 PIII               0.2              5      0.409
+ 5 PIII               0.5              2      0.578
+ 6 PIII               0.8              1.25   0.772
+ 7 PIII               0.9              1.11   0.881
+ 8 PIII               0.95             1.05   0.972
+ 9 PIII               0.975            1.03   1.05 
+10 PIII               0.98             1.02   1.08 
+11 PIII               0.99             1.01   1.14 </code></pre>
+</div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

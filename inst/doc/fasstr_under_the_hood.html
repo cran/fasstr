@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+<title>Under the fasstr Hood</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#header {
+text-align: center;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Under the fasstr Hood</h1>
+
+
+
+<p>The Flow Analysis Summary Statistics Tool for R (‘fasstr’) is a set of <a href="https://www.r-project.org/">R</a> functions to tidy, summarize, analyze, trend, and visualize streamflow data. This package summarizes continuous daily mean streamflow data into various daily, monthly, annual, and long-term statistics, completes annual trends and frequency analyses, in both table and plot formats.</p>
+<p>This vignette guide contains a look at the steps and internal functions used within the various ‘fasstr’ functions. It includes descriptions of the function and steps on data importing, cleaning and wrangling, filtering, analyzing, and plotting. It also describes some of the functions in the internal utils.R file and the packages required to use the ‘fasstr’ package.</p>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>‘fasstr’ utilizes tidy coding to utilize many efficient and useful packages and functions; the tidyverse packages tidy, dplyr, ggplot2 are used frequently, amongst others for specific functions. Because of this, ‘fasstr’ also exports the pipe “%&gt;%” to assist in using ‘fasstr’ in a tidy code routine.</p>
+<p>This vignette is broken into the following sections that describe some of the workflows involved in the ‘fasstr’ functions:</p>
+<ol style="list-style-type: decimal">
+<li>Data Importing and Checking</li>
+<li>Cleaning Functions (add_ and fill_)</li>
+<li>Analysis Functions (calc_ and compute_)</li>
+<li>Plotting Functions (plot_)</li>
+<li>Internal Functions (utils.R file)</li>
+<li>Package Dependencies</li>
+</ol>
+<hr />
+</div>
+<div id="data-importing-and-checking" class="section level2">
+<h2>1. Data Importing and Checking</h2>
+<p>The ‘fasstr’ functions primarily require daily mean streamflow data in cubic metres per second. As such, columns of dates and values are required. Many ‘fasstr’ functions can analyze multiple stations (using grouping functions) so a column to group data by (typically station numbers) can be provided. Other types of data can be used (climate, water level, etc), but plots and some conversions are based on the units of discharge. As there are two ways to provide daily data to the ‘fasstr’ functions, the “data” and the “station_number” arguments, there are several internal functions stored in the utils.R file that checks the data and formats the columns to ensure the data is prepared for the analysis. The following describes the steps to ensure data is consistently set up for analysis.</p>
+<p>The first step is to import daily data. The internal flowdata_import() function provides checks on the “data” and “station_number” arguments, and either extracts daily data from HYDAT (returns an error if the number isn’t in HYDAT) using the ‘tidyhydat’ package, or makes sure that “data” is in fact a data frame.</p>
+<p>At this point in a ‘fasstr’ function, all the column names of the data are saved as in a vector and any grouping (tidy grouping) is removed. The column names are saved as they may be changed in the following steps and the original names will be returned at the end of the analysis. Any grouping is removed to allow for the appropriate grouping of the analysis. For the cleaning functions (add_ and fill_) any grouping will be returned.</p>
+<p>The next step is to ensure the column names of dates, values, and groups are consistent as “Date”, “Value”, and “STATION_NUMBER” (to match the HYDAT outputs), respectively, for the analysis. This is required as grouping and summarizing functions in the following steps use these specific column names, and provided data may not use the same names. The facilitate the column renaming and checking, there are several internal functions in the utils.R. For each of the three columns there is a function that checks if it exists, the proper formatting, and renames the columns to the appropriate name. These functions are format_dates_col(), format_values_col(), and format_groups_col(). If no grouping is provided, a fake STATION_NUMBER of “XXXXXXX” is provided (and removed at the end of the ‘fasstr’ function). As all three columns are required for many ‘fasstr’ functions, there is a formal_all_cols() that uses all three functions, with an option to remove all other columns.</p>
+<p>At this point in a function there is now a data frame of data, usually called ‘flow_data’ that has three columns of “Date”, “Value”, and “STATION_NUMBER”, that is ready to be cleaned for analysis.</p>
+<p>Note: some functions use different data sources than daily data. The compute_HYDAT_peaks_frequencies() does not permit the “data” argument and just extracts data from HYDAT (and sets it up appropriately) and the compute_frequency_analysis() function requires a unique dataset (see ?compute_frequency_analysis for more information on the function).</p>
+<p>The following is an example of these first steps (from calc_annual_stats()):</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="co"># Check if data is provided and import it</span></a>
+<a class="sourceLine" id="cb1-2" title="2">flow_data &lt;-<span class="st"> </span><span class="kw">flowdata_import</span>(<span class="dt">data =</span> data, </a>
+<a class="sourceLine" id="cb1-3" title="3">                             <span class="dt">station_number =</span> station_number)</a>
+<a class="sourceLine" id="cb1-4" title="4"></a>
+<a class="sourceLine" id="cb1-5" title="5"><span class="co"># Save the original columns (to check for STATION_NUMBER col at end) and ungroup if necessary</span></a>
+<a class="sourceLine" id="cb1-6" title="6">orig_cols &lt;-<span class="st"> </span><span class="kw">names</span>(flow_data)</a>
+<a class="sourceLine" id="cb1-7" title="7">flow_data &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">ungroup</span>(flow_data)</a>
+<a class="sourceLine" id="cb1-8" title="8"></a>
+<a class="sourceLine" id="cb1-9" title="9"><span class="co"># Check and rename columns</span></a>
+<a class="sourceLine" id="cb1-10" title="10">flow_data &lt;-<span class="st"> </span><span class="kw">format_all_cols</span>(<span class="dt">data =</span> flow_data,</a>
+<a class="sourceLine" id="cb1-11" title="11">                             <span class="dt">dates =</span> <span class="kw">as.character</span>(<span class="kw">substitute</span>(dates)),</a>
+<a class="sourceLine" id="cb1-12" title="12">                             <span class="dt">values =</span> <span class="kw">as.character</span>(<span class="kw">substitute</span>(values)),</a>
+<a class="sourceLine" id="cb1-13" title="13">                             <span class="dt">groups =</span> <span class="kw">as.character</span>(<span class="kw">substitute</span>(groups)),</a>
+<a class="sourceLine" id="cb1-14" title="14">                             <span class="dt">rm_other_cols =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<hr />
+</div>
+<div id="cleaning-functions-add_-and-fill_" class="section level2">
+<h2>2. Cleaning Functions (add_ and fill_)</h2>
+<p>The ‘fasstr’ cleaning functions (start with add_ or fill_) just add rows or columns of data so there are fewer steps than the other ‘fasstr’ functions.</p>
+<p>After the data has been prepped with the appropriate columns, the columns are added with their equations or other functions, or dates are filled with NA if they are missing. Then if any of the column names were changed in the formatting, they are returned to their original names, and if there was a grouping beforehand, that grouping is returned.</p>
+<p>The following is an example of remaining steps of a cleaning function (from add_daily_yield()):</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="co">## SET UP BASIN AREA</span></a>
+<a class="sourceLine" id="cb2-2" title="2"><span class="kw">suppressWarnings</span>(flow_data &lt;-<span class="st"> </span><span class="kw">add_basin_area</span>(flow_data, <span class="dt">basin_area =</span> basin_area))</a>
+<a class="sourceLine" id="cb2-3" title="3">flow_data<span class="op">$</span>Basin_Area_sqkm_temp &lt;-<span class="st"> </span>flow_data<span class="op">$</span>Basin_Area_sqkm</a>
+<a class="sourceLine" id="cb2-4" title="4"></a>
+<a class="sourceLine" id="cb2-5" title="5"><span class="co">## ADD YIELD COLUMN</span></a>
+<a class="sourceLine" id="cb2-6" title="6">flow_data &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(flow_data, <span class="dt">Yield_mm =</span> Value <span class="op">*</span><span class="st"> </span><span class="dv">86400</span> <span class="op">/</span><span class="st"> </span>(Basin_Area_sqkm_temp <span class="op">*</span><span class="st"> </span><span class="dv">1000</span>))</a>
+<a class="sourceLine" id="cb2-7" title="7"></a>
+<a class="sourceLine" id="cb2-8" title="8"><span class="co"># Return the original names of the Date and Value columns</span></a>
+<a class="sourceLine" id="cb2-9" title="9"><span class="kw">names</span>(flow_data)[<span class="kw">names</span>(flow_data) <span class="op">==</span><span class="st"> &quot;Value&quot;</span>] &lt;-<span class="st"> </span><span class="kw">as.character</span>(<span class="kw">substitute</span>(values))</a>
+<a class="sourceLine" id="cb2-10" title="10"><span class="kw">names</span>(flow_data)[<span class="kw">names</span>(flow_data) <span class="op">==</span><span class="st"> &quot;STATION_NUMBER&quot;</span>] &lt;-<span class="st"> </span><span class="kw">as.character</span>(<span class="kw">substitute</span>(groups))</a>
+<a class="sourceLine" id="cb2-11" title="11"></a>
+<a class="sourceLine" id="cb2-12" title="12"></a>
+<a class="sourceLine" id="cb2-13" title="13"><span class="co">## Reformat to original names and groups</span></a>
+<a class="sourceLine" id="cb2-14" title="14"><span class="co">## -------------------------------------</span></a>
+<a class="sourceLine" id="cb2-15" title="15"></a>
+<a class="sourceLine" id="cb2-16" title="16"><span class="co"># Return columns to original order plus new column</span></a>
+<a class="sourceLine" id="cb2-17" title="17"><span class="cf">if</span>(<span class="st">&quot;Yield_mm&quot;</span> <span class="op">%in%</span><span class="st"> </span>orig_cols){</a>
+<a class="sourceLine" id="cb2-18" title="18">  flow_data &lt;-<span class="st">  </span>flow_data[, <span class="kw">c</span>(orig_cols)]</a>
+<a class="sourceLine" id="cb2-19" title="19">} <span class="cf">else</span> {</a>
+<a class="sourceLine" id="cb2-20" title="20">  flow_data &lt;-<span class="st">  </span>flow_data[, <span class="kw">c</span>(orig_cols, <span class="kw">paste</span>(<span class="st">&quot;Yield_mm&quot;</span>))]</a>
+<a class="sourceLine" id="cb2-21" title="21">}</a>
+<a class="sourceLine" id="cb2-22" title="22"></a>
+<a class="sourceLine" id="cb2-23" title="23"></a>
+<a class="sourceLine" id="cb2-24" title="24">dplyr<span class="op">::</span><span class="kw">as_tibble</span>(flow_data)</a></code></pre></div>
+<hr />
+</div>
+<div id="analysis-functions-calc_-and-compute_" class="section level2">
+<h2>3. Analysis Functions (calc_ and compute_)</h2>
+<p>The ‘fasstr’ analysis functions (start with calc_ or compute_ or screen_) require steps of cleaning (adding appropriate columns), filtering, analyzing and any final data wrangling.</p>
+<div id="data-cleaning-and-preparing" class="section level4">
+<h4>Data Cleaning and Preparing</h4>
+<p>After the data has been prepped with the appropriate columns, additional columns of dates (years, months, days), rolling days, basin areas, yields or volumes may be added, depending on the analysis. Dates with no data are also filled with NA values so that complete years can be analyzed (and appropriate warnings made if NA’s are produced). To facilitate these steps there is an internal function in the utils.R file called analysis_prep(). This function will fill the missing dates and add columns of Years, Months, WaterYears, DayofYears, and Dates to the data frame. It also creates a column of AnalysisDate if necessary, that extracts the dates and converts them into a single year for columns or plotting. This is to provide consistency to the analysis functions (as Year or WaterYear could be used depending on the water_year_start argument choice). The analysis date columns are ultimately returned to their original names (Year, DayofYear, Date) in the results. Any other columns are added as necessary using the necessary cleaning functions.</p>
+<p>For some functions a “RollingValue” column is created for the statistics calculations so that a roll_day value of other than 1 can be used. For this, the add_rolling_days() function creates an additional column based on the users selection and is renamed to “RollingValue”.</p>
+<p>At this point in a function the data frame of data, flow_data, has three columns of “Date”, “Value” or “RollingValue”, and “STATION_NUMBER”, and any other date and necessary column required to be filtered for analysis.</p>
+<p>The following is an example of the cleaning steps (from calc_annual_stats()):</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="co"># Fill missing dates, add date variables</span></a>
+<a class="sourceLine" id="cb3-2" title="2">flow_data &lt;-<span class="st"> </span><span class="kw">analysis_prep</span>(<span class="dt">data =</span> flow_data, </a>
+<a class="sourceLine" id="cb3-3" title="3">                           <span class="dt">water_year_start =</span> water_year_start)</a>
+<a class="sourceLine" id="cb3-4" title="4"></a>
+<a class="sourceLine" id="cb3-5" title="5"><span class="co"># Add rolling means to end of dataframe</span></a>
+<a class="sourceLine" id="cb3-6" title="6">flow_data &lt;-<span class="st"> </span><span class="kw">add_rolling_means</span>(<span class="dt">data =</span> flow_data, <span class="dt">roll_days =</span> roll_days, <span class="dt">roll_align =</span> roll_align)</a>
+<a class="sourceLine" id="cb3-7" title="7"><span class="kw">colnames</span>(flow_data)[<span class="kw">ncol</span>(flow_data)] &lt;-<span class="st"> &quot;RollingValue&quot;</span></a></code></pre></div>
+</div>
+<div id="data-filtering" class="section level4">
+<h4>Data Filtering</h4>
+<p>With all the necessary columns of data for analysis, the data can be filtered for the years, months, dates, etc as specified in the ‘fasstr’ function arguments. These are mostly completed with simple tidy filtering functions. However when using the complete_years argument in some of the ‘fasstr’ functions, there is an internal function in the utils.R file called filter_complete_yrs() that removes data from years with incomplete data.</p>
+<p>At this point in a function the data frame of data, flow_data, has three columns of “Date”, “Value”, and “STATION_NUMBER”, and any other date and necessary column, and is filtered for the analysis.</p>
+<p>The following is an example of the filtering steps (from calc_annual_stats()):</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="co"># Filter for the selected year (remove excluded years after)</span></a>
+<a class="sourceLine" id="cb4-2" title="2">flow_data &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">filter</span>(flow_data, AnalysisYear <span class="op">&gt;=</span><span class="st"> </span>start_year <span class="op">&amp;</span><span class="st"> </span>AnalysisYear <span class="op">&lt;=</span><span class="st"> </span>end_year)</a>
+<a class="sourceLine" id="cb4-3" title="3">flow_data &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">filter</span>(flow_data, Month <span class="op">%in%</span><span class="st"> </span>months)</a></code></pre></div>
+</div>
+<div id="calculating-statistics" class="section level4">
+<h4>Calculating Statistics</h4>
+<p>Now that the data contains all the necessary data to summarize, using the tidy methods of the tidyverse (predominately tidyr and dplyr packages), data is grouped by the necessary variables. Data is usually grouped by STATION_NUMBER and then whatever time-frame variable the function calls for (years, months, days, etc).</p>
+<p>Then the data is typically analyzed using the dplyr::summarize() function (for means, median, minimums, etc). If an analysis considers if missing data is available or not, then the na.rm argument is set to the ignore_missing function provided in the ‘fasstr’ functions. If NAN or Inf values are produced in the results, then they are replaced with NA for consistency. If percentiles are being calculated, another code chunk will loop through each percentile selected and attach to the data.</p>
+<p>Data is then ungrouped to allow for further data wrangling and outputting.</p>
+<p>The following is an example of the calculation steps (from calc_annual_stats()):</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="co"># Calculate basic stats</span></a>
+<a class="sourceLine" id="cb5-2" title="2">annual_stats &lt;-<span class="st">   </span>dplyr<span class="op">::</span><span class="kw">summarize</span>(dplyr<span class="op">::</span><span class="kw">group_by</span>(flow_data, STATION_NUMBER, AnalysisYear),</a>
+<a class="sourceLine" id="cb5-3" title="3">                                   <span class="dt">Mean =</span> <span class="kw">mean</span>(RollingValue, <span class="dt">na.rm =</span> ignore_missing),</a>
+<a class="sourceLine" id="cb5-4" title="4">                                   <span class="dt">Median =</span> stats<span class="op">::</span><span class="kw">median</span>(RollingValue, <span class="dt">na.rm =</span> ignore_missing),</a>
+<a class="sourceLine" id="cb5-5" title="5">                                   <span class="dt">Maximum =</span> <span class="kw">max</span> (RollingValue, <span class="dt">na.rm =</span> ignore_missing),</a>
+<a class="sourceLine" id="cb5-6" title="6">                                   <span class="dt">Minimum =</span> <span class="kw">min</span> (RollingValue, <span class="dt">na.rm =</span> ignore_missing))</a>
+<a class="sourceLine" id="cb5-7" title="7">annual_stats &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">ungroup</span>(annual_stats)</a>
+<a class="sourceLine" id="cb5-8" title="8"></a>
+<a class="sourceLine" id="cb5-9" title="9"><span class="co">#Remove Nans and Infs</span></a>
+<a class="sourceLine" id="cb5-10" title="10">annual_stats<span class="op">$</span>Mean[<span class="kw">is.nan</span>(annual_stats<span class="op">$</span>Mean)] &lt;-<span class="st"> </span><span class="ot">NA</span></a>
+<a class="sourceLine" id="cb5-11" title="11">annual_stats<span class="op">$</span>Maximum[<span class="kw">is.infinite</span>(annual_stats<span class="op">$</span>Maximum)] &lt;-<span class="st"> </span><span class="ot">NA</span></a>
+<a class="sourceLine" id="cb5-12" title="12">annual_stats<span class="op">$</span>Minimum[<span class="kw">is.infinite</span>(annual_stats<span class="op">$</span>Minimum)] &lt;-<span class="st"> </span><span class="ot">NA</span></a>
+<a class="sourceLine" id="cb5-13" title="13"></a>
+<a class="sourceLine" id="cb5-14" title="14"><span class="co"># Calculate annual percentiles</span></a>
+<a class="sourceLine" id="cb5-15" title="15"><span class="cf">if</span>(<span class="op">!</span><span class="kw">all</span>(<span class="kw">is.na</span>(percentiles))) {</a>
+<a class="sourceLine" id="cb5-16" title="16">  <span class="cf">for</span> (ptile <span class="cf">in</span> percentiles) {</a>
+<a class="sourceLine" id="cb5-17" title="17">    <span class="co"># Calculate percentiles</span></a>
+<a class="sourceLine" id="cb5-18" title="18">    annual_stats_ptile &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">summarise</span>(dplyr<span class="op">::</span><span class="kw">group_by</span>(flow_data, STATION_NUMBER, AnalysisYear),</a>
+<a class="sourceLine" id="cb5-19" title="19">                                           <span class="dt">Percentile =</span> stats<span class="op">::</span><span class="kw">quantile</span>(RollingValue, ptile <span class="op">/</span><span class="st"> </span><span class="dv">100</span>, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))</a>
+<a class="sourceLine" id="cb5-20" title="20">    annual_stats_ptile &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">ungroup</span>(annual_stats_ptile)</a>
+<a class="sourceLine" id="cb5-21" title="21">    <span class="kw">names</span>(annual_stats_ptile)[<span class="kw">names</span>(annual_stats_ptile) <span class="op">==</span><span class="st"> &quot;Percentile&quot;</span>] &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&quot;P&quot;</span>, ptile)</a>
+<a class="sourceLine" id="cb5-22" title="22">    </a>
+<a class="sourceLine" id="cb5-23" title="23">    <span class="co"># Merge with stats</span></a>
+<a class="sourceLine" id="cb5-24" title="24">    annual_stats &lt;-<span class="st"> </span><span class="kw">merge</span>(annual_stats, annual_stats_ptile, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;STATION_NUMBER&quot;</span>, <span class="st">&quot;AnalysisYear&quot;</span>))</a>
+<a class="sourceLine" id="cb5-25" title="25">    </a>
+<a class="sourceLine" id="cb5-26" title="26">    <span class="co"># Remove percentile if mean is NA (workaround for na.rm=FALSE in quantile)</span></a>
+<a class="sourceLine" id="cb5-27" title="27">    annual_stats[, <span class="kw">ncol</span>(annual_stats)] &lt;-<span class="st"> </span><span class="kw">ifelse</span>(<span class="kw">is.na</span>(annual_stats<span class="op">$</span>Mean), <span class="ot">NA</span>, annual_stats[, <span class="kw">ncol</span>(annual_stats)])</a>
+<a class="sourceLine" id="cb5-28" title="28">  }</a>
+<a class="sourceLine" id="cb5-29" title="29">}</a></code></pre></div>
+</div>
+<div id="final-data-wrangling" class="section level4">
+<h4>Final Data Wrangling</h4>
+<p>To finalize the data results there are usually some final data filtering or wrangling steps. Some of these include some additional filtering (usually when using the exclude_years argument; replaces data with NA), providing warnings if NA’s are produced in the data, renaming the analysis date columns (AnalysisYear to Year; as reversing above cleaning functions), and returning the names of the groups (i.e. STATION_NUMBER column) if different, or removing it if it wasn’t provided (as listed in the original column names vector described above).</p>
+<p>If the option to transpose the results data was set to TRUE with the transpose argument, then the data is gathered and spread such that each statistics is a single row as opposed to a column in the original results.</p>
+<p>After all wrangling, the final results are returned from the function as a tibble.</p>
+<p>The following is an example of the final wrangling steps (from calc_annual_stats()):</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="co"># Rename year column</span></a>
+<a class="sourceLine" id="cb6-2" title="2">annual_stats &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">rename</span>(annual_stats, <span class="dt">Year =</span> AnalysisYear)</a>
+<a class="sourceLine" id="cb6-3" title="3"></a>
+<a class="sourceLine" id="cb6-4" title="4"><span class="co"># Remove selected excluded years</span></a>
+<a class="sourceLine" id="cb6-5" title="5">annual_stats[annual_stats<span class="op">$</span>Year <span class="op">%in%</span><span class="st"> </span>exclude_years, <span class="op">-</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>)] &lt;-<span class="st"> </span><span class="ot">NA</span></a>
+<a class="sourceLine" id="cb6-6" title="6"></a>
+<a class="sourceLine" id="cb6-7" title="7"></a>
+<a class="sourceLine" id="cb6-8" title="8"><span class="co"># If transpose if selected</span></a>
+<a class="sourceLine" id="cb6-9" title="9"><span class="cf">if</span> (transpose) {</a>
+<a class="sourceLine" id="cb6-10" title="10">  <span class="co"># Get list of columns to order the Statistic column after transposing</span></a>
+<a class="sourceLine" id="cb6-11" title="11">  stat_levels &lt;-<span class="st"> </span><span class="kw">names</span>(annual_stats[<span class="op">-</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>)])</a>
+<a class="sourceLine" id="cb6-12" title="12">  </a>
+<a class="sourceLine" id="cb6-13" title="13">  <span class="co"># Transpose the columns for rows</span></a>
+<a class="sourceLine" id="cb6-14" title="14">  annual_stats &lt;-<span class="st"> </span>tidyr<span class="op">::</span><span class="kw">gather</span>(annual_stats, Statistic, Value, <span class="op">-</span>STATION_NUMBER, <span class="op">-</span>Year)</a>
+<a class="sourceLine" id="cb6-15" title="15">  annual_stats &lt;-<span class="st"> </span>tidyr<span class="op">::</span><span class="kw">spread</span>(annual_stats, Year, Value)</a>
+<a class="sourceLine" id="cb6-16" title="16">  </a>
+<a class="sourceLine" id="cb6-17" title="17">  <span class="co"># Order the columns</span></a>
+<a class="sourceLine" id="cb6-18" title="18">  annual_stats<span class="op">$</span>Statistic &lt;-<span class="st"> </span><span class="kw">factor</span>(annual_stats<span class="op">$</span>Statistic, <span class="dt">levels =</span> stat_levels)</a>
+<a class="sourceLine" id="cb6-19" title="19">  annual_stats &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">arrange</span>(annual_stats, STATION_NUMBER, Statistic)</a>
+<a class="sourceLine" id="cb6-20" title="20">}</a>
+<a class="sourceLine" id="cb6-21" title="21"></a>
+<a class="sourceLine" id="cb6-22" title="22"><span class="co"># Give warning if any NA values</span></a>
+<a class="sourceLine" id="cb6-23" title="23"><span class="kw">missing_values_warning</span>(annual_stats[, <span class="dv">3</span><span class="op">:</span><span class="kw">ncol</span>(annual_stats)])</a>
+<a class="sourceLine" id="cb6-24" title="24"></a>
+<a class="sourceLine" id="cb6-25" title="25"></a>
+<a class="sourceLine" id="cb6-26" title="26"><span class="co"># Recheck if station_number/grouping was in original data and rename or remove as necessary</span></a>
+<a class="sourceLine" id="cb6-27" title="27"><span class="cf">if</span>(<span class="kw">as.character</span>(<span class="kw">substitute</span>(groups)) <span class="op">%in%</span><span class="st"> </span>orig_cols) {</a>
+<a class="sourceLine" id="cb6-28" title="28">  <span class="kw">names</span>(annual_stats)[<span class="kw">names</span>(annual_stats) <span class="op">==</span><span class="st"> &quot;STATION_NUMBER&quot;</span>] &lt;-<span class="st"> </span><span class="kw">as.character</span>(<span class="kw">substitute</span>(groups))</a>
+<a class="sourceLine" id="cb6-29" title="29">} <span class="cf">else</span> {</a>
+<a class="sourceLine" id="cb6-30" title="30">  annual_stats &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">select</span>(annual_stats, <span class="op">-</span>STATION_NUMBER)</a>
+<a class="sourceLine" id="cb6-31" title="31">}</a>
+<a class="sourceLine" id="cb6-32" title="32"></a>
+<a class="sourceLine" id="cb6-33" title="33"></a>
+<a class="sourceLine" id="cb6-34" title="34">dplyr<span class="op">::</span><span class="kw">as_tibble</span>(annual_stats)</a></code></pre></div>
+<hr />
+</div>
+</div>
+<div id="plotting-functions-plot_" class="section level2">
+<h2>4. Plotting Functions (plot_)</h2>
+<p>The ‘fasstr’ plotting functions (start with plot_) take the data calculated in the analysis functions and then plot the data with set or custom plotting templates.</p>
+<div id="calculating-statistics-1" class="section level4">
+<h4>Calculating Statistics</h4>
+<p>For the plotting functions data is typically calculated from the other calc_ ‘fasstr’ functions and then wrangled into proper formatting. Before calculating the data, various checks are performed on the arguments and then the flowdata_import() is first used to check the ‘data’ or ‘station_data’ selections. Then the values, dates, and groups columns are formatted properly and all other columns removed using the format_all_cols() internal function. This data frame and the function arguments are then passed onto the ‘fasstr’ calc_ function. Any final data wrangling is also then completed to set it up for the plotting functions. Some NA values may be replaced with substitute values to allow the plot to be produced along with the appropriate data warnings.</p>
+</div>
+<div id="plotting-statistics" class="section level4">
+<h4>Plotting Statistics</h4>
+<p>Before plotting, some variables are created based on the custom options provided in the arguments (axis labels etc).</p>
+<p>As there is the potential for many plots to be produced in the ‘fasstr’ functions, a tidy method was used to create multiple plots simultaneously in an efficient process using dplyr, tidyr, purrr, and ggplot2 packages to create a tibble of plots. See this <a href="http://www.brodrigues.co/blog/2017-03-29-make-ggplot2-purrr/">webpage</a> for more information on the method. For ‘fasstr’ plotting functions, this entails creating a single tibble of groups (STATION_NUMBERs), data, and plots. First the data is grouped by the grouping (typically STATION_NUMBERs) using the dplyr::group() function; this will create a single plot for each grouping. Then using tidyr::nest() a tibble is created with two columns, the first being the STATION_NUMBER and the second being a tibble of data for each STATION_NUMBER (a tibble of tibbles). Then using dplyr::mutate() function a column of ggplots is created; and using purrr::map2() all of the plots can be created simultaneously (thus saving time in the function). As this type of table isn’t entirely user-friendly, each plot is extracted into a list and named appropriately (typically by each grouping and then the statistic).</p>
+<p>The following is an example of the process of the creating the plots (with simplified plotting).</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="co"># Calculate the statistics</span></a>
+<a class="sourceLine" id="cb7-2" title="2">annual_stats &lt;-<span class="st"> </span><span class="kw">calc_annual_stats</span>(<span class="dt">station_number =</span> <span class="kw">c</span>(<span class="st">&quot;08NM116&quot;</span>, <span class="st">&quot;08NM240&quot;</span>),</a>
+<a class="sourceLine" id="cb7-3" title="3">                                  <span class="dt">start_year =</span> <span class="dv">1985</span>, <span class="dt">end_year =</span> <span class="dv">2015</span>)</a>
+<a class="sourceLine" id="cb7-4" title="4"></a>
+<a class="sourceLine" id="cb7-5" title="5"><span class="co"># Wrangle statistics for plotting</span></a>
+<a class="sourceLine" id="cb7-6" title="6">annual_stats &lt;-<span class="st"> </span>tidyr<span class="op">::</span><span class="kw">gather</span>(annual_stats, Statistic, Value, <span class="op">-</span>Year, <span class="op">-</span>STATION_NUMBER)</a>
+<a class="sourceLine" id="cb7-7" title="7"></a>
+<a class="sourceLine" id="cb7-8" title="8"><span class="co"># Group data by grouping</span></a>
+<a class="sourceLine" id="cb7-9" title="9">tidy_plots &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">group_by</span>(annual_stats, STATION_NUMBER)</a>
+<a class="sourceLine" id="cb7-10" title="10"></a>
+<a class="sourceLine" id="cb7-11" title="11"><span class="co"># Create a tibble with a column of STATION_NUMBERs and a column of data for each STATION_NUMBER</span></a>
+<a class="sourceLine" id="cb7-12" title="12">tidy_plots &lt;-<span class="st"> </span>tidyr<span class="op">::</span><span class="kw">nest</span>(tidy_plots)</a>
+<a class="sourceLine" id="cb7-13" title="13"></a>
+<a class="sourceLine" id="cb7-14" title="14"><span class="co"># Create a new column of plots using mutate and purrr::map2</span></a>
+<a class="sourceLine" id="cb7-15" title="15">tidy_plots &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(tidy_plots,</a>
+<a class="sourceLine" id="cb7-16" title="16">                            <span class="dt">plot =</span> purrr<span class="op">::</span><span class="kw">map2</span>(data, STATION_NUMBER, </a>
+<a class="sourceLine" id="cb7-17" title="17">                                               <span class="op">~</span>ggplot2<span class="op">::</span><span class="kw">ggplot</span>(<span class="dt">data =</span> ., ggplot2<span class="op">::</span><span class="kw">aes</span>(<span class="dt">x =</span> Year, <span class="dt">y =</span> Value, <span class="dt">color =</span> Statistic)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb7-18" title="18"><span class="st">                                                 </span>ggplot2<span class="op">::</span><span class="kw">theme</span>(<span class="dt">plot.title =</span> ggplot2<span class="op">::</span><span class="kw">element_text</span>(<span class="dt">hjust =</span> <span class="fl">0.5</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb7-19" title="19"><span class="st">                                                 </span>ggplot2<span class="op">::</span><span class="kw">geom_line</span>(<span class="dt">alpha =</span> <span class="fl">0.5</span>, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb7-20" title="20"><span class="st">                                                 </span>ggplot2<span class="op">::</span><span class="kw">geom_point</span>(<span class="dt">na.rm =</span> <span class="ot">TRUE</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb7-21" title="21"><span class="st">                                                 </span>ggplot2<span class="op">::</span><span class="kw">ylab</span>(<span class="st">&quot;Discharge (cms)&quot;</span>)</a>
+<a class="sourceLine" id="cb7-22" title="22"></a>
+<a class="sourceLine" id="cb7-23" title="23">                            ))</a>
+<a class="sourceLine" id="cb7-24" title="24"></a>
+<a class="sourceLine" id="cb7-25" title="25"></a>
+<a class="sourceLine" id="cb7-26" title="26"><span class="co"># Create a list of named plots extracted from the tibble</span></a>
+<a class="sourceLine" id="cb7-27" title="27">plots &lt;-<span class="st"> </span>tidy_plots<span class="op">$</span>plot</a>
+<a class="sourceLine" id="cb7-28" title="28"><span class="cf">if</span> (<span class="kw">nrow</span>(tidy_plots) <span class="op">==</span><span class="st"> </span><span class="dv">1</span>) {</a>
+<a class="sourceLine" id="cb7-29" title="29">  <span class="kw">names</span>(plots) &lt;-<span class="st"> &quot;Annual_Statistics&quot;</span></a>
+<a class="sourceLine" id="cb7-30" title="30">} <span class="cf">else</span> {</a>
+<a class="sourceLine" id="cb7-31" title="31">  <span class="kw">names</span>(plots) &lt;-<span class="st"> </span><span class="kw">paste0</span>(tidy_plots<span class="op">$</span>STATION_NUMBER, <span class="st">&quot;_Annual_Statistics&quot;</span>)</a>
+<a class="sourceLine" id="cb7-32" title="32">}</a>
+<a class="sourceLine" id="cb7-33" title="33"></a>
+<a class="sourceLine" id="cb7-34" title="34"><span class="co"># Return the plots</span></a>
+<a class="sourceLine" id="cb7-35" title="35">plots</a></code></pre></div>
+<pre><code>$`08NM116_Annual_Statistics`</code></pre>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<pre><code>
+$`08NM240_Annual_Statistics`</code></pre>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<hr />
+</div>
+</div>
+<div id="internal-functions-utils.r-file" class="section level2">
+<h2>5. Internal Functions (utils.R file)</h2>
+<p>Within the package there is an R file called utils.R that contains a list of functions that are used repeatedly throughout the various ‘fasstr’ functions to minimize repetition. These functions are used internally and are not exported from the package.</p>
+<p>At the top of the file are several data formatting and wrangling functions:</p>
+<ul>
+<li><strong>flowdata_import()</strong> - checks if either <code>station_number</code> or <code>data</code> arguments are provided; extracts HYDAT data or sets up data for next steps.</li>
+<li><strong>format_dates_col()</strong> - checks for proper dates formats in column; renames columns to “Date” if not.</li>
+<li><strong>format_values_col()</strong> - checks for proper numeric formats in column; renames columns to “Value” if not.</li>
+<li><strong>format_groups_col()</strong> - checks for proper formats in column; renames columns to “STATION_NUMBER” if not; if no groups provided, a temporary STATION_NUMBER of “XXXXXXX” is created for analysis.</li>
+<li><strong>format_all_cols()</strong> - checks for proper formats of all dates, values, and groups columns; uses all three functions listed above; option to remove all other columns if <code>rm_other_cols = TRUE</code>.</li>
+<li><strong>analysis_prep()</strong> - fills missing dates with NA; adds dates columns of Years, day of years, and dates; formatted to calendar or water year as specified.</li>
+<li><strong>filter_complete_yrs()</strong> - filters data for years with which there is only complete annual data; required for some analyses.</li>
+</ul>
+<p>Below these formatting and data wrangling functions are many functions used to check argument and provide warnings when certain data is present. See the file for examples of these internal functions.</p>
+<hr />
+</div>
+<div id="package-dependencies" class="section level2">
+<h2>6. Package Dependencies</h2>
+<p>The following list contains the packages required to complete many of the ‘fasstr’ functions:</p>
+<ul>
+<li><strong>dplyr</strong> - used for many tidy functions (grouping, summarizing, etc)</li>
+<li><strong>e1071</strong> - used in the frequency analyses for determining skewness for the fitting distributions</li>
+<li><strong>fitdistrplus</strong> - used in the frequency analyses for fitting data to the distributions</li>
+<li><strong>ggplot2</strong> - used for plotting the data</li>
+<li><strong>lubridate</strong> - used for easy creation of date columns</li>
+<li><strong>PearsonDS</strong> - used in the frequency analyses for fitting data to the distributions</li>
+<li><strong>plyr</strong> - used in the frequency analyses to handle data</li>
+<li><strong>purrr</strong> - used in the plotting functions to plot many plots simultaneously</li>
+<li><strong>RcppRoll</strong> - used to add rolling means</li>
+<li><strong>scales</strong> - used in the plotting functions to customize plots</li>
+<li><strong>tidyhydat</strong> - used to extract data from a HYDAT database</li>
+<li><strong>tidyr</strong> - used for many tidy functions (gather, spread, etc)</li>
+<li><strong>openxlsx</strong> - used to write data as Excel files in the write_ functions</li>
+<li><strong>zyp</strong> - used in the trending function to calculate the trends</li>
+</ul>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
