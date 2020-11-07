@@ -10,12 +10,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and limitations under the License.
 
-#' @title Add daily cumulative runoff yield flows on an annual basis
+#' @title Add a daily cumulative water yield column to daily flows
 #'
-#' @description Add a column of rolling daily cumulative runoff yield flows on an annual basis to a streamflow dataset. Adds the 
-#'    runoff yield discharge from each day with the previous day(s) for each year, in units of millimetres. Converts cumulative 
-#'    discharge to a depth of water based on the upstream drainage basin area.The cumulative flows restart every year and are only 
-#'    calculated in years with complete data.
+#' @description Add a column of rolling daily cumulative water yields on an annual basis to a daily streamflow data set. Adds the 
+#'    water yields from each day with the previous day(s) for each year, in units of millimetres. Converts cumulative 
+#'    discharge to a depth of water based on the upstream drainage basin area from \code{basin_area} argument. The cumulative flows 
+#'    restart every year and are only calculated in years with complete data.
 #'
 #' @inheritParams calc_annual_stats
 #' @inheritParams add_basin_area
@@ -112,7 +112,7 @@ add_cumulative_yield <- function(data,
   
   # Add cumulative volume column and ungroup (remove analysisyear group)
   flow_data_temp <- dplyr::ungroup(flow_data_temp)
-  flow_data_temp <- dplyr::mutate(dplyr::group_by(flow_data_temp, STATION_NUMBER, WaterYear, add = TRUE), 
+  flow_data_temp <- dplyr::mutate(dplyr::group_by(flow_data_temp, STATION_NUMBER, WaterYear, .add = TRUE), 
                                   Cumul_Yield_mm = cumsum_na(Value) * 86400 / (Basin_Area_sqkm_temp * 1000))
   flow_data_temp <- dplyr::ungroup(flow_data_temp)
   

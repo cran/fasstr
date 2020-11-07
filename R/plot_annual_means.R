@@ -13,8 +13,8 @@
 
 #' @title Plot annual means compared to the long-term mean
 #'
-#' @description Plot annual means using the long-term annual mean as the point of reference to compare wet vs. dry years. Plots the
-#'    statistics from all daily discharge values from all years, unless specified. Data calculated using calc_annual_stats() function.
+#' @description Plot annual means using the long-term annual mean as the point of reference for annual means. Calculates statistics
+#'    from all values, unless specified. Data calculated using \code{calc_annual_stats()} function. Returns a list of plots.
 #'
 #' @inheritParams calc_annual_stats
 #' @param include_title Logical value to indicate adding the group/station number to the plot, if provided. Default \code{FALSE}.
@@ -129,7 +129,7 @@ plot_annual_means <- function(data,
                                    breaks = scales::pretty_breaks(n = 10)) +
        ggplot2::scale_x_continuous(breaks = scales::pretty_breaks(n = 8))+
        {if(length(unique(annual_stats$Year)) < 8) ggplot2::scale_x_continuous(breaks = unique(annual_stats$Year))}+
-       ggplot2::ylab(expression(Mean~Annual~Discharge~(m^3/s))) +
+       ggplot2::ylab("Mean Annual Discharge (cms)") + #expression(Mean~Annual~Discharge~(m^3/s))
        {if (include_title & .y != "XXXXXXX") ggplot2::ggtitle(paste(.y)) } +
        ggplot2::theme_bw() +
        ggplot2::theme(panel.border = ggplot2::element_rect(colour = "black", fill = NA, size = 1),

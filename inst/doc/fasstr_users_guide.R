@@ -58,7 +58,7 @@ fill_missing_dates(station_number = "08HA011") %>%
 #  # Just calendar year info
 #  add_date_variables(station_number = "08NM116")
 #  
-#  # If water years are require starting August (use month number)
+#  # If water years are required starting August (use month number)
 #  add_date_variables(station_number = "08NM116",
 #                     water_year_start = 8)
 
@@ -166,7 +166,9 @@ calc_longterm_daily_stats(station_number = "08NM116",
 
 ## ---- fig.height = 2.5, fig.width = 7, comment=NA-----------------------------
 plot_longterm_daily_stats(station_number = "08NM116", 
-                          start_year = 1974) 
+                          start_year = 1974,
+                          inner_percentiles = c(25,75),
+                          outer_percentiles = c(10,90)) 
 
 ## ---- comment=NA--------------------------------------------------------------
 calc_longterm_monthly_stats(station_number = "08NM116", 
@@ -197,12 +199,38 @@ calc_daily_stats(station_number = "08NM116",
                  start_year = 1974)
 
 ## ---- fig.height = 2.5, fig.width = 7, comment=NA-----------------------------
-plot_daily_stats(station_number = "08NM116", start_year = 1974) 
+plot_daily_stats(station_number = "08NM116", 
+                 start_year = 1974) 
 
 ## ---- fig.height = 2.5, fig.width = 7, comment=NA-----------------------------
 plot_daily_stats(station_number = "08NM116", 
                  start_year = 1974,
                  add_year = 2000) 
+
+## ---- fig.height = 3, fig.width = 7, comment=NA-------------------------------
+plot_flow_duration(station_number = "08NM116",
+                   start_year = 1974) 
+
+## ---- fig.height = 3, fig.width = 7, comment=NA-------------------------------
+plot_flow_duration(station_number = "08NM116",
+                   start_year = 1974,
+                   months = 7:9,
+                   include_longterm = FALSE) 
+
+## ----  echo=TRUE, comment=NA--------------------------------------------------
+calc_longterm_mean(station_number = "08NM116", 
+                   start_year = 1974,
+                   percent_MAD = c(5,10,20))
+
+## ----  echo=TRUE, comment=NA--------------------------------------------------
+calc_longterm_percentile(station_number = "08NM116",
+                         start_year = 1974,
+                         percentiles = c(25,50,75))
+
+## ----  echo=TRUE, comment=NA--------------------------------------------------
+calc_flow_percentile(station_number = "08NM116", 
+                     start_year = 1974,
+                     flow_value = 6.270)
 
 ## ---- fig.height = 2.5, fig.width = 7, comment=NA-----------------------------
 add_daily_volume(station_number = "08NM116") %>%
@@ -243,31 +271,6 @@ plot_daily_cumulative_stats(station_number = "08NM116",
                             start_year = 1974,
                             use_yield = TRUE) 
 
-## ----  echo=TRUE, comment=NA--------------------------------------------------
-calc_longterm_mean(station_number = "08NM116", 
-                   start_year = 1974,
-                   percent_MAD = c(5,10,20))
-
-## ----  echo=TRUE, comment=NA--------------------------------------------------
-calc_longterm_percentile(station_number = "08NM116",
-                         start_year = 1974,
-                         percentiles = c(25,50,75))
-
-## ----  echo=TRUE, comment=NA--------------------------------------------------
-calc_flow_percentile(station_number = "08NM116", 
-                     start_year = 1974,
-                     flow_value = 6.270)
-
-## ---- fig.height = 3, fig.width = 7, comment=NA-------------------------------
-plot_flow_duration(station_number = "08NM116",
-                   start_year = 1974) 
-
-## ---- fig.height = 3, fig.width = 7, comment=NA-------------------------------
-plot_flow_duration(station_number = "08NM116",
-                   start_year = 1974,
-                   months = 7:9,
-                   include_longterm = FALSE) 
-
 ## ---- comment=NA--------------------------------------------------------------
 calc_annual_flow_timing(station_number = "08NM116", 
                         start_year = 1974)
@@ -283,6 +286,10 @@ calc_annual_lowflows(station_number = "08NM116",
 ## ---- fig.height = 4.5, fig.width = 7, comment=NA-----------------------------
 plot_annual_lowflows(station_number = "08NM116",
                      start_year = 1974) 
+
+## ---- comment=NA--------------------------------------------------------------
+calc_annual_peaks(station_number = "08NM116", 
+                  start_year = 1974)
 
 ## ---- comment=NA--------------------------------------------------------------
 calc_annual_outside_normal(station_number = "08NM116", 
@@ -429,7 +436,7 @@ library(ggplot2)
 # Create the plot list and extract the plot using [[1]]
 plot <- plot_daily_stats(station_number = "08NM116", start_year = 1980)[[1]]
 
-# Customize the plot with various 'ggplot2' functions
+# Customize the plot with various `ggplot2` functions
 plot + 
   geom_hline(yintercept = 1.5, colour = "red", linetype = 2, size = 1) +
   geom_vline(xintercept = as.Date("1900-03-01"), colour = "darkgray", linetype = 1, size = 0.5) +
@@ -467,7 +474,7 @@ plot +
 #  
 #  write_plots(plots = annual_data,
 #              folder_name = "Annual Plots",
-#              combined_pdf =  TRUE)
+#              combined_pdf = TRUE)
 
 ## ---- eval=FALSE--------------------------------------------------------------
 #  freq_analysis <- compute_annual_frequencies(station_number = "08NM116")

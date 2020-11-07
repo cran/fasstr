@@ -13,8 +13,8 @@
 
 #' @title Plot annual summary statistics for data screening
 #'
-#' @description Plots the mean, median, maximum, minimum, standard deviation of annual flows. Plots the statistics from all daily 
-#'    discharge values from all years, unless specified. Data calculated using screen_flow_data() function.
+#' @description Plots the mean, median, maximum, minimum, standard deviation of annual flows. Calculates statistics
+#'    from all values, unless specified. Data calculated using \code{screen_flow_data()} function. Returns a list of plots.
 #'
 #' @inheritParams screen_flow_data
 #' @inheritParams plot_annual_stats
@@ -119,9 +119,9 @@ plot_data_screening <- function(data,
   ## ----------
   
   # Create axis label based on input columns
-  y_axis_title <- ifelse(as.character(substitute(values)) == "Volume_m3", expression(Volume~(m^3)),
+  y_axis_title <- ifelse(as.character(substitute(values)) == "Volume_m3", "Volume (cubic metres)", #expression(Volume~(m^3))
                          ifelse(as.character(substitute(values)) == "Yield_mm", "Yield (mm)", 
-                                expression(Discharge~(m^3/s))))
+                                "Discharge (cms)")) #expression(Discharge~(m^3/s))
   
   # Plot
   sum_plots <- dplyr::group_by(flow_summary, STATION_NUMBER)

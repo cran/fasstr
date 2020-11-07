@@ -12,17 +12,19 @@
 
 #' @title Write a suite of tables and plots from various fasstr functions into a directory
 #'
-#' @description Calculates and writes tables and plots from a suite of statistics from fasstr functions into 
+#' @description Calculates and writes tables and plots from a suite of statistics from \code{fasstr} functions into 
 #'    an Excel workbook, and accompanying plot files for certain analyses. Due to the number of tables and plots to be made, this 
-#'    function may take several minutes to complete. If using \code{ignore_missing = FALSE} (default) and there is missing data, 
+#'    function may take several minutes to complete. If \code{ignore_missing = FALSE} (default) and there is missing data, 
 #'    some tables and plots may be empty and produce warnings. Use \code{ignore_missing = TRUE} to ignore the missing values or 
-#'    filter your data to complete years.
+#'    filter your data to complete years. Calculates statistics from all values, unless specified. Returns a list of tibbles and
+#'    plots, along with saving the Excel and image files in a directory.
 #'    
 #' @inheritParams compute_full_analysis
 #' @param file_name Character string of the name of the Excel Workbook (and folder for plots if necessary) to create on drive to 
 #'    write all results. 
-#' @param plot_filetype Image type to write. One of "png", "eps", "ps", "tex", "pdf", "jpeg", "tiff", "bmp", or "svg".
-#'    If not "pdf" then individual plots will be created instead of a combined PDF. Default \code{"pdf"}.
+#' @param plot_filetype Image type to write. One of \code{'png'}, \code{'eps'}, \code{'ps'}, \code{'tex'}, \code{'pdf'}, 
+#'    \code{'jpeg'}, \code{'tiff'}, \code{'bmp'}, or \code{'svg'}. If not \code{'pdf'} then individual plots will be created instead 
+#'    of a combined PDF. Default \code{'pdf'}.
 #' 
 #' @seealso \code{\link{compute_full_analysis}},
 #'          \code{\link{screen_flow_data}},
@@ -373,7 +375,8 @@ write_full_analysis <- function(data,
     add_table(wb = output_excel,
               sheet = timeseries_sheet,
               data = flow_data_out,
-              title = paste0("Daily Flows, Dates, Rolling Means (cubic metres per second), and Basin Area (", start_year, "-", end_year, ")"),
+              title = paste0("Daily Flows, Dates, Rolling Means (cubic metres per second), and Basin Area (", 
+                             start_year, "-", end_year, ")"),
               col = 1,
               row = 1,
               comment = data_function)
@@ -421,7 +424,8 @@ write_full_analysis <- function(data,
     add_table(wb = output_excel,
               sheet = screening_sheet,
               data = flow_screening_out,
-              title = paste0("Data Screening: Annual Summary Statistics (cubic metres per second) and Data Availability (", start_year, "-", end_year, ")"),
+              title = paste0("Data Screening: Annual Summary Statistics (cubic metres per second) and Data Availability (", 
+                             start_year, "-", end_year, ")"),
               col = 1,
               row = 1,
               comment = screening_function)
@@ -529,7 +533,8 @@ write_full_analysis <- function(data,
     add_table(wb = output_excel,
               sheet = lt_sheet,
               data = lt_stats_out,
-              title = paste0("Long-term Summary Statistics of Daily Mean Flows, in cubic metres per second (", start_year, "-", end_year, ")"),
+              title = paste0("Long-term Summary Statistics of Daily Mean Flows, in cubic metres per second (", 
+                             start_year, "-", end_year, ")"),
               col = 1,
               row = 1,
               comment = longterm_function)
@@ -538,7 +543,8 @@ write_full_analysis <- function(data,
     add_plot(wb = output_excel,
              sheet = lt_sheet,
              plot = results$Longterm$Longterm_Daily_Summary_Stats_Plot[[1]],
-             title = paste0("Long-term Summary Statistics of Daily Mean Flows, in cubic metres per second (", start_year, "-", end_year, ")"),
+             title = paste0("Long-term Summary Statistics of Daily Mean Flows, in cubic metres per second (", 
+                            start_year, "-", end_year, ")"),
              col = ncol(lt_stats_out) + 2,
              row = 2,
              height = 4,
@@ -725,7 +731,8 @@ write_full_analysis <- function(data,
     add_table(wb = output_excel,
               sheet = ann_cumul_sheet,
               data = ann_cumul_out,
-              title = paste0("Annual Cumulative Volumetric (cubic metres) and Yield (millimetres) Summary Statistics (", start_year, "-", end_year, ")"),
+              title = paste0("Annual Cumulative Volumetric (cubic metres) and Yield (millimetres) Summary Statistics (", 
+                             start_year, "-", end_year, ")"),
               col = 1,
               row = 1,
               comment = paste0(annual_vol_function, "              ", annual_yield_function))
@@ -843,7 +850,8 @@ write_full_analysis <- function(data,
     add_table(wb = output_excel,
               sheet = ann_oth_sheet,
               data = ann_other_out,
-              title = paste0("Annual Low-flow Values (cubic metres per second) and Dates, Timing of Flows (day of year), and Number Days Above/Below Normal (", start_year, "-", end_year, ")"),
+              title = paste0("Annual Low-flow Values (cubic metres per second) and Dates, Timing of Flows",
+                             " (day of year), and Number Days Above/Below Normal (", start_year, "-", end_year, ")"),
               col = 1,
               row = 1,
               comment = paste0(annual_lows_function, "              ", annual_timing_function,

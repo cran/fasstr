@@ -11,11 +11,11 @@
 # See the License for the specific language governing permissions and limitations under the License.
 
 
-#' @title Plot annual lowflows
+#' @title Plot annual low flows and dates
 #'
-#' @description Plot annual n-day minimum values, and the day of year of occurrence of daily flow values from a 
-#'    streamflow dataset. Plots statistics from all daily discharge values from all years, unless specified. Data
-#'    calculated from calc_annual_lowflows() function.
+#' @description Plot annual n-day minimum values, and the day of year and date of occurrence of daily flow values from a daily 
+#'    streamflow data set. Calculates statistics from all values, unless specified. Data calculated from \code{calc_annual_lowflows()}
+#'    function. Returns a list of plots.
 #'
 #' @inheritParams calc_annual_lowflows
 #' @inheritParams plot_annual_stats
@@ -134,7 +134,8 @@ plot_annual_lowflows <- function(data,
 
 
   # Gather data and plot the minimums values
-  lowflow_values <- dplyr::select(lowflow_stats, STATION_NUMBER, Year, dplyr::contains("Day"), -dplyr::contains("DoY"), -dplyr::contains("Date"))
+  lowflow_values <- dplyr::select(lowflow_stats, STATION_NUMBER, Year, dplyr::contains("Day"), 
+                                  -dplyr::contains("DoY"), -dplyr::contains("Date"))
 
   lowflow_values <- tidyr::gather(lowflow_values, Statistic, Value, -STATION_NUMBER, -Year)
   lowflow_values <- dplyr::mutate(lowflow_values, Statistic = substr(Statistic, 5, nchar(Statistic)))
@@ -147,9 +148,9 @@ plot_annual_lowflows <- function(data,
   ## ----------
   
   # Create axis label based on input columns
-  y_axis_title <- ifelse(as.character(substitute(values)) == "Volume_m3", expression(Volume~(m^3)),
+  y_axis_title <- ifelse(as.character(substitute(values)) == "Volume_m3", "Volume (cubic metres)", #expression(Volume~(m^3))
                          ifelse(as.character(substitute(values)) == "Yield_mm", "Yield (mm)", 
-                                expression(Discharge~(m^3/s))))
+                                "Discharge (cms)")) #expression(Discharge~(m^3/s))
   
   # Create plots for each STATION_NUMBER in a tibble (see: http://www.brodrigues.co/blog/2017-03-29-make-ggplot2-purrr/)
   doy_plots <- dplyr::group_by(lowflow_doy, STATION_NUMBER)

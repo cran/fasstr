@@ -14,14 +14,14 @@
 
 #' @title Plot flow duration curves
 #'
-#' @description Plots flow duration curves, percent time a flow value is equalled or exceeded, for a streamflow dataset. Plots 
-#'    statistics from all daily discharge values from all years, unless specified. Data calculated using calc_longterm_stats() 
-#'    function then converted for plotting.
+#' @description Plots flow duration curves of flow data from a daily streamflow data set. Plots the percent time flows are 
+#'    equalled or exceeded. Calculates statistics from all values, unless specified. Data calculated using 
+#'    \code{calc_longterm_stats()} function then converted for plotting. Returns a list of plots.
 #'
 #' @inheritParams calc_longterm_daily_stats
 #' @inheritParams plot_annual_stats
-#' @param months Numeric vector of month curves to plot. NA if no months required. Default \code{1:12}.
-#' @param include_longterm Logical value indicating whether to include longterm curve of all data. Default \code{TRUE}.
+#' @param months Numeric vector of month curves to plot. \code{NA} if no months required. Default \code{1:12}.
+#' @param include_longterm Logical value indicating whether to include long-term curve of all data. Default \code{TRUE}.
 #'
 #' @return A list of ggplot2 objects with the following for each station provided:
 #'   \item{Flow_Duration}{a plot that contains flow duration curves for each month, long-term, and (option) customized months}
@@ -29,6 +29,10 @@
 #' @seealso \code{\link{calc_longterm_daily_stats}}
 #'   
 #' @examples
+#' \dontrun{
+#' 
+#' # Working examples:
+#' 
 #' # Run if HYDAT database has been downloaded (using tidyhydat::download_hydat())
 #' if (file.exists(tidyhydat::hy_downloaded_db())) {
 #' 
@@ -47,6 +51,7 @@
 #'                    custom_months = 7:9,
 #'                    custom_months_label = "Summer")
 #'                    
+#' }
 #' }
 #' @export
 
@@ -171,9 +176,9 @@ plot_flow_duration <- function(data,
   ## ----------
   
   # Create axis label based on input columns
-  y_axis_title <- ifelse(as.character(substitute(values)) == "Volume_m3", expression(Volume~(m^3)),
+  y_axis_title <- ifelse(as.character(substitute(values)) == "Volume_m3", "Volume (cubic metres)", #expression(Volume~(m^3))
                          ifelse(as.character(substitute(values)) == "Yield_mm", "Yield (mm)", 
-                                expression(Discharge~(m^3/s))))
+                                "Discharge (cms)")) #expression(Discharge~(m^3/s))
   
   flow_plots <- dplyr::group_by(percentiles_data, STATION_NUMBER)
   flow_plots <- tidyr::nest(flow_plots)

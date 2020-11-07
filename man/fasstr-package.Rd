@@ -7,7 +7,7 @@
 \title{fasstr: Analyze, Summarize, and Visualize Daily Streamflow Data}
 \description{
 The Flow Analysis Summary Statistics Tool for R, 'fasstr', provides various 
-    functions to clean and screen daily stream discharge data; calculate and visualize various summary statistics
+    functions to tidy and screen daily stream discharge data; calculate and visualize various summary statistics
     and metrics; and compute annual trending (using 'zyp' package methods <https://CRAN.R-project.org/package=zyp>)
     and volume frequency analyses (using methods similar to HEC-SSP (2019) 
     <https://www.hec.usace.army.mil/software/hec-ssp/>). It features useful function arguments for filtering of and
@@ -16,7 +16,6 @@ The Flow Analysis Summary Statistics Tool for R, 'fasstr', provides various
 }
 \references{
 tidyhydat information:
-
 
 To use the station_number argument of the fasstr functions, please download the latest version of HYDAT using the function:
  \itemize{
@@ -28,14 +27,15 @@ To use the station_number argument of the fasstr functions, please download the 
  \itemize{
    \item Please see this description of the database: goo.gl/H3NXJQ
    \item This page is landing page for technical description of HYDAT:
-   \url{http://collaboration.cmc.ec.gc.ca/cmc/hydrometrics/www/}
+   \url{https://collaboration.cmc.ec.gc.ca/cmc/hydrometrics/www/}
    \item This page links to a document that outlines database table definitions:
-   \url{http://collaboration.cmc.ec.gc.ca/cmc/hydrometrics/www/HYDAT_Definition_EN.pdf}
+   \url{https://collaboration.cmc.ec.gc.ca/cmc/hydrometrics/www/HYDAT_Definition_EN.pdf}
    }
 }
 \seealso{
 Useful links:
 \itemize{
+  \item \url{https://bcgov.github.io/fasstr/}
   \item \url{https://github.com/bcgov/fasstr}
   \item \url{https://www2.gov.bc.ca/gov/content/environment/air-land-water/water}
   \item Report bugs at \url{https://github.com/bcgov/fasstr/issues}
@@ -43,7 +43,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Jon Goetz \email{jon.goetz@gov.bc.ca}
+\strong{Maintainer}: Jon Goetz \email{jon.goetz@gov.bc.ca} (\href{https://orcid.org/0000-0002-4993-1119}{ORCID})
 
 Authors:
 \itemize{

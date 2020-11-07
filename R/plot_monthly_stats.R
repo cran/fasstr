@@ -12,10 +12,11 @@
 
 #' @title Plot monthly summary statistics
 #'
-#' @description Plots monthly mean, median, maximum, minimum, and percentiles for each month of all years of daily flow values 
-#'    from a streamflow dataset. Plots the statistics from all daily discharge values from all years, unless specified. Data
-#'    calculated using the calc_monthly_stats() function.
-#' @param percentiles Numeric vector of percentiles to calculate. Set to NA if none required. Default \code{NA}.
+#' @description Plots means, medians, maximums, minimums, and percentiles for each month of all years of flow values 
+#'    from a daily streamflow data set. Calculates statistics from all values, unless specified. Data calculated using the 
+#'    \code{calc_monthly_stats()} function. Produces a list containing a plot for each statistic. Returns a list of plots.
+#'    
+#' @param percentiles Numeric vector of percentiles to calculate. Set to \code{NA} if none required. Default \code{NA}.
 #' 
 #' @inheritParams calc_monthly_stats
 #' @inheritParams plot_annual_stats
@@ -134,9 +135,9 @@ plot_monthly_stats <- function(data,
   ## ----------
 
   # Create axis label based on input columns
-  y_axis_title <- ifelse(as.character(substitute(values)) == "Volume_m3", expression(Volume~(m^3)),
+  y_axis_title <- ifelse(as.character(substitute(values)) == "Volume_m3", "Volume (cubic metres)", #expression(Volume~(m^3))
                          ifelse(as.character(substitute(values)) == "Yield_mm", "Yield (mm)", 
-                                expression(Discharge~(m^3/s))))
+                                "Discharge (cms)")) #expression(Discharge~(m^3/s))
   
   # Create the daily stats plots
   monthly_plots <- dplyr::group_by(monthly_data, STATION_NUMBER, Statistic)

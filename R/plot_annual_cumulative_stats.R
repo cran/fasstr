@@ -10,14 +10,13 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and limitations under the License.
 
-#' @title Plot annual and seasonal total flows
+#' @title Plot annual (and seasonal) cumulative flows
 #' 
-#' @description Plots annual and seasonal total flows, volumetric or runoff yield flows, from a streamflow dataset. Calculates 
-#'    the statistics from all daily discharge values from all years, unless specified. Data calculated from
-#'    plot_annual_cumulative_stats() function. For water year and seasonal data, the designated
-#'    year is the year in which the year or season ends. For example, if using water years with a start month of 11, the OND season is
-#'    designated by the water year which starts in November (designated by the calendar year in which it ends).
-#'
+#' @description Plots annual and seasonal (if \code{include_seaons = TRUE}) total flows, volumetric discharge or water yields, from a 
+#'    daily streamflow data set. Calculates statistics from all values, unless specified. Data calculated from 
+#'    \code{plot_annual_cumulative_stats()} function. For water year and seasonal data, the designated year is the year in which the 
+#'    year or season ends. Returns a list of plots.
+#'    
 #' @inheritParams calc_annual_cumulative_stats
 #' @inheritParams plot_annual_stats
 #'    
@@ -26,9 +25,9 @@
 #'   \item{Two_Seasons_Total_Volume}{if include_seasons = TRUE, two seasons total volumetric discharges, in cubic metres}
 #'   \item{Four_Seasons_Total_Volume}{if include_seasons = TRUE, four seasons total volumetric discharges, in cubic metres}
 #'   If \code{use_yield} argument is used the list will contain the following objects:
-#'   \item{Annual_Yield}{annual runoff yield, in millimetres}
-#'   \item{Two_Seasons_Yield}{if include_seasons = TRUE, two seasons runoff yields, in millimetres}
-#'   \item{Four_Seasons_Yield}{if include_seasons = TRUE, four seasons runoff yields, in millimetres}
+#'   \item{Annual_Yield}{annual water yield, in millimetres}
+#'   \item{Two_Seasons_Yield}{if include_seasons = TRUE, two seasons water yield, in millimetres}
+#'   \item{Four_Seasons_Yield}{if include_seasons = TRUE, four seasons water yield, in millimetres}
 #'   
 #' @seealso \code{\link{calc_annual_cumulative_stats}}
 #'   
@@ -199,7 +198,7 @@ plot_annual_cumulative_stats <- function(data,
           ggplot2::scale_x_continuous(breaks = scales::pretty_breaks(n = 8))+
           {if(length(unique(seasons2_data$Year)) < 8) ggplot2::scale_x_continuous(breaks = unique(seasons2_data$Year))}+
           ggplot2::scale_y_continuous(breaks = scales::pretty_breaks(n = 6)) +
-          ggplot2::ylab("Volume (m3)") +
+          ggplot2::ylab("Volume (cubic metres)") +
           {if (use_yield) ggplot2::ylab("Yield (mm)")} +
           ggplot2::xlab("Year")+
           ggplot2::scale_color_brewer(palette = "Set1") +

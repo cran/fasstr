@@ -11,32 +11,32 @@
 # See the License for the specific language governing permissions and limitations under the License.
 
 
-#' @title Perform a custom annual frequency analysis
+#' @title Perform a custom volume frequency analysis
 #'
-#' @description Performs a flow volume frequency analysis from a streamflow dataset. Defaults to ranking by minimums; 
-#'    use \code{use_max} for to rank by maximum flows. Calculates the statistics from events
-#'    and flow values provided. Columns of events (years), their values (mins or maxs), and identifiers (lowflows, highflows, etc),
-#'    Function will calculate using all values in the provided data (no grouped analysis). Analysis methodology replicates that 
-#'    from \href{http://www.hec.usace.army.mil/software/hec-ssp/}{HEC-SSP}.
+#' @description Performs a volume frequency analysis on custom data. Defaults to ranking by minimums; use \code{use_max} for to 
+#'    rank by maximum flows. Calculates the statistics from events and flow values provided. Columns of events (e.g. years), their 
+#'    values (minimums or maximums), and identifiers (low-flows, high-flows, etc.). Function will calculate using all values in the
+#'    provided data (no grouped analysis). Analysis methodology replicates that from 
+#'    \href{https://www.hec.usace.army.mil/software/hec-ssp/}{HEC-SSP}. Returns a list of tibbles and plots.
 #'
-#' @param data  A data frame of flow data that contains columns of events, flow values, and measures (data type).
-#' @param events Column in \code{data} that contains event identifiers, typically year values. Default \code{"Year"}.
-#' @param values  Column in \code{data} that contains numeric flow values, in units of cubic metres per second. Default \code{"Value"}.
-#' @param measures  Column in \code{data} that contains measure identifiers (example data: '7-day low' or 'Annual Max'). Can have multiple
-#'    measures (ex. '7-day low' and '30-day low') in column if multiple statistics are desired. Default \code{"Measure"}.
-#' @param use_max  Logical value to indicate using annual maximums rather than the minimums for analysis. Default \code{FALSE}.
+#' @param data  A data frame of data that contains columns of events, flow values, and measures (data type).
+#' @param events Column in \code{data} that contains event identifiers, typically year values. Default \code{'Year'}.
+#' @param values  Column in \code{data} that contains numeric flow values, in units of cubic metres per second. Default \code{'Value'}.
+#' @param measures  Column in \code{data} that contains measure identifiers (example data: '7-day low' or 'Annual Max'). Can have 
+#'    multiple measures (ex. '7-day low' and '30-day low') in column if multiple statistics are desired. Default \code{'Measure'}.
+#' @param use_max  Logical value to indicate using maximums rather than the minimums for analysis. Default \code{FALSE}.
 #' @param use_log  Logical value to indicate log-scale transforming of flow data before analysis. Default \code{FALSE}.
-#' @param prob_plot_position Character string indicating the plotting positions used in the frequency plots, one of "weibull",
-#'    "median", or "hazen". Points are plotted against  (i-a)/(n+1-a-b) where \code{i} is the rank of the value; \code{n} is the 
+#' @param prob_plot_position Character string indicating the plotting positions used in the frequency plots, one of \code{'weibull'},
+#'    \code{'median'}, or \code{'hazen'}. Points are plotted against  (i-a)/(n+1-a-b) where \code{i} is the rank of the value; \code{n} is the 
 #'    sample size and \code{a} and \code{b} are defined as: (a=0, b=0) for Weibull plotting positions; (a=.2; b=.3) for Median 
-#'    plotting positions; and (a=.5; b=.5) for Hazen plotting positions. Default \code{"weibull"}.
+#'    plotting positions; and (a=.5; b=.5) for Hazen plotting positions. Default \code{'weibull'}.
 #' @param prob_scale_points  Numeric vector of probabilities to be plotted along the X axis in the frequency plot. Inverse of 
 #'    return period. Default \code{c(.9999, .999, .99, .9, .5, .2, .1, .02, .01, .001, .0001)}.
-#' @param fit_distr Character string identifying the distribution to fit annual data, one of "PIII" (Pearson Log III distribution) 
-#'    or "weibull" (Weibull distribution). Default \code{"PIII"}.
-#' @param fit_distr_method  Character string identifying the method used to fit the distribution, one of  "MOM" (method of moments) 
-#'    or "MLE" (maximum likelihood estimation). Selected as \code{"MOM"} if \code{fit_distr}=="PIII" (default) or \code{"MLE"} if 
-#'     \code{fit_distr}=="weibull".
+#' @param fit_distr Character string identifying the distribution to fit annual data, one of \code{'PIII'} (Log Pearson Type III)
+#'    or \code{'weibull'} (Weibull) distributions. Default \code{'PIII'}.
+#' @param fit_distr_method  Character string identifying the method used to fit the distribution, one of \code{'MOM'} (method of
+#'    moments) or \code{'MLE'} (maximum likelihood estimation). Selected as \code{'MOM'} if \code{fit_distr ='PIII'} (default) or 
+#'    \code{'MLE'} if \code{fit_distr = 'weibull'}.
 #' @param fit_quantiles Numeric vector of quantiles to be estimated from the fitted distribution. 
 #'    Default \code{c(.975, .99, .98, .95, .90, .80, .50, .20, .10, .05, .01)}.
 #' @param plot_curve Logical value to indicate plotting the computed curve on the probability plot. Default \code{TRUE}.
@@ -139,12 +139,14 @@ compute_frequency_analysis <- function(data,
     stop("Measures not found in data frame. Rename measure column to 'Measure' or identify the column using 'measures' argument.", call. = FALSE)
   names(data)[names(data) == as.character(substitute(measures))] <- "Measure"
   
-  
+
   # Set the Q_stat dataframe
   Q_stat <-  data
   
   if(fit_distr[1] == 'weibull' & any(Q_stat$Value < 0, na.rm = TRUE))
     stop("Cannot fit weibull distribution with negative flow values.", call. = FALSE)
+  if(fit_distr[1] == 'PIII' & any(Q_stat$Value <= 0, na.rm = TRUE))
+    stop("Cannot fit 'PIII' distribution with negative or zero flow values.", call. = FALSE)
   
   ## Define functions for analysis
   ##------------------------------
@@ -193,7 +195,7 @@ compute_frequency_analysis <- function(data,
     x$prob <- ((seq_len(length(x$Value))) - a)/((length(x$Value) + 1 - a - b))
     if(use_max)x$prob <- 1 - x$prob   # they like to use p(exceedance) if using a minimum
     #x$dist.prob <- stats::qnorm(1 - x$prob) temporarilty remove
-    x$return <- 1/x$prob
+    x$Return_P <- 1/x$prob
     x
   }, a = a, b = b, use_max = use_max)
   
@@ -241,10 +243,14 @@ compute_frequency_analysis <- function(data,
   if(use_max){ freqplot <- freqplot + ggplot2::theme(legend.justification = c(1,0), legend.position = c(.98, 0.02))}
   if(!use_log){ freqplot <- freqplot + ggplot2::scale_y_log10(breaks = scales::pretty_breaks(n = 10))}
   if(use_log){ freqplot <- freqplot + ggplot2::scale_y_continuous(breaks = scales::pretty_breaks(n = 10))}
-  if(use_log &  use_max ){freqplot <- freqplot + ggplot2::ylab(expression(lnDischarge~(m^3/s)))}  # adjust the Y axis label
-  if(use_log & !use_max){freqplot <- freqplot + ggplot2::ylab(expression(lnDischarge~(m^3/s)))}
-  if(!use_log &  use_max ){freqplot <- freqplot + ggplot2::ylab(expression(Discharge~(m^3/s)))}
-  if(!use_log & !use_max){freqplot <- freqplot + ggplot2::ylab(expression(Discharge~(m^3/s)))}
+  # if(use_log &  use_max ){freqplot <- freqplot + ggplot2::ylab(expression(lnDischarge~(m^3/s)))}  # adjust the Y axis label
+  # if(use_log & !use_max){freqplot <- freqplot + ggplot2::ylab(expression(lnDischarge~(m^3/s)))}
+  # if(!use_log &  use_max ){freqplot <- freqplot + ggplot2::ylab(expression(Discharge~(m^3/s)))}
+  # if(!use_log & !use_max){freqplot <- freqplot + ggplot2::ylab(expression(Discharge~(m^3/s)))}
+  if(use_log &  use_max ){freqplot <- freqplot + ggplot2::ylab("lnDischarge (cms)")}  # adjust the Y axis label
+  if(use_log & !use_max){freqplot <- freqplot + ggplot2::ylab("lnDischarge (cms)")}
+  if(!use_log &  use_max ){freqplot <- freqplot + ggplot2::ylab("Discharge (cms)")}
+  if(!use_log & !use_max){freqplot <- freqplot + ggplot2::ylab("Discharge (cms)")}
   
   #--------------------------------------------------------------
   # fit the distribution to each measure
@@ -312,7 +318,7 @@ compute_frequency_analysis <- function(data,
   }, prob = fit_quantiles, fit = fit, use_max = use_max, use_log = use_log)
   
   # get the transposed version
-  fitted_quantiles$Return <- 1 / fitted_quantiles$prob
+  fitted_quantiles$Return_P <- 1 / fitted_quantiles$prob
   
   fitted_quantiles$Measure <- factor(fitted_quantiles$Measure, levels = unique(fitted_quantiles$Measure))
   
@@ -320,7 +326,7 @@ compute_frequency_analysis <- function(data,
   fitted_quantiles_output <- dplyr::rename(fitted_quantiles_output,
                                            Distribution = distr,
                                            Probability = prob,
-                                           "Return Period" = Return)
+                                           "Return Period" = Return_P)
   
   ## Add fitted curves to the freqplot
   fit_quantiles_plot <-  seq(to = 0.99, from = 0.01, by = .005)
@@ -355,7 +361,7 @@ compute_frequency_analysis <- function(data,
   
   plotdata <- dplyr::rename(plotdata, 
                             Probability = prob,
-                            "Return Period" = return)
+                            "Return Period" = Return_P)
   
   
   freq_results <- list(Freq_Analysis_Data = dplyr::as_tibble(Q_stat),

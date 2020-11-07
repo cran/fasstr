@@ -13,10 +13,10 @@
 #' @title Plot cumulative daily flow statistics
 #' 
 #' @description Plot the daily cumulative mean, median, maximum, minimum, and 5, 25, 75, 95th percentiles for each day of the year 
-#'    from a streamflow dataset. Plots the statistics from all daily cumulative values from all years, unless specified. 
-#'    Data calculated using calc_daily_cumulative_stats() function. Can plot individual years for comparison using the 
+#'    from a daily streamflow data set. Calculates statistics from all values from complete, unless specified. 
+#'    Data calculated using \code{calc_daily_cumulative_stats()} function. Can plot individual years for comparison using the 
 #'    add_year argument. Defaults to volumetric cumulative flows, can use \code{use_yield} and \code{basin_area} to convert to 
-#'    runoff yield.
+#'    water yield. Returns a list of plots.
 #'
 #' @inheritParams calc_daily_cumulative_stats
 #' @inheritParams plot_daily_stats
@@ -221,7 +221,7 @@ plot_daily_cumulative_stats <- function(data,
              ggplot2::scale_x_date(date_labels = "%b", date_breaks = "1 month",
                                    limits = as.Date(c(NA, as.character(max(daily_stats$AnalysisDate)))), expand=c(0, 0)) +
              ggplot2::xlab("Day of Year")+
-             {if (!use_yield) ggplot2::ylab(expression(Cumuative~Volume~(m^3)))} +
+             {if (!use_yield) ggplot2::ylab("Cumulative Volume (cubic metres)")} +
              {if (use_yield) ggplot2::ylab("Cumulative Yield (mm)")} +
              ggplot2::theme_bw() +
              ggplot2::labs(color = 'Daily Statistics') +  

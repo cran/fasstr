@@ -35,12 +35,6 @@ freq_analysis$Freq_Plot_Data
 ## ---- echo=TRUE, fig.height = 4, fig.width = 7--------------------------------
 freq_analysis$Freq_Plot
 
-## ---- echo=TRUE, fig.height = 4, fig.width = 7--------------------------------
-freq_analysis <- compute_annual_frequencies(station_number = "08NM116",
-                                            roll_days = 7,
-                                            plot_curve = TRUE)
-freq_analysis$Freq_Plot
-
 ## ---- echo=TRUE, comment=NA---------------------------------------------------
 print(freq_analysis$Freq_Fitting$`7-Day`)
 
@@ -49,6 +43,12 @@ summary(freq_analysis$Freq_Fitting$`7-Day`)
 
 ## ---- echo=TRUE, comment=NA, fig.height = 6, fig.width = 7--------------------
 plot(freq_analysis$Freq_Fitting$`7-Day`)
+
+## ---- echo=TRUE, fig.height = 4, fig.width = 7--------------------------------
+freq_analysis <- compute_annual_frequencies(station_number = "08NM116",
+                                            roll_days = 7,
+                                            plot_curve = TRUE)
+freq_analysis$Freq_Plot
 
 ## ---- echo=TRUE, comment=NA---------------------------------------------------
 freq_analysis$Freq_Fitted_Quantiles
