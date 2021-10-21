@@ -6,12 +6,12 @@ library(fasstr)
 
 ## ---- eval=FALSE--------------------------------------------------------------
 #  compute_annual_trends(station_number = "08NM116",
-#                        zyp_method = "yuepilon",
+#                        zyp_method = "zhang",
 #                        start_year = 1973, end_year = 2013)
 
 ## ---- eval=FALSE--------------------------------------------------------------
 #  compute_annual_trends(station_number = "08NM116",
-#                        zyp_method = "yuepilon",
+#                        zyp_method = "zhang",
 #                        start_year = 1973, end_year = 2013,
 #                        annual_percentiles = c(10,90),
 #                        monthly_percentiles = c(10,20),
@@ -24,7 +24,7 @@ library(fasstr)
 
 ## ---- comment=NA, echo=FALSE--------------------------------------------------
 trends <- compute_annual_trends(station_number = "08NM116",
-                                zyp_method = "yuepilon",
+                                zyp_method = "zhang",
                                 start_year = 1973, end_year = 2013)
 
 data <- as.data.frame(trends[[1]])[,2:5]
@@ -35,7 +35,7 @@ data
 
 ## ---- echo=TRUE, include=TRUE-------------------------------------------------
 trends_analysis <- compute_annual_trends(station_number = "08NM116",
-                                         zyp_method = "yuepilon",
+                                         zyp_method = "zhang",
                                          start_year = 1973, end_year = 2013)
 
 ## ---- echo=TRUE, comment=NA---------------------------------------------------
@@ -46,7 +46,7 @@ trends_analysis$Annual_Trends_Results
 
 ## ---- echo = FALSE, include=FALSE---------------------------------------------
 trends <- compute_annual_trends(station_number = "08NM116",
-                                zyp_method = "yuepilon", zyp_alpha = 0.05,
+                                zyp_method = "zhang", zyp_alpha = 0.05,
                                 start_year = 1973, end_year = 2013)
 
 ## ----  echo=FALSE, comment=NA, fig.height = 3, fig.width = 7------------------

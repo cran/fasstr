@@ -1,11 +1,10 @@
 ## ----options, include=FALSE---------------------------------------------------
 knitr::opts_chunk$set(eval = nzchar(Sys.getenv("hydat_eval")),
-warning = FALSE, 
-message = FALSE)
+                      warning = FALSE, 
+                      message = FALSE)
 
 ## ---- include=FALSE-----------------------------------------------------------
 library(fasstr)
-library(dplyr)
 
 ## ---- eval=FALSE--------------------------------------------------------------
 #  mission_creek <- compute_full_analysis(station_number = "08NM116",
@@ -37,7 +36,7 @@ head(as.data.frame(fill_missing_dates(station_number = "08NM116") %>%
                      add_date_variables() %>%
                      add_rolling_means() %>%
                      add_basin_area() %>% 
-                     filter(WaterYear >= 1990, WaterYear <= 2001) 
+                     dplyr::filter(WaterYear >= 1990, WaterYear <= 2001) 
 ))
 
 ## ----  echo=FALSE, comment=NA-------------------------------------------------
@@ -224,7 +223,7 @@ plot_daily_cumulative_stats(station_number = "08NM116", add_year = 1990, use_yie
                             start_year = 1990, end_year = 2001)[[1]]
 
 ## ----  echo=FALSE, comment=NA-------------------------------------------------
-trends <- compute_annual_trends(station_number = "08NM116", zyp_method = "yuepilon", zyp_alpha = 0.05,
+trends <- compute_annual_trends(station_number = "08NM116", zyp_method = "zhang", zyp_alpha = 0.05,
                                 start_year = 1990, end_year = 2001)
 head(as.data.frame(trends[[1]]))
 

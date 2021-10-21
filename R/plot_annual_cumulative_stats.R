@@ -35,9 +35,6 @@
 #' # Run if HYDAT database has been downloaded (using tidyhydat::download_hydat())
 #' if (file.exists(tidyhydat::hy_downloaded_db())) {
 #' 
-#' # Plot annual cumulative volume statistics
-#' plot_annual_cumulative_stats(station_number = "08NM116") 
-#' 
 #' # Plot annual cumulative yield statistics with default HYDAT basin area
 #' plot_annual_cumulative_stats(station_number = "08NM116",
 #'                              use_yield = TRUE) 
@@ -46,11 +43,6 @@
 #' plot_annual_cumulative_stats(station_number = "08NM116",
 #'                              use_yield = TRUE,
 #'                              basin_area = 800) 
-#' 
-#' # Plot annual cumulative yield statistics and seasonal totals
-#' plot_annual_cumulative_stats(station_number = "08NM116",
-#'                              use_yield = TRUE,
-#'                              include_seasons = TRUE)
 #'                              
 #' }
 #' @export
@@ -165,7 +157,7 @@ plot_annual_cumulative_stats <- function(data,
         ggplot2::xlab("Year")+
         ggplot2::scale_color_brewer(palette = "Set1") +
         ggplot2::theme_bw() +
-        ggplot2::guides(colour = FALSE)+
+        ggplot2::guides(colour = 'none') +
         {if (include_title & .y != "XXXXXXX") ggplot2::ggtitle(paste(.y)) } +
         ggplot2::theme(panel.border = ggplot2::element_rect(colour = "black", fill = NA, size = 1),
                        panel.grid = ggplot2::element_line(size = .2),
@@ -203,7 +195,7 @@ plot_annual_cumulative_stats <- function(data,
           ggplot2::xlab("Year")+
           ggplot2::scale_color_brewer(palette = "Set1") +
           ggplot2::theme_bw() +
-          ggplot2::guides(colour = FALSE) +
+          ggplot2::guides(colour = 'none') +
           {if (include_title & .y != "XXXXXXX") ggplot2::ggtitle(paste(.y)) } +
           ggplot2::theme(panel.border = ggplot2::element_rect(colour = "black", fill = NA, size = 1),
                          panel.grid = ggplot2::element_line(size = .2),
@@ -231,7 +223,7 @@ plot_annual_cumulative_stats <- function(data,
           ggplot2::xlab("Year")+
           ggplot2::scale_color_brewer(palette = "Set1") +
           ggplot2::theme_bw() +
-          ggplot2::guides(colour = FALSE)+
+          ggplot2::guides(colour = 'none')+
           {if (include_title & .y != "XXXXXXX") ggplot2::ggtitle(paste(.y)) } +
           ggplot2::theme(panel.border = ggplot2::element_rect(colour = "black", fill = NA, size = 1),
                          panel.grid = ggplot2::element_line(size = .2),

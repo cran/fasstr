@@ -321,7 +321,6 @@ The following list contains the packages required to complete many of the `fasst
 - [`e1071`](https://cran.r-project.org/package=e1071) - used in the frequency analyses for determining skewness for the fitting distributions
 - [`fitdistrplus`](https://cran.r-project.org/package=fitdistrplus) - used in the frequency analyses for fitting data to the distributions
 - [`ggplot2`](https://cran.r-project.org/package=ggplot2) - used for plotting the data
-- [`lubridate`](https://cran.r-project.org/package=lubridate) - used for easy creation of date columns
 - [`PearsonDS`](https://cran.r-project.org/package=PearsonDS) - used in the frequency analyses for fitting data to the distributions
 - [`plyr`](https://cran.r-project.org/package=plyr) - used in the frequency analyses to handle data
 - [`purrr`](https://cran.r-project.org/package=purrr) - used in the plotting functions to plot many plots simultaneously
@@ -330,6 +329,6 @@ The following list contains the packages required to complete many of the `fasst
 - [`tidyhydat`](https://cran.r-project.org/package=tidyhydat) - used to extract data from a HYDAT database
 - [`tidyr`](https://cran.r-project.org/package=tidyr) - used for many tidy functions (gather, spread, etc)
 - [`openxlsx`](https://cran.r-project.org/package=openxlsx) - used to write data as Excel files in the write_ functions
-- [`zyp`](https://cran.r-project.org/package=zyp) - used in the trending funrction to calculate the trends
+- [`zyp`](https://cran.r-project.org/package=zyp) - used in the trending function to calculate the trends
 
 

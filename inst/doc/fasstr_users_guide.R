@@ -12,7 +12,6 @@ message = FALSE)
 
 ## ---- echo=TRUE---------------------------------------------------------------
 library(fasstr)
-library(dplyr)
 
 ## ---- echo=TRUE, eval=FALSE---------------------------------------------------
 #  tidyhydat::download_hydat()
@@ -42,7 +41,6 @@ data.frame(data[1:6,])
 
 ## ----exampletidy, comment=NA--------------------------------------------------
 fill_missing_dates(station_number = "08HA011") %>% 
-  dplyr::select(Date, Value) %>%  # keeps just the Date and Value columns
   add_date_variables() %>% 
   add_rolling_means(roll_days = 7)
 

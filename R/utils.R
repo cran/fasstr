@@ -27,9 +27,6 @@ flowdata_import <- function(data = NULL, station_number = NULL){
   
   # If a station_number is provided, check if they exist in HYDAT, if they do extract the daily data
   if (is.null(data)) {
-    if (!file.exists(file.path(tidyhydat::hy_dir(),"HYDAT.sqlite3")))
-      stop("A HYDAT database has not been downloaded yet using the tidyhydat::download_hydat() function. 
-       Download HYDAT before using station_number argument.", call. = FALSE)
     if (!is.character(station_number))  stop("station_number must be a character vector containing HYDAT station number(s).", call. = FALSE)
     station_number <- toupper(station_number) # make lower-case typos into uppercase
     if (!all(station_number %in% dplyr::pull(suppressMessages(tidyhydat::hy_stations()[1])))) 
@@ -407,7 +404,8 @@ missing_complete_yr_warning <- function(x) {
 
 zyp_method_checks <- function(zyp_method) {
   if (is.na(zyp_method) | !zyp_method %in% c("yuepilon", "zhang") )   
-    stop('zyp_trending argument must be either "yuepilon" or "zhang"', call. = FALSE)
+    stop('zyp_trending argument must be either "zhang" or "yuepilon". "zhang" is recommended for hydrologic applications over "yuepilon".', 
+         call. = FALSE)
 }
 
 zyp_alpha_checks <- function(zyp_alpha){

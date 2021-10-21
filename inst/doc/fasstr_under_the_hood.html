@@ -14,74 +14,7 @@
 
 <title>Internal fasstr Workflows</title>
 
-<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
-// be compatible with the behavior of Pandoc < 2.8).
-document.addEventListener('DOMContentLoaded', function(e) {
-  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
-  var i, h, a;
-  for (i = 0; i < hs.length; i++) {
-    h = hs[i];
-    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
-    a = h.attributes;
-    while (a.length > 0) h.removeAttribute(a[0].name);
-  }
-});
-</script>
-<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
-// v0.0.1
-// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
-
-document.addEventListener('DOMContentLoaded', function() {
-  const codeList = document.getElementsByClassName("sourceCode");
-  for (var i = 0; i < codeList.length; i++) {
-    var linkList = codeList[i].getElementsByTagName('a');
-    for (var j = 0; j < linkList.length; j++) {
-      if (linkList[j].innerHTML === "") {
-        linkList[j].setAttribute('aria-hidden', 'true');
-      }
-    }
-  }
-});
-</script>
-<style type="text/css">
-a.anchor-section {margin-left: 10px; visibility: hidden; color: inherit;}
-a.anchor-section::before {content: '#';}
-.hasAnchor:hover a.anchor-section {visibility: visible;}
-</style>
-<script>// Anchor sections v1.0 written by Atsushi Yasumoto on Oct 3rd, 2020.
-document.addEventListener('DOMContentLoaded', function() {
-  // Do nothing if AnchorJS is used
-  if (typeof window.anchors === 'object' && anchors.hasOwnProperty('hasAnchorJSLink')) {
-    return;
-  }
-
-  const h = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
-
-  // Do nothing if sections are already anchored
-  if (Array.from(h).some(x => x.classList.contains('hasAnchor'))) {
-    return null;
-  }
-
-  // Use section id when pandoc runs with --section-divs
-  const section_id = function(x) {
-    return ((x.classList.contains('section') || (x.tagName === 'SECTION'))
-            ? x.id : '');
-  };
-
-  // Add anchors
-  h.forEach(function(x) {
-    const id = x.id || section_id(x.parentElement);
-    if (id === '') {
-      return null;
-    }
-    let anchor = document.createElement('a');
-    anchor.href = '#' + id;
-    anchor.classList = ['anchor-section'];
-    x.classList.add('hasAnchor');
-    x.appendChild(anchor);
-  });
-});
-</script>
+<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -93,11 +26,19 @@ document.addEventListener('DOMContentLoaded', function() {
     </style>
 
 
-<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
 <style type="text/css" data-origin="pandoc">
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
@@ -183,187 +124,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 
-<style type="text/css">body {
-background-color: #fff;
-margin: 1em auto;
-max-width: 700px;
-overflow: visible;
-padding-left: 2em;
-padding-right: 2em;
-font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-font-size: 14px;
-line-height: 1.35;
-}
-#TOC {
-clear: both;
-margin: 0 0 10px 10px;
-padding: 4px;
-width: 400px;
-border: 1px solid #CCCCCC;
-border-radius: 5px;
-background-color: #f6f6f6;
-font-size: 13px;
-line-height: 1.3;
-}
-#TOC .toctitle {
-font-weight: bold;
-font-size: 15px;
-margin-left: 5px;
-}
-#TOC ul {
-padding-left: 40px;
-margin-left: -1.5em;
-margin-top: 5px;
-margin-bottom: 5px;
-}
-#TOC ul ul {
-margin-left: -2em;
-}
-#TOC li {
-line-height: 16px;
-}
-table {
-margin: 1em auto;
-border-width: 1px;
-border-color: #DDDDDD;
-border-style: outset;
-border-collapse: collapse;
-}
-table th {
-border-width: 2px;
-padding: 5px;
-border-style: inset;
-}
-table td {
-border-width: 1px;
-border-style: inset;
-line-height: 18px;
-padding: 5px 5px;
-}
-table, table th, table td {
-border-left-style: none;
-border-right-style: none;
-}
-table thead, table tr.even {
-background-color: #f7f7f7;
-}
-p {
-margin: 0.5em 0;
-}
-blockquote {
-background-color: #f6f6f6;
-padding: 0.25em 0.75em;
-}
-hr {
-border-style: solid;
-border: none;
-border-top: 1px solid #777;
-margin: 28px 0;
-}
-dl {
-margin-left: 0;
-}
-dl dd {
-margin-bottom: 13px;
-margin-left: 13px;
-}
-dl dt {
-font-weight: bold;
-}
-ul {
-margin-top: 0;
-}
-ul li {
-list-style: circle outside;
-}
-ul ul {
-margin-bottom: 0;
-}
-pre, code {
-background-color: #f7f7f7;
-border-radius: 3px;
-color: #333;
-white-space: pre-wrap; 
-}
-pre {
-border-radius: 3px;
-margin: 5px 0px 10px 0px;
-padding: 10px;
-}
-pre:not([class]) {
-background-color: #f7f7f7;
-}
-code {
-font-family: Consolas, Monaco, 'Courier New', monospace;
-font-size: 85%;
-}
-p > code, li > code {
-padding: 2px 0px;
-}
-div.figure {
-text-align: center;
-}
-img {
-background-color: #FFFFFF;
-padding: 2px;
-border: 1px solid #DDDDDD;
-border-radius: 3px;
-border: 1px solid #CCCCCC;
-margin: 0 5px;
-}
-h1 {
-margin-top: 0;
-font-size: 35px;
-line-height: 40px;
-}
-h2 {
-border-bottom: 4px solid #f7f7f7;
-padding-top: 10px;
-padding-bottom: 2px;
-font-size: 145%;
-}
-h3 {
-border-bottom: 2px solid #f7f7f7;
-padding-top: 10px;
-font-size: 120%;
-}
-h4 {
-border-bottom: 1px solid #f7f7f7;
-margin-left: 8px;
-font-size: 105%;
-}
-h5, h6 {
-border-bottom: 1px solid #ccc;
-font-size: 105%;
-}
-a {
-color: #0033dd;
-text-decoration: none;
-}
-a:hover {
-color: #6666ff; }
-a:visited {
-color: #800080; }
-a:visited:hover {
-color: #BB00BB; }
-a[href^="http:"] {
-text-decoration: underline; }
-a[href^="https:"] {
-text-decoration: underline; }
 
-code > span.kw { color: #555; font-weight: bold; } 
-code > span.dt { color: #902000; } 
-code > span.dv { color: #40a070; } 
-code > span.bn { color: #d14; } 
-code > span.fl { color: #d14; } 
-code > span.ch { color: #d14; } 
-code > span.st { color: #d14; } 
-code > span.co { color: #888888; font-style: italic; } 
-code > span.ot { color: #007020; } 
-code > span.al { color: #ff0000; font-weight: bold; } 
-code > span.fu { color: #900; font-weight: bold; } 
-code > span.er { color: #a61717; background-color: #e3d2d2; } 
-</style>
+<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
 
 
 
@@ -404,20 +166,20 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <p>At this point in a function there is now a data frame of data, usually called ‘flow_data’ that has three columns of ‘Date’, ‘Value’, and ‘STATION_NUMBER’, that is ready to be tidied for analysis.</p>
 <p>Note: some functions use different data sources than daily data. The <code>compute_HYDAT_peaks_frequencies()</code> does not permit the <code>data</code> argument and just extracts data from HYDAT (and sets it up appropriately) and the <code>compute_frequency_analysis()</code> function requires a unique dataset (see <code>?compute_frequency_analysis</code> for more information on the function).</p>
 <p>The following is an example of these first steps (from <code>calc_annual_stats()</code>):</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># Check if data is provided and import it</span></span>
-<span id="cb1-2"><a href="#cb1-2"></a>flow_data &lt;-<span class="st"> </span><span class="kw">flowdata_import</span>(<span class="dt">data =</span> data, </span>
-<span id="cb1-3"><a href="#cb1-3"></a>                             <span class="dt">station_number =</span> station_number)</span>
-<span id="cb1-4"><a href="#cb1-4"></a></span>
-<span id="cb1-5"><a href="#cb1-5"></a><span class="co"># Save the original columns (to check for STATION_NUMBER col at end) and ungroup if necessary</span></span>
-<span id="cb1-6"><a href="#cb1-6"></a>orig_cols &lt;-<span class="st"> </span><span class="kw">names</span>(flow_data)</span>
-<span id="cb1-7"><a href="#cb1-7"></a>flow_data &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">ungroup</span>(flow_data)</span>
-<span id="cb1-8"><a href="#cb1-8"></a></span>
-<span id="cb1-9"><a href="#cb1-9"></a><span class="co"># Check and rename columns</span></span>
-<span id="cb1-10"><a href="#cb1-10"></a>flow_data &lt;-<span class="st"> </span><span class="kw">format_all_cols</span>(<span class="dt">data =</span> flow_data,</span>
-<span id="cb1-11"><a href="#cb1-11"></a>                             <span class="dt">dates =</span> <span class="kw">as.character</span>(<span class="kw">substitute</span>(dates)),</span>
-<span id="cb1-12"><a href="#cb1-12"></a>                             <span class="dt">values =</span> <span class="kw">as.character</span>(<span class="kw">substitute</span>(values)),</span>
-<span id="cb1-13"><a href="#cb1-13"></a>                             <span class="dt">groups =</span> <span class="kw">as.character</span>(<span class="kw">substitute</span>(groups)),</span>
-<span id="cb1-14"><a href="#cb1-14"></a>                             <span class="dt">rm_other_cols =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check if data is provided and import it</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>flow_data <span class="ot">&lt;-</span> <span class="fu">flowdata_import</span>(<span class="at">data =</span> data, </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>                             <span class="at">station_number =</span> station_number)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Save the original columns (to check for STATION_NUMBER col at end) and ungroup if necessary</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>orig_cols <span class="ot">&lt;-</span> <span class="fu">names</span>(flow_data)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>flow_data <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">ungroup</span>(flow_data)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Check and rename columns</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>flow_data <span class="ot">&lt;-</span> <span class="fu">format_all_cols</span>(<span class="at">data =</span> flow_data,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>                             <span class="at">dates =</span> <span class="fu">as.character</span>(<span class="fu">substitute</span>(dates)),</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>                             <span class="at">values =</span> <span class="fu">as.character</span>(<span class="fu">substitute</span>(values)),</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>                             <span class="at">groups =</span> <span class="fu">as.character</span>(<span class="fu">substitute</span>(groups)),</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>                             <span class="at">rm_other_cols =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <hr />
 </div>
 <div id="tidying-functions-add_-and-fill_" class="section level2">
@@ -425,29 +187,29 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <p>The <code>fasstr</code> tidying functions (start with <code>add_</code> or <code>fill_</code>) just add rows or columns of data so there are fewer steps than the other <code>fasstr</code> functions.</p>
 <p>After the data has been prepped with the appropriate columns, the columns are added with their equations or other functions, or dates are filled with NA if they are missing. Then if any of the column names were changed in the formatting, they are returned to their original names, and if there was a grouping beforehand, that grouping is returned.</p>
 <p>The following is an example of remaining steps of a tidying function (from <code>add_daily_yield()</code>):</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="co">## SET UP BASIN AREA</span></span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="kw">suppressWarnings</span>(flow_data &lt;-<span class="st"> </span><span class="kw">add_basin_area</span>(flow_data, <span class="dt">basin_area =</span> basin_area))</span>
-<span id="cb2-3"><a href="#cb2-3"></a>flow_data<span class="op">$</span>Basin_Area_sqkm_temp &lt;-<span class="st"> </span>flow_data<span class="op">$</span>Basin_Area_sqkm</span>
-<span id="cb2-4"><a href="#cb2-4"></a></span>
-<span id="cb2-5"><a href="#cb2-5"></a><span class="co">## ADD YIELD COLUMN</span></span>
-<span id="cb2-6"><a href="#cb2-6"></a>flow_data &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(flow_data, <span class="dt">Yield_mm =</span> Value <span class="op">*</span><span class="st"> </span><span class="dv">86400</span> <span class="op">/</span><span class="st"> </span>(Basin_Area_sqkm_temp <span class="op">*</span><span class="st"> </span><span class="dv">1000</span>))</span>
-<span id="cb2-7"><a href="#cb2-7"></a></span>
-<span id="cb2-8"><a href="#cb2-8"></a><span class="co"># Return the original names of the Date and Value columns</span></span>
-<span id="cb2-9"><a href="#cb2-9"></a><span class="kw">names</span>(flow_data)[<span class="kw">names</span>(flow_data) <span class="op">==</span><span class="st"> &#39;Value&#39;</span>] &lt;-<span class="st"> </span><span class="kw">as.character</span>(<span class="kw">substitute</span>(values))</span>
-<span id="cb2-10"><a href="#cb2-10"></a><span class="kw">names</span>(flow_data)[<span class="kw">names</span>(flow_data) <span class="op">==</span><span class="st"> &#39;STATION_NUMBER&#39;</span>] &lt;-<span class="st"> </span><span class="kw">as.character</span>(<span class="kw">substitute</span>(groups))</span>
-<span id="cb2-11"><a href="#cb2-11"></a></span>
-<span id="cb2-12"><a href="#cb2-12"></a></span>
-<span id="cb2-13"><a href="#cb2-13"></a><span class="co">## Reformat to original names and groups</span></span>
-<span id="cb2-14"><a href="#cb2-14"></a><span class="co">## -------------------------------------</span></span>
-<span id="cb2-15"><a href="#cb2-15"></a></span>
-<span id="cb2-16"><a href="#cb2-16"></a><span class="co"># Return columns to original order plus new column</span></span>
-<span id="cb2-17"><a href="#cb2-17"></a><span class="cf">if</span>(<span class="st">&#39;Yield_mm&#39;</span> <span class="op">%in%</span><span class="st"> </span>orig_cols){</span>
-<span id="cb2-18"><a href="#cb2-18"></a>  flow_data &lt;-<span class="st">  </span>flow_data[, <span class="kw">c</span>(orig_cols)]</span>
-<span id="cb2-19"><a href="#cb2-19"></a>} <span class="cf">else</span> {</span>
-<span id="cb2-20"><a href="#cb2-20"></a>  flow_data &lt;-<span class="st">  </span>flow_data[, <span class="kw">c</span>(orig_cols, <span class="kw">paste</span>(<span class="st">&#39;Yield_mm&#39;</span>))]</span>
-<span id="cb2-21"><a href="#cb2-21"></a>}</span>
-<span id="cb2-22"><a href="#cb2-22"></a></span>
-<span id="cb2-23"><a href="#cb2-23"></a>dplyr<span class="op">::</span><span class="kw">as_tibble</span>(flow_data)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="do">## SET UP BASIN AREA</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressWarnings</span>(flow_data <span class="ot">&lt;-</span> <span class="fu">add_basin_area</span>(flow_data, <span class="at">basin_area =</span> basin_area))</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>flow_data<span class="sc">$</span>Basin_Area_sqkm_temp <span class="ot">&lt;-</span> flow_data<span class="sc">$</span>Basin_Area_sqkm</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="do">## ADD YIELD COLUMN</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>flow_data <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">mutate</span>(flow_data, <span class="at">Yield_mm =</span> Value <span class="sc">*</span> <span class="dv">86400</span> <span class="sc">/</span> (Basin_Area_sqkm_temp <span class="sc">*</span> <span class="dv">1000</span>))</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Return the original names of the Date and Value columns</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(flow_data)[<span class="fu">names</span>(flow_data) <span class="sc">==</span> <span class="st">&#39;Value&#39;</span>] <span class="ot">&lt;-</span> <span class="fu">as.character</span>(<span class="fu">substitute</span>(values))</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(flow_data)[<span class="fu">names</span>(flow_data) <span class="sc">==</span> <span class="st">&#39;STATION_NUMBER&#39;</span>] <span class="ot">&lt;-</span> <span class="fu">as.character</span>(<span class="fu">substitute</span>(groups))</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="do">## Reformat to original names and groups</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="do">## -------------------------------------</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Return columns to original order plus new column</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="st">&#39;Yield_mm&#39;</span> <span class="sc">%in%</span> orig_cols){</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  flow_data <span class="ot">&lt;-</span>  flow_data[, <span class="fu">c</span>(orig_cols)]</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>  flow_data <span class="ot">&lt;-</span>  flow_data[, <span class="fu">c</span>(orig_cols, <span class="fu">paste</span>(<span class="st">&#39;Yield_mm&#39;</span>))]</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">as_tibble</span>(flow_data)</span></code></pre></div>
 <hr />
 </div>
 <div id="analysis-functions-calc_-and-compute_" class="section level2">
@@ -459,22 +221,22 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <p>For some functions a ‘RollingValue’ column is created for the statistics calculations so that a roll_day value of other than 1 can be used. For this, the add_rolling_days() function creates an additional column based on the users selection and is renamed to ‘RollingValue’.</p>
 <p>At this point in a function the data frame of data, flow_data, has three columns of ‘Date’, ‘Value’ or ‘RollingValue’, and ‘STATION_NUMBER’, and any other date and necessary column required to be filtered for analysis.</p>
 <p>The following is an example of the tidying steps (from <code>calc_annual_stats()</code>):</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># Fill missing dates, add date variables</span></span>
-<span id="cb3-2"><a href="#cb3-2"></a>flow_data &lt;-<span class="st"> </span><span class="kw">analysis_prep</span>(<span class="dt">data =</span> flow_data, </span>
-<span id="cb3-3"><a href="#cb3-3"></a>                           <span class="dt">water_year_start =</span> water_year_start)</span>
-<span id="cb3-4"><a href="#cb3-4"></a></span>
-<span id="cb3-5"><a href="#cb3-5"></a><span class="co"># Add rolling means to end of dataframe</span></span>
-<span id="cb3-6"><a href="#cb3-6"></a>flow_data &lt;-<span class="st"> </span><span class="kw">add_rolling_means</span>(<span class="dt">data =</span> flow_data, <span class="dt">roll_days =</span> roll_days, <span class="dt">roll_align =</span> roll_align)</span>
-<span id="cb3-7"><a href="#cb3-7"></a><span class="kw">colnames</span>(flow_data)[<span class="kw">ncol</span>(flow_data)] &lt;-<span class="st"> &#39;RollingValue&#39;</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fill missing dates, add date variables</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>flow_data <span class="ot">&lt;-</span> <span class="fu">analysis_prep</span>(<span class="at">data =</span> flow_data, </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>                           <span class="at">water_year_start =</span> water_year_start)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Add rolling means to end of dataframe</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>flow_data <span class="ot">&lt;-</span> <span class="fu">add_rolling_means</span>(<span class="at">data =</span> flow_data, <span class="at">roll_days =</span> roll_days, <span class="at">roll_align =</span> roll_align)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(flow_data)[<span class="fu">ncol</span>(flow_data)] <span class="ot">&lt;-</span> <span class="st">&#39;RollingValue&#39;</span></span></code></pre></div>
 </div>
 <div id="data-filtering" class="section level4">
 <h4>Data Filtering</h4>
 <p>With all the necessary columns of data for analysis, the data can be filtered for the years, months, dates, etc. as specified in the <code>fasstr</code> function arguments. These are mostly completed with simple tidy filtering functions. However when using the <code>complete_years</code> argument in some of the <code>fasstr</code> functions, there is an internal function in the utils.R file called <code>filter_complete_yrs()</code> that removes data from years with incomplete data.</p>
 <p>At this point in a function the data frame of data, flow_data, has three columns of ‘Date’, ‘Value’, and ‘STATION_NUMBER’, and any other date and necessary column, and is filtered for the analysis.</p>
 <p>The following is an example of the filtering steps (from <code>calc_annual_stats()</code>):</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># Filter for the selected year (remove excluded years after)</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a>flow_data &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">filter</span>(flow_data, WaterYear <span class="op">&gt;=</span><span class="st"> </span>start_year <span class="op">&amp;</span><span class="st"> </span>WaterYear <span class="op">&lt;=</span><span class="st"> </span>end_year)</span>
-<span id="cb4-3"><a href="#cb4-3"></a>flow_data &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">filter</span>(flow_data, Month <span class="op">%in%</span><span class="st"> </span>months)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter for the selected year (remove excluded years after)</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>flow_data <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">filter</span>(flow_data, WaterYear <span class="sc">&gt;=</span> start_year <span class="sc">&amp;</span> WaterYear <span class="sc">&lt;=</span> end_year)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>flow_data <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">filter</span>(flow_data, Month <span class="sc">%in%</span> months)</span></code></pre></div>
 </div>
 <div id="calculating-statistics" class="section level4">
 <h4>Calculating Statistics</h4>
@@ -482,35 +244,35 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <p>Then the data is typically analyzed using the <code>dplyr::summarize()</code> function (for means, median, minimums, etc). If an analysis considers if missing data is available or not, then the <code>na.rm</code> argument is set to the <code>ignore_missing</code> function provided in the <code>fasstr</code> functions. If <code>NAN</code> or <code>Inf</code> values are produced in the results, then they are replaced with <code>NA</code> for consistency. If percentiles are being calculated, another code chunk will loop through each percentile selected and attach to the data.</p>
 <p>Data is then ungrouped to allow for further data wrangling and outputting.</p>
 <p>The following is an example of the calculation steps (from <code>calc_annual_stats()</code>):</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># Calculate basic stats</span></span>
-<span id="cb5-2"><a href="#cb5-2"></a>annual_stats &lt;-<span class="st">   </span>dplyr<span class="op">::</span><span class="kw">summarize</span>(dplyr<span class="op">::</span><span class="kw">group_by</span>(flow_data, STATION_NUMBER, WaterYear),</span>
-<span id="cb5-3"><a href="#cb5-3"></a>                                   <span class="dt">Mean =</span> <span class="kw">mean</span>(RollingValue, <span class="dt">na.rm =</span> ignore_missing),</span>
-<span id="cb5-4"><a href="#cb5-4"></a>                                   <span class="dt">Median =</span> stats<span class="op">::</span><span class="kw">median</span>(RollingValue, <span class="dt">na.rm =</span> ignore_missing),</span>
-<span id="cb5-5"><a href="#cb5-5"></a>                                   <span class="dt">Maximum =</span> <span class="kw">max</span> (RollingValue, <span class="dt">na.rm =</span> ignore_missing),</span>
-<span id="cb5-6"><a href="#cb5-6"></a>                                   <span class="dt">Minimum =</span> <span class="kw">min</span> (RollingValue, <span class="dt">na.rm =</span> ignore_missing))</span>
-<span id="cb5-7"><a href="#cb5-7"></a>annual_stats &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">ungroup</span>(annual_stats)</span>
-<span id="cb5-8"><a href="#cb5-8"></a></span>
-<span id="cb5-9"><a href="#cb5-9"></a><span class="co">#Remove Nans and Infs</span></span>
-<span id="cb5-10"><a href="#cb5-10"></a>annual_stats<span class="op">$</span>Mean[<span class="kw">is.nan</span>(annual_stats<span class="op">$</span>Mean)] &lt;-<span class="st"> </span><span class="ot">NA</span></span>
-<span id="cb5-11"><a href="#cb5-11"></a>annual_stats<span class="op">$</span>Maximum[<span class="kw">is.infinite</span>(annual_stats<span class="op">$</span>Maximum)] &lt;-<span class="st"> </span><span class="ot">NA</span></span>
-<span id="cb5-12"><a href="#cb5-12"></a>annual_stats<span class="op">$</span>Minimum[<span class="kw">is.infinite</span>(annual_stats<span class="op">$</span>Minimum)] &lt;-<span class="st"> </span><span class="ot">NA</span></span>
-<span id="cb5-13"><a href="#cb5-13"></a></span>
-<span id="cb5-14"><a href="#cb5-14"></a><span class="co"># Calculate annual percentiles</span></span>
-<span id="cb5-15"><a href="#cb5-15"></a><span class="cf">if</span>(<span class="op">!</span><span class="kw">all</span>(<span class="kw">is.na</span>(percentiles))) {</span>
-<span id="cb5-16"><a href="#cb5-16"></a>  <span class="cf">for</span> (ptile <span class="cf">in</span> percentiles) {</span>
-<span id="cb5-17"><a href="#cb5-17"></a>    <span class="co"># Calculate percentiles</span></span>
-<span id="cb5-18"><a href="#cb5-18"></a>    annual_stats_ptile &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">summarise</span>(dplyr<span class="op">::</span><span class="kw">group_by</span>(flow_data, STATION_NUMBER, WaterYear),</span>
-<span id="cb5-19"><a href="#cb5-19"></a>                                           <span class="dt">Percentile =</span> stats<span class="op">::</span><span class="kw">quantile</span>(RollingValue, ptile <span class="op">/</span><span class="st"> </span><span class="dv">100</span>, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))</span>
-<span id="cb5-20"><a href="#cb5-20"></a>    annual_stats_ptile &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">ungroup</span>(annual_stats_ptile)</span>
-<span id="cb5-21"><a href="#cb5-21"></a>    <span class="kw">names</span>(annual_stats_ptile)[<span class="kw">names</span>(annual_stats_ptile) <span class="op">==</span><span class="st"> &#39;Percentile&#39;</span>] &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&#39;P&#39;</span>, ptile)</span>
-<span id="cb5-22"><a href="#cb5-22"></a>    </span>
-<span id="cb5-23"><a href="#cb5-23"></a>    <span class="co"># Merge with stats</span></span>
-<span id="cb5-24"><a href="#cb5-24"></a>    annual_stats &lt;-<span class="st"> </span><span class="kw">merge</span>(annual_stats, annual_stats_ptile, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&#39;STATION_NUMBER&#39;</span>, <span class="st">&#39;WaterYear&#39;</span>))</span>
-<span id="cb5-25"><a href="#cb5-25"></a>    </span>
-<span id="cb5-26"><a href="#cb5-26"></a>    <span class="co"># Remove percentile if mean is NA (workaround for na.rm=FALSE in quantile)</span></span>
-<span id="cb5-27"><a href="#cb5-27"></a>    annual_stats[, <span class="kw">ncol</span>(annual_stats)] &lt;-<span class="st"> </span><span class="kw">ifelse</span>(<span class="kw">is.na</span>(annual_stats<span class="op">$</span>Mean), <span class="ot">NA</span>, annual_stats[, <span class="kw">ncol</span>(annual_stats)])</span>
-<span id="cb5-28"><a href="#cb5-28"></a>  }</span>
-<span id="cb5-29"><a href="#cb5-29"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate basic stats</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>annual_stats <span class="ot">&lt;-</span>   dplyr<span class="sc">::</span><span class="fu">summarize</span>(dplyr<span class="sc">::</span><span class="fu">group_by</span>(flow_data, STATION_NUMBER, WaterYear),</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>                                   <span class="at">Mean =</span> <span class="fu">mean</span>(RollingValue, <span class="at">na.rm =</span> ignore_missing),</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>                                   <span class="at">Median =</span> stats<span class="sc">::</span><span class="fu">median</span>(RollingValue, <span class="at">na.rm =</span> ignore_missing),</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>                                   <span class="at">Maximum =</span> <span class="fu">max</span> (RollingValue, <span class="at">na.rm =</span> ignore_missing),</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>                                   <span class="at">Minimum =</span> <span class="fu">min</span> (RollingValue, <span class="at">na.rm =</span> ignore_missing))</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>annual_stats <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">ungroup</span>(annual_stats)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co">#Remove Nans and Infs</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>annual_stats<span class="sc">$</span>Mean[<span class="fu">is.nan</span>(annual_stats<span class="sc">$</span>Mean)] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>annual_stats<span class="sc">$</span>Maximum[<span class="fu">is.infinite</span>(annual_stats<span class="sc">$</span>Maximum)] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>annual_stats<span class="sc">$</span>Minimum[<span class="fu">is.infinite</span>(annual_stats<span class="sc">$</span>Minimum)] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate annual percentiles</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">all</span>(<span class="fu">is.na</span>(percentiles))) {</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (ptile <span class="cf">in</span> percentiles) {</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Calculate percentiles</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    annual_stats_ptile <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">summarise</span>(dplyr<span class="sc">::</span><span class="fu">group_by</span>(flow_data, STATION_NUMBER, WaterYear),</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">Percentile =</span> stats<span class="sc">::</span><span class="fu">quantile</span>(RollingValue, ptile <span class="sc">/</span> <span class="dv">100</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    annual_stats_ptile <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">ungroup</span>(annual_stats_ptile)</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">names</span>(annual_stats_ptile)[<span class="fu">names</span>(annual_stats_ptile) <span class="sc">==</span> <span class="st">&#39;Percentile&#39;</span>] <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&#39;P&#39;</span>, ptile)</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Merge with stats</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>    annual_stats <span class="ot">&lt;-</span> <span class="fu">merge</span>(annual_stats, annual_stats_ptile, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&#39;STATION_NUMBER&#39;</span>, <span class="st">&#39;WaterYear&#39;</span>))</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Remove percentile if mean is NA (workaround for na.rm=FALSE in quantile)</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>    annual_stats[, <span class="fu">ncol</span>(annual_stats)] <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(annual_stats<span class="sc">$</span>Mean), <span class="cn">NA</span>, annual_stats[, <span class="fu">ncol</span>(annual_stats)])</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 </div>
 <div id="final-data-wrangling" class="section level4">
 <h4>Final Data Wrangling</h4>
@@ -518,39 +280,39 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <p>If the option to transpose the results data was set to <code>TRUE</code> with the <code>transpose</code> argument, then the data is gathered and spread such that each statistics is a single row as opposed to a column in the original results.</p>
 <p>After all wrangling, the final results are returned from the function as a tibble.</p>
 <p>The following is an example of the final wrangling steps (from <code>calc_annual_stats()</code>):</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># Rename year column</span></span>
-<span id="cb6-2"><a href="#cb6-2"></a>annual_stats &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">rename</span>(annual_stats, <span class="dt">Year =</span> WaterYear)</span>
-<span id="cb6-3"><a href="#cb6-3"></a></span>
-<span id="cb6-4"><a href="#cb6-4"></a><span class="co"># Remove selected excluded years</span></span>
-<span id="cb6-5"><a href="#cb6-5"></a>annual_stats[annual_stats<span class="op">$</span>Year <span class="op">%in%</span><span class="st"> </span>exclude_years, <span class="op">-</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>)] &lt;-<span class="st"> </span><span class="ot">NA</span></span>
-<span id="cb6-6"><a href="#cb6-6"></a></span>
-<span id="cb6-7"><a href="#cb6-7"></a></span>
-<span id="cb6-8"><a href="#cb6-8"></a><span class="co"># If transpose if selected</span></span>
-<span id="cb6-9"><a href="#cb6-9"></a><span class="cf">if</span> (transpose) {</span>
-<span id="cb6-10"><a href="#cb6-10"></a>  <span class="co"># Get list of columns to order the Statistic column after transposing</span></span>
-<span id="cb6-11"><a href="#cb6-11"></a>  stat_levels &lt;-<span class="st"> </span><span class="kw">names</span>(annual_stats[<span class="op">-</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>)])</span>
-<span id="cb6-12"><a href="#cb6-12"></a>  </span>
-<span id="cb6-13"><a href="#cb6-13"></a>  <span class="co"># Transpose the columns for rows</span></span>
-<span id="cb6-14"><a href="#cb6-14"></a>  annual_stats &lt;-<span class="st"> </span>tidyr<span class="op">::</span><span class="kw">gather</span>(annual_stats, Statistic, Value, <span class="op">-</span>STATION_NUMBER, <span class="op">-</span>Year)</span>
-<span id="cb6-15"><a href="#cb6-15"></a>  annual_stats &lt;-<span class="st"> </span>tidyr<span class="op">::</span><span class="kw">spread</span>(annual_stats, Year, Value)</span>
-<span id="cb6-16"><a href="#cb6-16"></a>  </span>
-<span id="cb6-17"><a href="#cb6-17"></a>  <span class="co"># Order the columns</span></span>
-<span id="cb6-18"><a href="#cb6-18"></a>  annual_stats<span class="op">$</span>Statistic &lt;-<span class="st"> </span><span class="kw">factor</span>(annual_stats<span class="op">$</span>Statistic, <span class="dt">levels =</span> stat_levels)</span>
-<span id="cb6-19"><a href="#cb6-19"></a>  annual_stats &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">arrange</span>(annual_stats, STATION_NUMBER, Statistic)</span>
-<span id="cb6-20"><a href="#cb6-20"></a>}</span>
-<span id="cb6-21"><a href="#cb6-21"></a></span>
-<span id="cb6-22"><a href="#cb6-22"></a><span class="co"># Give warning if any NA values</span></span>
-<span id="cb6-23"><a href="#cb6-23"></a><span class="kw">missing_values_warning</span>(annual_stats[, <span class="dv">3</span><span class="op">:</span><span class="kw">ncol</span>(annual_stats)])</span>
-<span id="cb6-24"><a href="#cb6-24"></a></span>
-<span id="cb6-25"><a href="#cb6-25"></a></span>
-<span id="cb6-26"><a href="#cb6-26"></a><span class="co"># Recheck if station_number/grouping was in original data and rename or remove as necessary</span></span>
-<span id="cb6-27"><a href="#cb6-27"></a><span class="cf">if</span>(<span class="kw">as.character</span>(<span class="kw">substitute</span>(groups)) <span class="op">%in%</span><span class="st"> </span>orig_cols) {</span>
-<span id="cb6-28"><a href="#cb6-28"></a>  <span class="kw">names</span>(annual_stats)[<span class="kw">names</span>(annual_stats) <span class="op">==</span><span class="st"> &#39;STATION_NUMBER&#39;</span>] &lt;-<span class="st"> </span><span class="kw">as.character</span>(<span class="kw">substitute</span>(groups))</span>
-<span id="cb6-29"><a href="#cb6-29"></a>} <span class="cf">else</span> {</span>
-<span id="cb6-30"><a href="#cb6-30"></a>  annual_stats &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">select</span>(annual_stats, <span class="op">-</span>STATION_NUMBER)</span>
-<span id="cb6-31"><a href="#cb6-31"></a>}</span>
-<span id="cb6-32"><a href="#cb6-32"></a></span>
-<span id="cb6-33"><a href="#cb6-33"></a>dplyr<span class="op">::</span><span class="kw">as_tibble</span>(annual_stats)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Rename year column</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>annual_stats <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">rename</span>(annual_stats, <span class="at">Year =</span> WaterYear)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove selected excluded years</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>annual_stats[annual_stats<span class="sc">$</span>Year <span class="sc">%in%</span> exclude_years, <span class="sc">-</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co"># If transpose if selected</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (transpose) {</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Get list of columns to order the Statistic column after transposing</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  stat_levels <span class="ot">&lt;-</span> <span class="fu">names</span>(annual_stats[<span class="sc">-</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)])</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Transpose the columns for rows</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  annual_stats <span class="ot">&lt;-</span> tidyr<span class="sc">::</span><span class="fu">gather</span>(annual_stats, Statistic, Value, <span class="sc">-</span>STATION_NUMBER, <span class="sc">-</span>Year)</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>  annual_stats <span class="ot">&lt;-</span> tidyr<span class="sc">::</span><span class="fu">spread</span>(annual_stats, Year, Value)</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Order the columns</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>  annual_stats<span class="sc">$</span>Statistic <span class="ot">&lt;-</span> <span class="fu">factor</span>(annual_stats<span class="sc">$</span>Statistic, <span class="at">levels =</span> stat_levels)</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>  annual_stats <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">arrange</span>(annual_stats, STATION_NUMBER, Statistic)</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Give warning if any NA values</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="fu">missing_values_warning</span>(annual_stats[, <span class="dv">3</span><span class="sc">:</span><span class="fu">ncol</span>(annual_stats)])</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Recheck if station_number/grouping was in original data and rename or remove as necessary</span></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="fu">as.character</span>(<span class="fu">substitute</span>(groups)) <span class="sc">%in%</span> orig_cols) {</span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>(annual_stats)[<span class="fu">names</span>(annual_stats) <span class="sc">==</span> <span class="st">&#39;STATION_NUMBER&#39;</span>] <span class="ot">&lt;-</span> <span class="fu">as.character</span>(<span class="fu">substitute</span>(groups))</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>  annual_stats <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">select</span>(annual_stats, <span class="sc">-</span>STATION_NUMBER)</span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">as_tibble</span>(annual_stats)</span></code></pre></div>
 <hr />
 </div>
 </div>
@@ -566,41 +328,41 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <p>Before plotting, some variables are created based on the custom options provided in the arguments (axis labels etc).</p>
 <p>As there is the potential for many plots to be produced in the <code>fasstr</code> functions, a tidy method was used to create multiple plots simultaneously in an efficient process using <code>dplyr</code>, <code>tidyr</code>, <code>purrr</code>, and <code>ggplot2</code> packages to create a tibble of plots. See this <a href="https://www.brodrigues.co/blog/2017-03-29-make-ggplot2-purrr/">webpage</a> for more information on the method. For <code>fasstr</code> plotting functions, this entails creating a single tibble of groups (‘STATION_NUMBER’s), data, and plots. First the data is grouped by the grouping (typically ’STATION_NUMBER’s) using the <code>dplyr::group()</code> function; this will create a single plot for each grouping. Then using <code>tidyr::nest()</code> a tibble is created with two columns, the first being the ’STATION_NUMBER’ and the second being a tibble of data for each ‘STATION_NUMBER’ (a tibble of tibbles). Then using <code>dplyr::mutate()</code> function a column of ggplots is created; and using <code>purrr::map2()</code> all of the plots can be created simultaneously (thus saving time in the function). As this type of table isn’t entirely user-friendly, each plot is extracted into a list and named appropriately (typically by each grouping and then the statistic).</p>
 <p>The following is an example of the process of the creating the plots (with simplified plotting).</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># Calculate the statistics</span></span>
-<span id="cb7-2"><a href="#cb7-2"></a>annual_stats &lt;-<span class="st"> </span><span class="kw">calc_annual_stats</span>(<span class="dt">station_number =</span> <span class="kw">c</span>(<span class="st">&#39;08NM116&#39;</span>, <span class="st">&#39;08NM240&#39;</span>),</span>
-<span id="cb7-3"><a href="#cb7-3"></a>                                  <span class="dt">start_year =</span> <span class="dv">1985</span>, <span class="dt">end_year =</span> <span class="dv">2015</span>)</span>
-<span id="cb7-4"><a href="#cb7-4"></a></span>
-<span id="cb7-5"><a href="#cb7-5"></a><span class="co"># Wrangle statistics for plotting</span></span>
-<span id="cb7-6"><a href="#cb7-6"></a>annual_stats &lt;-<span class="st"> </span>tidyr<span class="op">::</span><span class="kw">gather</span>(annual_stats, Statistic, Value, <span class="op">-</span>Year, <span class="op">-</span>STATION_NUMBER)</span>
-<span id="cb7-7"><a href="#cb7-7"></a></span>
-<span id="cb7-8"><a href="#cb7-8"></a><span class="co"># Group data by grouping</span></span>
-<span id="cb7-9"><a href="#cb7-9"></a>tidy_plots &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">group_by</span>(annual_stats, STATION_NUMBER)</span>
-<span id="cb7-10"><a href="#cb7-10"></a></span>
-<span id="cb7-11"><a href="#cb7-11"></a><span class="co"># Create a tibble with a column of STATION_NUMBERs and a column of data for each STATION_NUMBER</span></span>
-<span id="cb7-12"><a href="#cb7-12"></a>tidy_plots &lt;-<span class="st"> </span>tidyr<span class="op">::</span><span class="kw">nest</span>(tidy_plots)</span>
-<span id="cb7-13"><a href="#cb7-13"></a></span>
-<span id="cb7-14"><a href="#cb7-14"></a><span class="co"># Create a new column of plots using mutate and purrr::map2</span></span>
-<span id="cb7-15"><a href="#cb7-15"></a>tidy_plots &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(tidy_plots,</span>
-<span id="cb7-16"><a href="#cb7-16"></a>                            <span class="dt">plot =</span> purrr<span class="op">::</span><span class="kw">map2</span>(data, STATION_NUMBER, </span>
-<span id="cb7-17"><a href="#cb7-17"></a>                                               <span class="op">~</span>ggplot2<span class="op">::</span><span class="kw">ggplot</span>(<span class="dt">data =</span> ., ggplot2<span class="op">::</span><span class="kw">aes</span>(<span class="dt">x =</span> Year, <span class="dt">y =</span> Value, <span class="dt">color =</span> Statistic)) <span class="op">+</span></span>
-<span id="cb7-18"><a href="#cb7-18"></a><span class="st">                                                 </span>ggplot2<span class="op">::</span><span class="kw">theme</span>(<span class="dt">plot.title =</span> ggplot2<span class="op">::</span><span class="kw">element_text</span>(<span class="dt">hjust =</span> <span class="fl">0.5</span>)) <span class="op">+</span></span>
-<span id="cb7-19"><a href="#cb7-19"></a><span class="st">                                                 </span>ggplot2<span class="op">::</span><span class="kw">geom_line</span>(<span class="dt">alpha =</span> <span class="fl">0.5</span>, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>) <span class="op">+</span></span>
-<span id="cb7-20"><a href="#cb7-20"></a><span class="st">                                                 </span>ggplot2<span class="op">::</span><span class="kw">geom_point</span>(<span class="dt">na.rm =</span> <span class="ot">TRUE</span>) <span class="op">+</span></span>
-<span id="cb7-21"><a href="#cb7-21"></a><span class="st">                                                 </span>ggplot2<span class="op">::</span><span class="kw">ylab</span>(<span class="st">&#39;Discharge (cms)&#39;</span>)</span>
-<span id="cb7-22"><a href="#cb7-22"></a></span>
-<span id="cb7-23"><a href="#cb7-23"></a>                            ))</span>
-<span id="cb7-24"><a href="#cb7-24"></a></span>
-<span id="cb7-25"><a href="#cb7-25"></a></span>
-<span id="cb7-26"><a href="#cb7-26"></a><span class="co"># Create a list of named plots extracted from the tibble</span></span>
-<span id="cb7-27"><a href="#cb7-27"></a>plots &lt;-<span class="st"> </span>tidy_plots<span class="op">$</span>plot</span>
-<span id="cb7-28"><a href="#cb7-28"></a><span class="cf">if</span> (<span class="kw">nrow</span>(tidy_plots) <span class="op">==</span><span class="st"> </span><span class="dv">1</span>) {</span>
-<span id="cb7-29"><a href="#cb7-29"></a>  <span class="kw">names</span>(plots) &lt;-<span class="st"> &#39;Annual_Statistics&#39;</span></span>
-<span id="cb7-30"><a href="#cb7-30"></a>} <span class="cf">else</span> {</span>
-<span id="cb7-31"><a href="#cb7-31"></a>  <span class="kw">names</span>(plots) &lt;-<span class="st"> </span><span class="kw">paste0</span>(tidy_plots<span class="op">$</span>STATION_NUMBER, <span class="st">&#39;_Annual_Statistics&#39;</span>)</span>
-<span id="cb7-32"><a href="#cb7-32"></a>}</span>
-<span id="cb7-33"><a href="#cb7-33"></a></span>
-<span id="cb7-34"><a href="#cb7-34"></a><span class="co"># Return the plots</span></span>
-<span id="cb7-35"><a href="#cb7-35"></a>plots</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the statistics</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>annual_stats <span class="ot">&lt;-</span> <span class="fu">calc_annual_stats</span>(<span class="at">station_number =</span> <span class="fu">c</span>(<span class="st">&#39;08NM116&#39;</span>, <span class="st">&#39;08NM240&#39;</span>),</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">start_year =</span> <span class="dv">1985</span>, <span class="at">end_year =</span> <span class="dv">2015</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Wrangle statistics for plotting</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>annual_stats <span class="ot">&lt;-</span> tidyr<span class="sc">::</span><span class="fu">gather</span>(annual_stats, Statistic, Value, <span class="sc">-</span>Year, <span class="sc">-</span>STATION_NUMBER)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Group data by grouping</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>tidy_plots <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">group_by</span>(annual_stats, STATION_NUMBER)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a tibble with a column of STATION_NUMBERs and a column of data for each STATION_NUMBER</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>tidy_plots <span class="ot">&lt;-</span> tidyr<span class="sc">::</span><span class="fu">nest</span>(tidy_plots)</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a new column of plots using mutate and purrr::map2</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>tidy_plots <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">mutate</span>(tidy_plots,</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>                            <span class="at">plot =</span> purrr<span class="sc">::</span><span class="fu">map2</span>(data, STATION_NUMBER, </span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>                                               <span class="sc">~</span>ggplot2<span class="sc">::</span><span class="fu">ggplot</span>(<span class="at">data =</span> ., ggplot2<span class="sc">::</span><span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> Value, <span class="at">color =</span> Statistic)) <span class="sc">+</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>                                                 ggplot2<span class="sc">::</span><span class="fu">theme</span>(<span class="at">plot.title =</span> ggplot2<span class="sc">::</span><span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>)) <span class="sc">+</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>                                                 ggplot2<span class="sc">::</span><span class="fu">geom_line</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>                                                 ggplot2<span class="sc">::</span><span class="fu">geom_point</span>(<span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>                                                 ggplot2<span class="sc">::</span><span class="fu">ylab</span>(<span class="st">&#39;Discharge (cms)&#39;</span>)</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>                            ))</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a list of named plots extracted from the tibble</span></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>plots <span class="ot">&lt;-</span> tidy_plots<span class="sc">$</span>plot</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">nrow</span>(tidy_plots) <span class="sc">==</span> <span class="dv">1</span>) {</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>(plots) <span class="ot">&lt;-</span> <span class="st">&#39;Annual_Statistics&#39;</span></span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>(plots) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(tidy_plots<span class="sc">$</span>STATION_NUMBER, <span class="st">&#39;_Annual_Statistics&#39;</span>)</span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a><span class="co"># Return the plots</span></span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>plots</span></code></pre></div>
 <pre><code>$`08NM116_Annual_Statistics`</code></pre>
 <p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAqAAAAEgCAMAAABcujGyAAABR1BMVEUAAAAAADoAAGYAOmYAOpAAZrYAujgAv8QzMzM6AAA6ADo6AGY6OpA6ZpA6ZrY6kJA6kLY6kNtNTU1NTW5NTY5NbqtNjshhnP9mAABmADpmAGZmOgBmOjpmZjpmZmZmZrZmtttmtv9rt8hruOtuTU1uTW5uTY5ubqtuq8huq+R10pF11dd51pV52NuOTU2OTW6OTY6OyP+QOgCQOjqQOmaQZgCQZpCQkDqQkGaQtpCQ27aQ2/+mw/Wpx/mrbk2rbm6rbo6ryKur5P+2ZgC2Zjq2tma225C22/+2/7a2/9u2//+3nwDIjk3I///RxXXUyHnbkDrbkGbb25Db/7bb/9vb///kq27k///r6+vwp+fysKzy8vL0q+r1ZOP1tK/4dm36sfH7urb/tmb/yI7/25D/27b/29v/5Kv//7b//8j//9v//+T///9MXfRUAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAgAElEQVR4nO2d+2PdRlbHr0ucNElhsds02QILpu0uSSFduzy666UtNiyQhzEsSXxvCWkds3Ec/f8/o9FbM3Me85A0uvd82/heSXOPzhx9NJoZzUiLTCRKWIupHRCJMAmgoqQlgIqSlgAqSloCqChpCaCipOUI6Jld0HovxTQmjsUyNgx+tATQaYwl65gA6huhyW1thmMCqG+EJre1GY4JoL4RmtzWZjgmgPpGaHJbm+GYAOobocltbYZjMwdUJBpXUoJOYyxZx2Zegk4YocltzdWxV69eRTA2DH60BNBpjI3n2KtXboQKoJ4RmtzWTB0TQKkIuWqeHExoSwBt5RMhV43HQZzamZdGroOugo0Ngx+tTQY0UtnipREjtmr+hBgbBj9aAmgkY44aG9CzFRdRAdQzQvFtbRSg7EJUAPWM0AC2NqMOujK++BgbBj9aGw0o+7LHMeam8SLWySMrvwKoZ4QGsLVyad2uAaCsQlQA9YzQALY2D9B8iarXCKCUBNCoxrQski1DAZSSABrVmABKRchVo3Gwcum/pow5arSI6TkUQIMlgMY0ZuRQ6qChGhNQJ0LXA1AqywIoJQE0pjFLBvE8C6CUBNCYxgRQKkLOGosDx1E+8wTUlj8BNEwCaERjAigVIXcJoBGNCaBUhNwlgEY0JoBSEXLXqIBGmAzhpZEiZs8dmmcBlNJIHKx6H4HGnCWAMiWARjHmLAGUKRjQ57tK+8XnR0+rlc4R8pAAGs/YOgOq9PrOi+zJfmeFc4Q8JIDGM7bmgL798ih79+1RZ41zhDwkgEYzBmRubQB9/nEO6cPiQp/r/VzjODWGftQ+11JQ5maUaQxQVYBmbz7vlqKup7CPximoHOc64sbcNWkJiuZ5RiWoqoGWauqhrhHykQAazdiaA/rkfvNNAEWNuWttAD1dLBZbh/mX//vXdmX+/eLWIbQYC9Dywq6K0XffrV830yYACmYtHqCn7z3KsvPFXo9AjUZvOAlAiypo0R/6YdOQZ2XK8YEdzAjFtbWyfPM25qE1AfTqYE99HF97NgGgNnEy5frII2aE4tpKDNBhIgZnDcm0I6A7FYQ3F4ud4u9ip/iuqCwW95rFq4PFYlsA5dlaWb96GvOQcc0JCdl0gOZX90WJqCLw8t5ecdEv4Lx1WJScFzf3qsWrg+0yhQDKsLUJgCIZiwZo2UraLgH9/bOS1BrQ248admtenTXEYJF51UEFUJYxjIrLe3Ud9Lxo01dEZsflJb1aPH/vUSKAOj6wgxmhqLZWwHcvYz4aow46GqB1+Xh5b+uwU4IW6C6aK/66ABpY/vY1F0DDQjYdoNVlu4Ly/Fp+jT/f6gCqEN1L7RLv+sCOvkJrsH0JoIDgbW4l6LHqpK+bP+eqAL25dai+10Vm/lktqlTqnwDa0UwADQsZ4BhqMRagRRupaMgf5/XNvNK59escx/x7UaJWd5mqxVS6mVyfh9DX+ICynRVAJ1BygI5SB10hS87GvBQzYgJoK0amnGfzalplQX0AfQmggARQb62ysF6qnuYDaEimrY7h9gRQb20eoM4T9DFjmlVQ4OZ1B9R9qo+mHNB4hAqgkARQX40PKHd3AugESg7QVWEsFqG85sO0gAaf0gJoKzJTK+3TWRsLaECebY5R1uIA+r1d4Vw2GgpQ73CXgMYiVACFJIASAYK0cYAGR8wPUDCBAErFTQD1N9ZqLQEtbvzXY/i9AG1z7RnuVW0sDqG85sOUgAZH7GxTAL28V5N5Wk503hxAmTubE6C0sbkBevlJZ7xzb8EPUM94N4DGIXROgPrneCMA5YnIVDfTAijHVnjEzgTQjohMBYd7BRjzlQAKC0gSEdCLm2p88nF/LlI919MH0Mt7e8Usp/UG1GJ37QDlmIoL6KtXr0xAb/3hs+zyT92IxAA93lbT7k+dh+XX+hFZ8rAw0FMsLWYne17mUPnlmIqxuy6fHUKrrRe3/+wwu/hZDqh6ushedryTnW7nJejVV18vFjvFMx9Uedpfo6kLaF6AqklN2PRQ/BT2GySk/8bWfvBV6iVoeMQ6xhwtxSlB/7dUAWj5tQvov+xl//mr248uf3qoMLz85N8+eaRwzClTl//8aw1ouwYH9PLeTjqARiCU20PI2tNkgLq/4n30SzxQgv72j67+9rcldKpn6LQsM6++OszUv5zbpgRt1iCAXh3sqImjx8glHo9QMKCrfoTWHlBtt4AX5DzCBAC110Fv//vf/+7Pi1LxeKHaNsUMeX9AVU1hWz1KzxNQXrjJmA0MqNXomgHKC5w9VcxW/O1H//z1jrq2q5nxOYrHP9sOApQWGiHPW9z6LywDfbyVNqDMgM0ZUPWckaqmeevw4oP//uqwj6MiMm+YC6CEzXBAHWdLuwDqXgdNB9CKztPF4g/+5C8O9rLza//VLy/zLT/5xOESr+TZSPIdg6H/ItNXBGg0QF2fN+EUMerBOKkCGkP9RhLZA4pFKBzQlRGhsQBl7Sg2oOw7WgJoKcbjb7EI+d5B1NNn5ipYsdq3awUoM+6zA7R6Ij4mJELe/d96ehdAKS5GA9SnDsoFdEW55wmoPV3CgKJd9KWQCA0DKGEjHUAdH6CYOQRsBW5pjTHMMHeXMqBBjaSBAMUBXDNA4RacAJp13ikCC4lQOKArS4QoAlOpgw4I6Ara0DXWEb+yMTdAgxpJ/r03emonQAku2O3b8QFlB8wRUIfm2twADWokzRxQjqsYoORl2LDlBihqfFMAZQx2hiM0EKDUBYto4aYLKL87djhArUYTBvTy3sK7keTf/W2kdqryrz+gK3BLa6y35NDhNTNAGQIjFND20NO6AEpxkSqgIERg3yg/lw5uCKBjAIol0GwhhUsYoPRlWPcD8EQA1dQDVPUz4TfkoQiFNI71tMMBilXPUgeUnUufkIPGOqtTALQYS48SCkVoSEAxI/EAZbg6CaArcAvgWEKAWqcdBwBa9YP6zEmKAGiT1AFQ8vKXKKAOddBBAbUl9gT08ePHJqCRpx17AxpWtdNTDgco2sAlPWXkkp3bFQi7bsIVUK+OE8hYdzUO6OPHXUJrQJtpx9XjFsrZxxcf/J36cAdUjb1XmLo+3S6waqenHBBQsjrbUz9XnFxyc7uCS+MVuMjL5diA/kepAtDy6/fmtONyRnxWzT6+uLlTvnfWGdDi5YrY0xcTBRROEQJom62VkgBqBRQvQatpx4rM6oF0l5/Uc+F9ACVl9X1oQOnOSyagqDN2QAs220VfP4zkQwHqxufQddB62nFxC6h8rax6f/zYgIZV7Yx0fEDp+lkwoP1l8qe83K4joNZWfDPtuCo9y9nHfoCazwd9vru7+9HT7O3D3TsvcEDp9q1LqDwABVO4dGEbzROdSEZfRTigfRPwQs8xx/2jNuMCWk47VnXQvNZZzz72K0HzYrhqWVVPWH6yrxbefbOfPf94AwG1HLpIgK4Mx8D9zh7QqsDM4VJMFbOP9/wv8cfdZ9S/+/ZIfbz95dPszc+fTgooZMQRUMKVFbJUGfP2w0i+EYDGEFwHzS/tu7v72ZtfvMjefqlYfT+X+w64D/lD09k3/kimcHKFYSKKHw5uuD7P0v2JioHPYJwS0DefH6lS9PWdGlAl8hTmnKNEKnYJuiJT+JegtrScQYWM3K4Mx5jW6BLUuQCdcwla6Ml+W4LOHVDKEdIcZ1j2kIDSFZlNBDS0DjpLQO1J4wC6Mhxj+0EB6s6n5TezAVRd29999/TdN/eDWvFRAKXBgJniO0J1qwKAMq/D/QQsQI2OL+AXmwmo6gf98CgL7Qd1aNkixnzBcOrCXmmfNmOWbW6ArgzHYHsCqA7o6WKxd+r9AFtuCIg0UwOKtkUmBZSoyPjwOS9Aj6/9rnyPwgwBBds1fDdWRLoYgNabBVAPQIuXKOwFvESBGQIijdUYCQYFKLd5jaTLrNu51+H+Vk6t3bQkgM4IUBYY7oAiShxQLz7NnyUMaHaqLvHuA5YJQF3Z8ATUuhu3m4ArPFkEQJuNfoCiNW0/QI0xWikD6jlgORzQXorJAFXDP7Htdg4GA5RR70YdY8kc5Zo0oKSAbKYPKI9PzqPyyKovsqt2U3xAvQtQATQGoJyCyrJKACU0K0DrZzMtFmBHE5BNHFD6YUFzApTsVgoGFOvvgpuCnm2kIeugtnnxVwd7Ti/kts7qhLtCgVyi4aYft9aP7RCAso4e83VE/oB2ttCA2s2AgHryaf7SE9Dr16+bgFrmxTOe8QkC2s6LB3uagDymAahlXchNQMhYzxb/Ony21oBev94ltAZUnxeff9Qj6rkz5GcDKF33GwvQnjEXQMm+tF5CN0BDMsgKPwToX5cqAC2/fg/Oiy+mJi0UoPwZ8vYHN4D344EsknVQXu81aoy6slpXhtxjgYyNAyhgJDlA8RK0Py9ezcVs66C8GfKWftC97HRLf2NiEKBmEHwixADUXDsIoF1zDoAyWoKdpBzKO8amBtReB9XmxZcv5t5r38/tDCgpIIs0oLy2LWYsSUAdrsODAhqWQY5nFKDWVrw+L74pQfkz5OO9ac4pCtgWyBjZOAEBjcOnAOoBaG9efFsH5c+Qj/iuTqcwIBs4gHIP3zCAtgYdAGVdSJu03GBVxpIFtD8v/uqgbsWzZ8hrg0WoR44BOWQBerbiVfzXElDm/ZrGAPt6UxgLzSCj+eYDaAzFesuHeyDAtSGA2jkYDFD2ddjoahNAPQBlCMggF1BO2RICqJ2DSHxahucPBajb09gc3jvDsLnZgDIOHWyMapusDaBujyp3eXMXw2jKgAa97dg9FIU2A1DzSXnYjnDk6Ai6ax6AXh3sXB3soW15IH8OgHaOFfDg4gBAjZtWYXepNXUdW6Fu6FvMhAKoB6AKzWP85iiQPxdAtQcX8+ugHED1jYkAitsyhRKn2zZKZx+1RhMH9HQ7+qQ5TdxhlxYRvTuWrWkAamt4+7thls4BxkyjCQOqXuSV00n3hgapANTvpz9qn1Q6KvHLly/9HKnMwqa5HvjuObpxTzMjA6pehXi8AEeKZFFKUO64YIuo7kcjIT6M4qUSZQpyDLkb2fMASBZS6Bn9bRFK0F7IbEoCUFpA7mJEiGGMDWiTIgFA7akiAboKNmYYFUApxQC0tYWkDQIUvdtDV5fjALoKN2YYTRnQMfpBaSHGVp2/uJpDhyV249MLUChNFEA714lwEcZSABR/E3chIHPpAdpc/LDEy/w/B/UdI6rShKtBEdNvE2wKoAMPt+MqDqB18wFJvDwLAJTqLSP6oSIASvYMeVmNOtyunnbcDqlzmnKsAzrsgGWusOuuC6BFMnScz/LMjVB3QJm2XKXDnwKgN27cMAGN/DputIt+LEDxlgtRLhmJMUCXzR+mnAFFdh4MKGMAkodV2BgB6I0bXUJrQOtpx2rYcjnDOP929dXXi8XOuXoIWDVgubMGBrR9rMi0jSQaUH4bHr8JGAYoVQclprIGRcw24iCC0D4rCNC/KVUAWn793px23M4wVjjmTR118W/nJHXWwIDyBGQtUUDxUm7Z+ctSzBu6IRFzHFzKlhegeAlaTTtuWSzKy8NM/bv86WFTgjZr0gdUEQpDExHQZe+DIwEUBtReB62nHccCVN3qxPuagKzFBHSZIdQIoDbbscKP3TelALW24utpx7EAPd7OiN5QIGcRAV3ixvDucV00ny6ExhxxEFoHjWesowEALacdQ4AqIk/fYwPaPptpckCRItRp9Bzs2NCAjmgrZUC7/5uAqtnHP/lkjoCC2MQCdGn55m3MQ0kCWnYdA/vwADSG7A8Pmw7QZW0M4EYAHdJY6oAO9BIFFzWAAuA4Tm9gAMondKaAOgyJSR5QUl4RclELqBUc1wlikGNL4LuXMR+NB6jToEJ4/oidh40DdNk1ZiFHAKWN9XhcLtcJ0OJVc9idznEBtaATCdAlsuRszEvDAVoCuaxULXOzmDigx9uqnXQ6XT/oUjNmJdTF4KYCuuyvUCUpL5erlAG9LF91PGE3kw5osOy2luiiozE/DV2CWsRCNHVAVR9TSoA6DSi2iAUody/zABRptdeXfMRU0oBeHeycbx2WNzwnAXRpGls6zhvStImAorkh20yrhAFVk+a2s2PsuQ2sCHnLAqjrzEtNVseMI7hWgBKZmTWgtDgR8tdUgDIJXR9Akeoo1Aq187BZgC4txgYA1HJw1ghQMitlPKFWPdiPZ+dhREDLPtDulI83n+3u7mfZ893d3Y+eTgWo69x1TQIorJJRLb7pAmro7ZdH2ZvPj7In+52VjAh5qw6tbiykJW9xzGrOulI/N9YM0DPbfaaogJYPAinGdhTTjfIS0PnBdDCgrz/O/zzZf/ft0YYCatQu5gCoa7CMTPrWQe/evWsCWlCpBnmeq8uymtaO3QUiAS3GMvVePpuXom8f7hZX+ix7P5ejdSf94Lwh3m5sK4tjF3XXI8g1VoGZ7PLZIbTaWgCqsDzeUm+UVS+aC3hww9VBUfe8vNeWwu++uV9c5dtSlD6FvdWc+4axgCLUdAwwZlk9xxLUPVRGHd+xm+kfSxWAll81QC9uHVZfLz54Zh00zwS0fm6tmjlX6u3D+9W3ph5KRshfyQG6LAddYMb8lQygxm/8+kHtJejN5pKsAFXPlvcHtH3uTU3qm8+a5tEIgLZhYkPFEBt2uG90CZ85AUoIUO1Hnh31YB20/RpWgrZPDqvuxVd8vr7zInv33fDdTHEAJRreSJ8VcvuzRjR9QP3O5CiAWlvxfUDD6qAGoKr/UzWP8s8Pm4Y8FSF/RQGUqDZivf74HeyRhlmFGvO81PR+NhygqvLo34o3ALWKipC38KoeN/DxADUK1GXgLQNN/KLdwZhvVWgkQMP6QdcH0G5iY2QUE1BOoz5I/DPHwZh3XR0MWWe1B6AxlMrT7aIAuqxHj9tsUWMhqWlKBERBjxOPA6h/W3IOgPKER8hfRIR4oe/MddfvSjFmPFATkXGIgl7I4DaxDTQW0B1Hd6bZeRBALdshE0vLUmbZRLoApEbnngUASg9zZxoTQAcDlKyl07E3RyHXx505Xazt+IQSZMg2b0CX5G65xoKmx2CdKOVqqwRQWwLSQr3OacZtbQJOnyFbXaem1IUeVbFwMCaAZtMBSkQfKCTdirUltaMM3F7u34WQrP2Z5oCHYMf4ou6X2XnYEEAZtzLwfnRgveN1lzrEYEHlfpXWb/PjP6dyIYA2wiIUITiwMYRB5NC4XXeXyH6UoLbI0vhCCThz4NYZno8YgILDcevVVgmgQJpa1LFzcoyqsAL94R7VSMhtz5oKVjlmSwAlQ4MaGx5QXkFl+EJ18JtCHujl0QN7FgnQ2oIAqok5YjYlQOFCk9EdZpuqhv6+4Jkq2sP5FEDtMrEAjIGEYtYHAhSudmJ15e4NLcgx8/dk50IsQM+69zbMfVglgLay9+8Q1l3roGxjFTZwg8kw3X9cAugYRDzeeovBpwBqDUoQoORxGWjg+lnpON8lYhwgbIC8AVsaiwJoaSXmcLt62nH+5b3o045HANT+tDX+1W9KQAPbOTxAeyU0dotrekDz/JmAVtOO1VDO02vPgqcdjwwodI/ctXqGKRVAjTuhiGNQoYkAGofPchd+gBbhsAKaY1lNRgqcdjwaoC+JJ/7OHFBeSY85BlU78QZYDHkA+j+linCUX783ph1XgAZOO44HKB4wcgSHc/vBx5aPuLnktJxQx6CGe4wRB7iWcUvQatpxcYnfOgybdhwPUCJgLr05RvSQRTdbPuIa45xIOKAvgSck+vXjO8gbULgOWpH6x18lU4JuPKCcuiNqK/KNJheB7/KlALW24jsVzrwCmkQddEm/mMelu1GPHrTgbstDfGPdO012P/0AtddvI/I5DKDFa2O3A6cdhwBaRWhZtXzwOmZA15D7be/JAYXc9ATUXr+NmcvlECXo+aLoAJ2qH7S6TcLDJ6TlPRtA6fs/uC2kTNSqD1jXpZegXfsAGkOOgFpVAKqtG+RZij9Yv6aoH3ofA1geyr7tWCJKDlDopDNPO6DsCOsaAsdoeNhyl4uxZfMn3JbFcv9rxFyCtQs7D/MA1H5Z8BrcUYQC3hQZ0MePHzPtMIxp8u3spdVUHxr7AmgjIFu29UMCyr61hx66x4/dCI05di+EKaMfX+qgjYBcWdf7DO4AjfUM8G89ryegL7WJWGNUZCIy56Qh78VzB0vyItSxsOGAOgyN8tAGAepz6wc21ppwGLuD2Do5UYSe8G1FHf0sgDKVHqB4qbZk2ykEHrqTmkwHQmNyIIAyNexwO/d7k9R1d+nEJ+TYSQdLPqGpAOr4hrE4fRXD4Edr4PGglk47QgSgjvedrY6d9JkECdUdSQZQJ2ORatrD4Edr6AHLrDk1XRXxPDkBqHEduaM5pg6VaRrYl3FkZwzoSW/Zx9gw+NEaDVAen2XLpfxWktSPZxigUGFiPx3WAtCTkzIbJ5XoAnXDAK3BZPFZgpJ1lk+0eBqAOkUbPjgWQk+Msnx+gBbO9/KsB5RtbBj8aA0/J4nddVmj0DOmx9PkEw1315ZBe2/nFmfQsjxMuq0w2/bw2+tJeBUKNLZWgGrRZvYMNSFDAdXEBbSCDEncPWLm8TPLcosniB9m4l5y14aMJkv4YQSp0279AdWjzXr4MHglLSpQ4M/q8qD+uRbuchErLzoeWFwxdoU7gli3XGdPWsUEVG8UIbLuefMAJRo2RsvashOAmbZJVZYIergrDuB9961VRQ/sJ2KMVdKDLRUHqGxyueZYHQONdVZPpCiAopQQgDIjZGvFmOu0ksnjWCGUwMVxvSuqpNdtactgSU/lAmtWEjJPuzUE1Had7eRZB9RyteuHwroT/eDBLQBwkRCZulOhPbPX5QDELNQwbnGxHaNqlaiM025dATXWtlk2+MT75aB6xAm40DOOLOJiA3rWIGcB0lhlb54hPUMn9Dls+s2rZ2Mi2pHD4EdrOEDR/m/szgY9wAOuKOrCuxuvX7+uecY3hlDTOdANN9quUMesfetoszxWBxhSQRgGP1px66Bmho0V3j3Fxc+Bm5U+tgpoNGwcjKHZaApYaFf4joFzuKlE4XX+IK0noAgHHh3eGFSuB0Oz1ePiAQUoXuqR9cLu9mJXD5TaRfaPu2qIhPvWgrRxgNpuGRJyApQoA/u2Si4eVKqoAX9rUORye7LvaOdcKHZNnRpO8Me9b7qOddARZ1botogj3S8xH+hEFpvrUs32Y39Auwda7cC4wmOnBm06AFCqWrOGrXhLQdVdJADVA6Yt4w0ZHFCtxARTm4g2xVx7WSaPLCAr//ipQe2K3SVgN+1Ur2n2MZGiAGopHrqb0auypfnQXUbiSUJklJhnd+/ePbMuPuiUct2aYrsn47LM4xViMOvs15Bj641IjMfELA/s1obBj1YMQK/nB7pbwVKL3bhDBHZSt9KWgXiiEPUrmZ1d373bI7S/2MDe3a77DbdzrBcCsIjsmC7S9HZFQUSf4mfG5jYmxcHSFks/mvDbPB4GP1oxAC0OdHvoyuPeubBq/PYPtAaNvmyLJwKRdm70tv7mN4Xt3zQqF7VdEZ602WhOJOuPdcawTD54oIUMhMjNk+4ZD+1aO3bG4Wg0DH60aEDfPty986JesLl+Zj3uSp3oQ4dSh0b7tTWe4JG2L9aWqc3tVoYnncUia20mrSWRZtua6b9EM92xbS0QLJ5wdm31xHaQB6UQEQnou2/2s+cf10s21zsh+EKpWCy+IQdaLX6aq5P6C+3XavOnxeKnjdpFa3zbxU7q1vaNfPEGtNixrXsC22480TLZiYmWWjNNQOSdaVvItF3bFr+YH6Bvf/k0e/Pzp9WSFdD2QLeLLa925Cypz2zLWsC0cwEOt+3HZzeUwEUjdT8foG1bJjtY2GzrIdLOHHxXjpkGd80Jf6uBOQRFAvrmFy+yt18e5d/ez2VNUhzo/nJvs8pzu1gEDE6tL/cT64uabW1RT214hu5K24zbtmztbdf9Nhy5wc+GY6bJXWfY8tQiAX19pwZUyXZuFUWRfYN1M3ANac9VdCtuW/ck5j0WPJf6ViKXmmNENvB9EakdNbeO+rYEVXLLVNQITW5rMxybHaCMOmjC4RbHYhkbmENQjFb8faoVn3C4xbFYxobFEFaMftCEwy2OxTI2KIWIpn5f/MDGxLFYxobBj5YAOo2xZB0TQH0jNLmtzXBMAPWN0OS2NsOxmQM6huy3qxKQODaBBFC+xLEJJIDyJY5NIAGUL3FsAiUIqEjUSgAVJS0BVJS0BFBR0hJARUkrFUCLIadvPtv9qP3oDaOayq3Pdnf3G1f6Hwk5VsUvBcdiKxFAXysk3z7cz57feVF99KeTTiM1leDN50eVK/2PhByr4peCY9GVBqBPPvynvASoZpdUH/2h/NPotTrcT/YrV/ofCTlWxS8Fx6IrDUDLS1Qf0P5kqOlkeJSeY1kvflP7FVcpAVpc2z88qj7600knk5ryUrnS/0jIsayMXyKOxVVKgKqa/199e1R9pFEevH14P0uyaO86lkkJOrjqupOqR5UfSdSo3ny2nzUzWxOqg/Ydy6orUAqOxVZKgKqzP2+FVh/96aQTeVVgULvS/0jIsayMXwqORVdKgGavd4t+vOojgV6957tK++n1g2qOST+oSDSNBFBR0hJARUlLABUlLQFUlLQEUFHSEkBhXR289yj/uLi5PbUnGywBFNHFzZ387/G1Z1M7ssESQDGd5kXoxc29qd3YZAmgmC7vbWfH6gJ/dbBYqOv9xc3FYrGTXdz+h2JRNLgEUFTnW7+6daj4zCk9vfbs8t5eUaxKtXQ0CaCo8pJTVUPPVXGZ0/l7VRu9uHUol/3RJIDiKtDMTheFclbP84+twwtVrIrGkACKqwK0ashf3ts6LEpQAXQsCaC4SkDPt0ogzxWo51KCjigBFFcJ6NVBTmYOpgL14qYAOqIEUFwloEU3kypFj/OPX28OGmwAAAA2SURBVN/bE0BHkwAqSloCqChpCaCipCWAipKWACpKWgKoKGkJoKKkJYCKkpYAKkpaAqgoaf0/6DnDjuq9kewAAAAASUVORK5CYII=" /><!-- --></p>
 <pre><code>
@@ -633,7 +395,6 @@ $`08NM240_Annual_Statistics`</code></pre>
 <li><a href="https://cran.r-project.org/package=e1071"><code>e1071</code></a> - used in the frequency analyses for determining skewness for the fitting distributions</li>
 <li><a href="https://cran.r-project.org/package=fitdistrplus"><code>fitdistrplus</code></a> - used in the frequency analyses for fitting data to the distributions</li>
 <li><a href="https://cran.r-project.org/package=ggplot2"><code>ggplot2</code></a> - used for plotting the data</li>
-<li><a href="https://cran.r-project.org/package=lubridate"><code>lubridate</code></a> - used for easy creation of date columns</li>
 <li><a href="https://cran.r-project.org/package=PearsonDS"><code>PearsonDS</code></a> - used in the frequency analyses for fitting data to the distributions</li>
 <li><a href="https://cran.r-project.org/package=plyr"><code>plyr</code></a> - used in the frequency analyses to handle data</li>
 <li><a href="https://cran.r-project.org/package=purrr"><code>purrr</code></a> - used in the plotting functions to plot many plots simultaneously</li>
@@ -642,7 +403,7 @@ $`08NM240_Annual_Statistics`</code></pre>
 <li><a href="https://cran.r-project.org/package=tidyhydat"><code>tidyhydat</code></a> - used to extract data from a HYDAT database</li>
 <li><a href="https://cran.r-project.org/package=tidyr"><code>tidyr</code></a> - used for many tidy functions (gather, spread, etc)</li>
 <li><a href="https://cran.r-project.org/package=openxlsx"><code>openxlsx</code></a> - used to write data as Excel files in the write_ functions</li>
-<li><a href="https://cran.r-project.org/package=zyp"><code>zyp</code></a> - used in the trending funrction to calculate the trends</li>
+<li><a href="https://cran.r-project.org/package=zyp"><code>zyp</code></a> - used in the trending function to calculate the trends</li>
 </ul>
 </div>
 
