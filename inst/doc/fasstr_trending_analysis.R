@@ -22,6 +22,12 @@ library(fasstr)
 #                        timing_percent = c(25,33,50,75),
 #                        normal_percentiles = c(25,75))
 
+## ---- eval=FALSE--------------------------------------------------------------
+#  compute_annual_trends(station_number = "08NM116",
+#                        zyp_method = "zhang",
+#                        start_year = 1973, end_year = 2013,
+#                        months = 5:9)
+
 ## ---- comment=NA, echo=FALSE--------------------------------------------------
 trends <- compute_annual_trends(station_number = "08NM116",
                                 zyp_method = "zhang",

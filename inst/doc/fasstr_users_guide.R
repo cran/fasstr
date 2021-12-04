@@ -1,7 +1,7 @@
 ## ----options, include=FALSE---------------------------------------------------
 knitr::opts_chunk$set(eval = nzchar(Sys.getenv("hydat_eval")),
-# warning = FALSE, 
-message = FALSE)
+                      # warning = FALSE, 
+                      message = FALSE)
 
 ## ---- echo=TRUE, eval=FALSE---------------------------------------------------
 #  install.packages("fasstr")
@@ -314,6 +314,10 @@ plot_annual_means(station_number = "08NM116",
 
 ## ---- eval=FALSE--------------------------------------------------------------
 #  calc_annual_stats(station_number = "08NM116",
+#                    allowed_missing = 25)
+
+## ---- eval=FALSE--------------------------------------------------------------
+#  calc_annual_stats(station_number = "08NM116",
 #                    ignore_missing = TRUE,
 #                    water_year_start = 9)
 
@@ -351,6 +355,12 @@ plot_annual_means(station_number = "08NM116",
 #                    start_year = 1980,
 #                    end_year = 2010,
 #                    months = 6:8)
+
+## ---- eval=FALSE--------------------------------------------------------------
+#  calc_flow_timing(station_number = "08NM116",
+#                   start_year = 1980,
+#                   end_year = 2010,
+#                   months = 1:7)
 
 ## ---- eval=FALSE--------------------------------------------------------------
 #  calc_longterm_daily_stats(station_number = "08NM116",
