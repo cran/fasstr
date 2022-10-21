@@ -1,7 +1,11 @@
 ## ----options, include=FALSE---------------------------------------------------
 knitr::opts_chunk$set(eval = nzchar(Sys.getenv("hydat_eval")),
                       # warning = FALSE, 
-                      message = FALSE)
+                      message = FALSE#,
+                      #  collapse = TRUE,
+                      # crayon.enabled = FALSE
+)
+#options(crayon.enabled = FALSE)
 
 ## ---- echo=TRUE, eval=FALSE---------------------------------------------------
 #  install.packages("fasstr")
@@ -39,10 +43,17 @@ data.frame(data[1:6,])
 #  calc_longterm_daily_stats(station_number = "08NM116")
 #  calc_longterm_daily_stats(station_number = c("08NM116", "08NM242"))
 
-## ----exampletidy, comment=NA--------------------------------------------------
-fill_missing_dates(station_number = "08HA011") %>% 
-  add_date_variables() %>% 
-  add_rolling_means(roll_days = 7)
+## ----exampletidy, comment=NA, eval=FALSE--------------------------------------
+#  fill_missing_dates(station_number = "08HA011") %>%
+#    add_date_variables() %>%
+#    add_rolling_means(roll_days = 7)
+
+## ----exampletidy2, comment=NA, echo=FALSE-------------------------------------
+data.frame(head(
+  fill_missing_dates(station_number = "08HA011") %>%
+    add_date_variables() %>%
+    add_rolling_means(roll_days = 7)
+))
 
 ## ---- eval=FALSE--------------------------------------------------------------
 #  # Very gappy (early years):
@@ -77,24 +88,24 @@ fill_missing_dates(station_number = "08HA011") %>%
 
 ## ----  echo=FALSE, comment=NA-------------------------------------------------
 library(fasstr)
-head(add_rolling_means(station_number = "08HA011", roll_days = 5, roll_align = "left") %>% 
-       dplyr::rename("Q5Day_left" = Q5Day) %>% 
-       add_rolling_means(roll_days = 5, roll_align = "center") %>% 
-       dplyr::rename("Q5Day_center" = Q5Day) %>% 
-       add_rolling_means(roll_days = 5, roll_align = "right") %>% 
-       dplyr::rename("Q5Day_right" = Q5Day) %>% 
-       dplyr::select(-STATION_NUMBER, -Parameter, -Symbol))
+data.frame(head(add_rolling_means(station_number = "08HA011", roll_days = 5, roll_align = "left") %>% 
+                  dplyr::rename("Q5Day_left" = Q5Day) %>% 
+                  add_rolling_means(roll_days = 5, roll_align = "center") %>% 
+                  dplyr::rename("Q5Day_center" = Q5Day) %>% 
+                  add_rolling_means(roll_days = 5, roll_align = "right") %>% 
+                  dplyr::rename("Q5Day_right" = Q5Day) %>% 
+                  dplyr::select(-STATION_NUMBER, -Parameter, -Symbol)))
 
 
 ## ----  echo=FALSE, comment=NA-------------------------------------------------
 library(fasstr)
-head(add_rolling_means(station_number = "08HA011", roll_days = 6, roll_align = "left") %>% 
-       dplyr::rename("Q6Day_left" = Q6Day) %>% 
-       add_rolling_means(roll_days = 6, roll_align = "center") %>% 
-       dplyr::rename("Q6Day_center" = Q6Day) %>% 
-       add_rolling_means(roll_days = 6, roll_align = "right") %>% 
-       dplyr::rename("Q6Day_right" = Q6Day) %>% 
-       dplyr::select(-STATION_NUMBER, -Parameter, -Symbol))
+data.frame(head(add_rolling_means(station_number = "08HA011", roll_days = 6, roll_align = "left") %>% 
+                  dplyr::rename("Q6Day_left" = Q6Day) %>% 
+                  add_rolling_means(roll_days = 6, roll_align = "center") %>% 
+                  dplyr::rename("Q6Day_center" = Q6Day) %>% 
+                  add_rolling_means(roll_days = 6, roll_align = "right") %>% 
+                  dplyr::rename("Q6Day_right" = Q6Day) %>% 
+                  dplyr::select(-STATION_NUMBER, -Parameter, -Symbol)))
 
 
 ## ---- eval=FALSE--------------------------------------------------------------
@@ -131,16 +142,16 @@ head(add_rolling_means(station_number = "08HA011", roll_days = 6, roll_align = "
 #  add_cumulative_yield(station_number = "08NM116",
 #                       basin_area = 800)
 
-## ---- comment=NA--------------------------------------------------------------
-fill_missing_dates(station_number = "08NM116") %>% 
-  add_date_variables(water_year_start = 9) %>%
-  add_seasons(seasons_length = 3) %>% 
-  add_rolling_means() %>%
-  add_basin_area() %>% 
-  add_daily_volume() %>%
-  add_daily_yield() %>%
-  add_cumulative_volume() %>% 
-  add_cumulative_yield()
+## ---- comment=NA, eval = FALSE------------------------------------------------
+#  fill_missing_dates(station_number = "08NM116") %>%
+#    add_date_variables(water_year_start = 9) %>%
+#    add_seasons(seasons_length = 3) %>%
+#    add_rolling_means() %>%
+#    add_basin_area() %>%
+#    add_daily_volume() %>%
+#    add_daily_yield() %>%
+#    add_cumulative_volume() %>%
+#    add_cumulative_yield()
 
 ## ---- fig.height = 2.5, fig.width = 7, comment=NA, warning=FALSE--------------
 plot_flow_data(station_number = "08NM116") 
@@ -149,18 +160,34 @@ plot_flow_data(station_number = "08NM116")
 plot_flow_data(station_number = c("08NM241", "08NM242"),
                one_plot = TRUE) 
 
-## ---- comment=NA--------------------------------------------------------------
-screen_flow_data(station_number = "08NM116")
+## ---- fig.height = 2.5, fig.width = 7, comment=NA, warning=FALSE--------------
+plot_flow_data_symbols(station_number = "08NM116",
+                       start_year = 1972, end_year = 1976) 
 
-## ---- fig.height = 3, fig.width = 7, comment=NA-------------------------------
-plot_data_screening(station_number = "08NM116") 
+## ---- comment=NA, eval=FALSE--------------------------------------------------
+#  screen_flow_data(station_number = "08NM116")
+
+## ---- comment=NA, echo=FALSE--------------------------------------------------
+data.frame(head(
+  screen_flow_data(station_number = "08NM116")
+))
 
 ## ---- fig.height = 4, fig.width = 7, comment=NA-------------------------------
+plot_data_screening(station_number = "08NM116") 
+
+## ---- fig.height = 3, fig.width = 7, comment=NA-------------------------------
 plot_missing_dates(station_number = "08NM116") 
 
-## ---- comment=NA--------------------------------------------------------------
-calc_longterm_daily_stats(station_number = "08NM116", 
-                          start_year = 1974)
+## ---- fig.height = 3, fig.width = 7, comment=NA-------------------------------
+plot_annual_symbols(station_number = "08NM116") 
+
+## ---- comment=NA, eval=FALSE--------------------------------------------------
+#  calc_longterm_daily_stats(station_number = "08NM116",
+#                            start_year = 1974)
+
+## ---- comment=NA, echo=FALSE--------------------------------------------------
+data.frame(calc_longterm_daily_stats(station_number = "08NM116", 
+                                     start_year = 1974))
 
 ## ---- fig.height = 2.5, fig.width = 7, comment=NA-----------------------------
 plot_longterm_daily_stats(station_number = "08NM116", 
@@ -168,33 +195,50 @@ plot_longterm_daily_stats(station_number = "08NM116",
                           inner_percentiles = c(25,75),
                           outer_percentiles = c(10,90)) 
 
-## ---- comment=NA--------------------------------------------------------------
-calc_longterm_monthly_stats(station_number = "08NM116", 
-                            start_year = 1974)
+## ---- comment=NA, eval=FALSE--------------------------------------------------
+#  calc_longterm_monthly_stats(station_number = "08NM116",
+#                              start_year = 1974)
+
+## ---- comment=NA, echo=FALSE--------------------------------------------------
+data.frame(calc_longterm_monthly_stats(station_number = "08NM116", 
+                                       start_year = 1974))
 
 ## ---- fig.height = 2.5, fig.width = 7, comment=NA-----------------------------
 plot_longterm_monthly_stats(station_number = "08NM116", 
                             start_year = 1974) 
 
-## ---- comment=NA--------------------------------------------------------------
-calc_annual_stats(station_number = "08NM116", 
-                  start_year = 1974)
+## ---- comment=NA, eval=FALSE--------------------------------------------------
+#  calc_annual_stats(station_number = "08NM116",
+#                    start_year = 1974)
+
+## ---- comment=NA, echo=FALSE--------------------------------------------------
+data.frame(head(calc_annual_stats(station_number = "08NM116", 
+                                  start_year = 1974)))
 
 ## ---- fig.height = 2.5, fig.width = 7, comment=NA-----------------------------
 plot_annual_stats(station_number = "08NM116", 
-                  start_year = 1974) 
+                  start_year = 1974,
+                  log_discharge = TRUE) 
 
-## ---- comment=NA--------------------------------------------------------------
-calc_monthly_stats(station_number = "08NM116", 
-                   start_year = 1974)
+## ---- comment=NA, eval=FALSE--------------------------------------------------
+#  calc_monthly_stats(station_number = "08NM116",
+#                     start_year = 1974)
+
+## ---- comment=NA, echo=FALSE--------------------------------------------------
+data.frame(head(calc_monthly_stats(station_number = "08NM116", 
+                                   start_year = 1974)))
 
 ## ---- fig.height = 4, fig.width = 7, comment=NA-------------------------------
 plot_monthly_stats(station_number = "08NM116", 
                    start_year = 1974)[1]
 
-## ---- comment=NA--------------------------------------------------------------
-calc_daily_stats(station_number = "08NM116", 
-                 start_year = 1974)
+## ---- comment=NA, eval=FALSE--------------------------------------------------
+#  calc_daily_stats(station_number = "08NM116",
+#                   start_year = 1974)
+
+## ---- comment=NA, echo=FALSE--------------------------------------------------
+data.frame(head(calc_daily_stats(station_number = "08NM116", 
+                                 start_year = 1974)))
 
 ## ---- fig.height = 2.5, fig.width = 7, comment=NA-----------------------------
 plot_daily_stats(station_number = "08NM116", 
@@ -215,20 +259,35 @@ plot_flow_duration(station_number = "08NM116",
                    months = 7:9,
                    include_longterm = FALSE) 
 
-## ----  echo=TRUE, comment=NA--------------------------------------------------
-calc_longterm_mean(station_number = "08NM116", 
-                   start_year = 1974,
-                   percent_MAD = c(5,10,20))
+## ----  echo=TRUE, comment=NA, eval=FALSE--------------------------------------
+#  calc_longterm_mean(station_number = "08NM116",
+#                     start_year = 1974,
+#                     percent_MAD = c(5,10,20))
 
-## ----  echo=TRUE, comment=NA--------------------------------------------------
-calc_longterm_percentile(station_number = "08NM116",
-                         start_year = 1974,
-                         percentiles = c(25,50,75))
+## ---- comment=NA, echo=FALSE--------------------------------------------------
+data.frame(calc_longterm_mean(station_number = "08NM116", 
+                              start_year = 1974,
+                              percent_MAD = c(5,10,20)))
 
-## ----  echo=TRUE, comment=NA--------------------------------------------------
-calc_flow_percentile(station_number = "08NM116", 
-                     start_year = 1974,
-                     flow_value = 6.270)
+## ----  echo=TRUE, comment=NA, eval=FALSE--------------------------------------
+#  calc_longterm_percentile(station_number = "08NM116",
+#                           start_year = 1974,
+#                           percentiles = c(25,50,75))
+
+## ---- comment=NA, echo=FALSE--------------------------------------------------
+data.frame(calc_longterm_percentile(station_number = "08NM116",
+                                    start_year = 1974,
+                                    percentiles = c(25,50,75)))
+
+## ----  echo=TRUE, comment=NA, eval=FALSE--------------------------------------
+#  calc_flow_percentile(station_number = "08NM116",
+#                       start_year = 1974,
+#                       flow_value = 6.270)
+
+## ---- comment=NA, echo=FALSE--------------------------------------------------
+data.frame(calc_flow_percentile(station_number = "08NM116", 
+                                start_year = 1974,
+                                flow_value = 6.270))
 
 ## ---- fig.height = 2.5, fig.width = 7, comment=NA-----------------------------
 add_daily_volume(station_number = "08NM116") %>%
@@ -240,68 +299,137 @@ add_daily_yield(station_number = "08NM116") %>%
   plot_daily_stats(values = "Yield_mm",
                    start_year = 1974) 
 
-## ---- comment=NA--------------------------------------------------------------
-calc_annual_cumulative_stats(station_number = "08NM116", start_year = 1974)
+## ---- comment=NA, eval=FALSE--------------------------------------------------
+#  calc_annual_cumulative_stats(station_number = "08NM116", start_year = 1974)
 
-## ---- comment=NA--------------------------------------------------------------
-calc_annual_cumulative_stats(station_number = "08NM116", 
-                             start_year = 1974,
-                             include_seasons = TRUE)
+## ---- comment=NA, echo=FALSE--------------------------------------------------
+data.frame(head(calc_annual_cumulative_stats(station_number = "08NM116", start_year = 1974)))
+
+## ---- comment=NA, eval=FALSE--------------------------------------------------
+#  calc_annual_cumulative_stats(station_number = "08NM116",
+#                               start_year = 1974,
+#                               include_seasons = TRUE)
+
+## ---- comment=NA, echo=FALSE--------------------------------------------------
+data.frame(head(calc_annual_cumulative_stats(station_number = "08NM116", 
+                                             start_year = 1974,
+                                             include_seasons = TRUE)))
 
 ## ---- fig.height = 3, fig.width = 7, comment=NA-------------------------------
 plot_annual_cumulative_stats(station_number = "08NM116", 
                              start_year = 1974) 
 
-## ---- comment=NA--------------------------------------------------------------
-calc_monthly_cumulative_stats(station_number = "08NM116", 
-                              start_year = 1974)
+## ---- comment=NA, eval=FALSE--------------------------------------------------
+#  calc_monthly_cumulative_stats(station_number = "08NM116",
+#                                start_year = 1974)
+
+## ---- comment=NA, echo=FALSE--------------------------------------------------
+data.frame(calc_monthly_cumulative_stats(station_number = "08NM116", 
+                                         start_year = 1974))
 
 ## ---- fig.height = 3, fig.width = 7, comment=NA-------------------------------
 plot_monthly_cumulative_stats(station_number = "08NM116", 
                               start_year = 1974) 
 
-## ---- comment=NA--------------------------------------------------------------
-calc_daily_cumulative_stats(station_number = "08NM116", 
-                            start_year = 1974)
+## ---- comment=NA, eval=FALSE--------------------------------------------------
+#  calc_daily_cumulative_stats(station_number = "08NM116",
+#                              start_year = 1974)
+
+## ---- comment=NA, echo=FALSE--------------------------------------------------
+data.frame(head(calc_daily_cumulative_stats(station_number = "08NM116", 
+                                            start_year = 1974)))
 
 ## ---- fig.height = 3, fig.width = 7, comment=NA-------------------------------
 plot_daily_cumulative_stats(station_number = "08NM116", 
                             start_year = 1974,
                             use_yield = TRUE) 
 
-## ---- comment=NA--------------------------------------------------------------
-calc_annual_flow_timing(station_number = "08NM116", 
-                        start_year = 1974)
+## ---- comment=NA, eval=FALSE--------------------------------------------------
+#  calc_annual_flow_timing(station_number = "08NM116",
+#                          start_year = 1974)
+
+## ---- comment=NA, echo=FALSE--------------------------------------------------
+data.frame(head(calc_annual_flow_timing(station_number = "08NM116", 
+                                        start_year = 1974)))
 
 ## ---- fig.height = 4.5, fig.width = 7, comment=NA-----------------------------
 plot_annual_flow_timing(station_number = "08NM116",
                         start_year = 1974) 
 
-## ---- comment=NA--------------------------------------------------------------
-calc_annual_lowflows(station_number = "08NM116", 
-                     start_year = 1974)
+## ---- fig.height = 3.5, fig.width = 8, comment=NA-----------------------------
+plot_annual_flow_timing_year(station_number = "08NM116",
+                             year_to_plot = 1999) 
+
+## ---- comment=NA, eval=FALSE--------------------------------------------------
+#  calc_annual_lowflows(station_number = "08NM116",
+#                       start_year = 1974)
+
+## ---- comment=NA, echo=FALSE--------------------------------------------------
+data.frame(head(calc_annual_lowflows(station_number = "08NM116", 
+                                     start_year = 1974)))
 
 ## ---- fig.height = 4.5, fig.width = 7, comment=NA-----------------------------
 plot_annual_lowflows(station_number = "08NM116",
                      start_year = 1974) 
 
-## ---- comment=NA--------------------------------------------------------------
-calc_annual_peaks(station_number = "08NM116", 
-                  start_year = 1974)
+## ---- comment=NA, eval=FALSE--------------------------------------------------
+#  calc_annual_highflows(station_number = "08NM116",
+#                        start_year = 1974)
 
-## ---- comment=NA--------------------------------------------------------------
-calc_annual_outside_normal(station_number = "08NM116", 
-                           start_year = 1974)
+## ---- comment=NA, echo=FALSE--------------------------------------------------
+data.frame(head(calc_annual_highflows(station_number = "08NM116", 
+                                      start_year = 1974)))
 
 ## ---- fig.height = 4.5, fig.width = 7, comment=NA-----------------------------
-plot_annual_outside_normal(station_number = "08NM116", 
-                           start_year = 1974) 
+plot_annual_highflows(station_number = "08NM116",
+                      start_year = 1974) 
+
+## ---- comment=NA, eval=FALSE--------------------------------------------------
+#  calc_annual_extremes(station_number = "08NM116",
+#                       roll_days_min = 7,
+#                       roll_days_max = 3,
+#                       start_year = 1974)
+
+## ---- comment=NA, echo=FALSE--------------------------------------------------
+data.frame(head(calc_annual_extremes(station_number = "08NM116",
+                                     roll_days_min = 7,
+                                     roll_days_max = 3,
+                                     start_year = 1974)))
+
+## ---- fig.height = 3, fig.width = 7, comment=NA-------------------------------
+plot_annual_extremes(station_number = "08NM116",
+                     roll_days_min = 7,
+                     roll_days_max = 3,
+                     start_year = 1974)
+
+## ---- fig.height = 3, fig.width = 8, comment=NA-------------------------------
+plot_annual_extremes_year(station_number = "08NM116",
+                          roll_days_min = 7,
+                          roll_days_max = 3,
+                          start_year = 1974,
+                          year_to_plot = 1999)
+
+## ---- comment=NA, eval=FALSE--------------------------------------------------
+#  calc_annual_normal_days(station_number = "08NM116",
+#                          start_year = 1974)
+
+## ---- comment=NA, echo=FALSE--------------------------------------------------
+data.frame(head(calc_annual_normal_days(station_number = "08NM116", 
+                                        start_year = 1974)))
+
+## ---- fig.height = 3, fig.width = 7, comment=NA-------------------------------
+plot_annual_normal_days(station_number = "08NM116", 
+                        start_year = 1974) 
+
+## ---- fig.height = 3.5, fig.width = 8, comment=NA-----------------------------
+plot_annual_normal_days_year(station_number = "08NM116",
+                             year_to_plot = 1999) 
 
 ## ---- comment=NA--------------------------------------------------------------
 colnames(calc_all_annual_stats(station_number = "08NM116",
                                start_year = 1974))
 
-## ---- fig.height = 3, fig.width = 7, comment=NA-------------------------------
+## ---- fig.height = 3, fig.width = 8, comment=NA-------------------------------
 plot_annual_means(station_number = "08NM116", 
                   start_year = 1974) 
 
@@ -398,22 +526,33 @@ plot_annual_lowflows(station_number = "08NM116",
 #                          end_year = 2010,
 #                          percent_total = c(10,20))
 
-## ---- fig.height = 4.5, fig.width = 7, comment=NA-----------------------------
-plot_annual_outside_normal(station_number = "08NM116", 
-                           start_year = 1980, 
-                           end_year = 2010,
-                           normal_percentiles = c(10,90))
+## ---- fig.height = 3, fig.width = 7, comment=NA-------------------------------
+plot_annual_normal_days(station_number = "08NM116", 
+                        start_year = 1980, 
+                        end_year = 2010,
+                        normal_percentiles = c(10,90))
 
-## ---- comment=NA--------------------------------------------------------------
-calc_longterm_daily_stats(station_number = "08NM116", 
-                          start_year = 1980, 
-                          end_year = 2010)
+## ---- comment=NA, eval=FALSE--------------------------------------------------
+#  calc_longterm_daily_stats(station_number = "08NM116",
+#                            start_year = 1980,
+#                            end_year = 2010)
 
-## ---- comment=NA--------------------------------------------------------------
-calc_longterm_daily_stats(station_number = "08NM116", 
-                          start_year = 1980, 
-                          end_year = 2010,
-                          transpose = TRUE)
+## ---- comment=NA, echo=FALSE--------------------------------------------------
+data.frame(calc_longterm_daily_stats(station_number = "08NM116", 
+                                     start_year = 1980, 
+                                     end_year = 2010))
+
+## ---- comment=NA, eval=FALSE--------------------------------------------------
+#  calc_longterm_daily_stats(station_number = "08NM116",
+#                            start_year = 1980,
+#                            end_year = 2010,
+#                            transpose = TRUE)
+
+## ---- comment=NA, echo=FALSE--------------------------------------------------
+data.frame(calc_longterm_daily_stats(station_number = "08NM116", 
+                                     start_year = 1980, 
+                                     end_year = 2010,
+                                     transpose = TRUE))
 
 ## ---- fig.height = 2.5, fig.width = 7, comment=NA-----------------------------
 plot_annual_stats(station_number = "08NM116", 

@@ -44,11 +44,21 @@ trends_analysis <- compute_annual_trends(station_number = "08NM116",
                                          zyp_method = "zhang",
                                          start_year = 1973, end_year = 2013)
 
-## ---- echo=TRUE, comment=NA---------------------------------------------------
-trends_analysis$Annual_Trends_Data
+## ---- echo=TRUE, comment=NA,eval=FALSE----------------------------------------
+#  trends_analysis$Annual_Trends_Data
 
-## ---- echo=TRUE, comment=NA---------------------------------------------------
-trends_analysis$Annual_Trends_Results
+## ---- comment=NA, echo=FALSE--------------------------------------------------
+data.frame(head(
+  trends_analysis$Annual_Trends_Data
+))
+
+## ---- echo=TRUE, comment=NA, eval=FALSE---------------------------------------
+#  trends_analysis$Annual_Trends_Results
+
+## ---- comment=NA, echo=FALSE--------------------------------------------------
+data.frame(head(
+  trends_analysis$Annual_Trends_Results
+))
 
 ## ---- echo = FALSE, include=FALSE---------------------------------------------
 trends <- compute_annual_trends(station_number = "08NM116",

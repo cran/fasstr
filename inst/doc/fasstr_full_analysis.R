@@ -87,11 +87,11 @@ head(as.data.frame(calc_annual_cumulative_stats(station_number = "08NM116",
                                                 use_yield = TRUE)))
 
 ## ----  echo=FALSE, comment=NA-------------------------------------------------
-head(as.data.frame(calc_annual_outside_normal(station_number = "08NM116",
+head(as.data.frame(calc_annual_normal_days(station_number = "08NM116",
                                               start_year = 1990, end_year = 2001)))
 
 ## ----  echo=FALSE, fig.height = 4.5, fig.width = 7, comment=NA----------------
-plot_annual_outside_normal(station_number = "08NM116",
+plot_annual_normal_days(station_number = "08NM116",
                            start_year = 1990, end_year = 2001)[[1]]
 
 ## ----  echo=FALSE, comment=NA-------------------------------------------------

@@ -14,25 +14,38 @@
 
 <title>Computing Annual Trends with fasstr</title>
 
-<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
 
 <style type="text/css">
-  code{white-space: pre-wrap;}
-  span.smallcaps{font-variant: small-caps;}
-  span.underline{text-decoration: underline;}
-  div.column{display: inline-block; vertical-align: top; width: 50%;}
-  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-  ul.task-list{list-style: none;}
-    </style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
 
 
 <style type="text/css">
-  code {
-    white-space: pre;
-  }
-  .sourceCode {
-    overflow: visible;
-  }
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
 </style>
 <style type="text/css" data-origin="pandoc">
 pre > code.sourceCode { white-space: pre; position: relative; }
@@ -50,55 +63,54 @@ pre > code.sourceCode { white-space: pre-wrap; }
 pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
-  { counter-reset: source-line 0; }
+{ counter-reset: source-line 0; }
 pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
+{ position: relative; left: -4em; counter-increment: source-line; }
 pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
 div.sourceCode
-  {   }
+{ }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
 </style>
 <script>
 // apply pandoc div.sourceCode style to pre.sourceCode instead
@@ -107,13 +119,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   for (var i = 0; i < sheets.length; i++) {
     if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
     try { var rules = sheets[i].cssRules; } catch (e) { continue; }
-    for (var j = 0; j < rules.length; j++) {
+    var j = 0;
+    while (j < rules.length) {
       var rule = rules[j];
       // check if there is a div.sourceCode rule
-      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -125,7 +144,187 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 
-<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
 
 
 
@@ -141,17 +340,47 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 
-<p><code>fasstr</code>, the Flow Analysis Summary Statistics Tool for R, is a set of <a href="https://www.r-project.org/">R</a> functions to tidy, summarize, analyze, trend, and visualize streamflow data. This package summarizes continuous daily mean streamflow data into various daily, monthly, annual, and long-term statistics, completes trending and frequency analyses, with outputs in both table and plot formats.</p>
-<p>This vignette documents the usage of the <code>compute_annual_trends()</code> function in <code>fasstr</code>. This vignette is a high-level adjunct to the details found in the function documentation (see <code>?compute_annual_trends()</code>). You’ll learn what arguments to provide to the function to customize your analysis, what analyses are computed, and what outputs are produced.</p>
+<p><code>fasstr</code>, the Flow Analysis Summary Statistics Tool for R,
+is a set of <a href="https://www.r-project.org/">R</a> functions to
+tidy, summarize, analyze, trend, and visualize streamflow data. This
+package summarizes continuous daily mean streamflow data into various
+daily, monthly, annual, and long-term statistics, completes trending and
+frequency analyses, with outputs in both table and plot formats.</p>
+<p>This vignette documents the usage of the
+<code>compute_annual_trends()</code> function in <code>fasstr</code>.
+This vignette is a high-level adjunct to the details found in the
+function documentation (see <code>?compute_annual_trends()</code>).
+You’ll learn what arguments to provide to the function to customize your
+analysis, what analyses are computed, and what outputs are produced.</p>
 <div id="overview" class="section level2">
 <h2>Overview</h2>
-<p>Determining trends in streamflow data can provide information on potential changes in hydrological processes over time. The annual trending analysis with <code>fasstr</code> allows for customization of both the inputs and outputs. This function takes up to 107 annual streamflow metrics (calculated using various annual <code>fasstr</code> functions) and calculates prewhitened, non-parametric trends using the Mann-Kendall test performed using the <a href="https://CRAN.R-project.org/package=zyp"><code>zyp</code></a> R package. See the <code>zyp</code> <a href="https://CRAN.R-project.org/package=zyp/zyp.pdf">documentation</a> for more information on the methods.</p>
-<p>Each annual metric/time-series is analyzed for trends using trend-free prewhitening to remove lag-1 correlation (may artificially detect a significant trend). The slope of each metric over time is then estimated using the Theil-Sen approach. If the estimated slope is different from zero, then the data are detrended by the slope and the AR(1) 1s calculated for the detrended time series. The residuals and the trend are combined and then tested for significance using the Mann-Kendall trend test.</p>
-<p>The trending function results in a list containing two tibble data frame outputs and, if selected, plot for each metric trended.</p>
+<p>Determining trends in streamflow data can provide information on
+potential changes in hydrological processes over time. The annual
+trending analysis with <code>fasstr</code> allows for customization of
+both the inputs and outputs. This function takes up to 107 annual
+streamflow metrics (calculated using various annual <code>fasstr</code>
+functions) and calculates prewhitened, non-parametric trends using the
+Mann-Kendall test performed using the <a href="https://CRAN.R-project.org/package=zyp"><code>zyp</code></a> R
+package. See the <code>zyp</code> <a href="https://CRAN.R-project.org/package=zyp/zyp.pdf">documentation</a>
+for more information on the methods.</p>
+<p>Each annual metric/time-series is analyzed for trends using
+trend-free prewhitening to remove lag-1 correlation (may artificially
+detect a significant trend). The slope of each metric over time is then
+estimated using the Theil-Sen approach. If the estimated slope is
+different from zero, then the data are detrended by the slope and the
+AR(1) 1s calculated for the detrended time series. The residuals and the
+trend are combined and then tested for significance using the
+Mann-Kendall trend test.</p>
+<p>The trending function results in a list containing two tibble data
+frame outputs and, if selected, plot for each metric trended.</p>
 <ol style="list-style-type: decimal">
-<li><strong>Annual_Trends_Data</strong> - data used for analysis calculated from various annual <code>fasstr</code> functions</li>
-<li><strong>Annual_Trends_Results</strong> - results of the <code>zyp</code> trending analysis, and includes various other statistics</li>
-<li><strong>‘Sep_Maximum’</strong> - an example of each of 107 plots produced (one for each metric)</li>
+<li><strong>Annual_Trends_Data</strong> - data used for analysis
+calculated from various annual <code>fasstr</code> functions</li>
+<li><strong>Annual_Trends_Results</strong> - results of the
+<code>zyp</code> trending analysis, and includes various other
+statistics</li>
+<li><strong>‘Sep_Maximum’</strong> - an example of each of 107 plots
+produced (one for each metric)</li>
 </ol>
 </div>
 <div id="function-and-data-inputs" class="section level2">
@@ -159,23 +388,44 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li><code>compute_annual_trends()</code></li>
 </ul>
-<p>To determine annual trends from a daily streamflow data set, the <code>compute_annual_trends()</code> function will take daily data, either from HYDAT using the <code>station_number</code> argument or your own data frame of data using the <code>data</code> argument to complete the analysis. To complete a custom trends analysis of data please see the <code>zyp</code> functions for more information.</p>
+<p>To determine annual trends from a daily streamflow data set, the
+<code>compute_annual_trends()</code> function will take daily data,
+either from HYDAT using the <code>station_number</code> argument or your
+own data frame of data using the <code>data</code> argument to complete
+the analysis. To complete a custom trends analysis of data please see
+the <code>zyp</code> functions for more information.</p>
 </div>
 <div id="usage-options-and-outputs" class="section level2">
 <h2>Usage, Options, and Outputs</h2>
 <div id="analysis-data" class="section level3">
 <h3>Analysis Data</h3>
-<p>This function is provided to calculate trends on a multitude of annual metrics, as calculate by various annual and monthly <code>fasstr</code> functions. The functions will calculate metrics from each of the following functions:</p>
+<p>This function is provided to calculate trends on a multitude of
+annual metrics, as calculate by various annual and monthly
+<code>fasstr</code> functions. The functions will calculate metrics from
+each of the following functions:</p>
 <ul>
-<li><code>calc_annual_stats()</code> - calculate annual summary statistics</li>
-<li><code>calc_annual_cumulative_stats()</code> - calculate annual and seasonal cumulative flows, both volume and yield</li>
-<li><code>calc_annual_flow_timing()</code> - calculate annual flow timing</li>
+<li><code>calc_annual_stats()</code> - calculate annual summary
+statistics</li>
+<li><code>calc_annual_cumulative_stats()</code> - calculate annual and
+seasonal cumulative flows, both volume and yield</li>
+<li><code>calc_annual_flow_timing()</code> - calculate annual flow
+timing</li>
 <li><code>calc_annual_lowflows()</code> - calculate annual lowflows</li>
-<li><code>calc_annual_outside_normal()</code> - calculate annual days above and below normal</li>
-<li><code>calc_monthly_stats()</code> - calculate annual monthly summary statistics</li>
+<li><code>calc_annual_normal_days()</code> - calculate annual days above
+and below normal</li>
+<li><code>calc_monthly_stats()</code> - calculate annual monthly summary
+statistics</li>
 </ul>
-<p>While each of the different metrics have default variables for their arguments, many of them can be customized. The following table shows which arguments are used for which statistics and what the defaults are. See the documentation for more information.</p>
+<p>While each of the different metrics have default variables for their
+arguments, many of them can be customized. The following table shows
+which arguments are used for which statistics and what the defaults are.
+See the documentation for more information.</p>
 <table>
+<colgroup>
+<col width="23%" />
+<col width="24%" />
+<col width="51%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th>Argument</th>
@@ -196,12 +446,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tr>
 <tr class="odd">
 <td><code>stats_days</code></td>
-<td><code>calc_annual_stats()</code> &amp; <code>calc_monthly_stats()</code></td>
+<td><code>calc_annual_stats()</code> &amp;
+<code>calc_monthly_stats()</code></td>
 <td><code>1</code></td>
 </tr>
 <tr class="even">
 <td><code>stats_align</code></td>
-<td><code>calc_annual_stats()</code> &amp; <code>calc_monthly_stats()</code></td>
+<td><code>calc_annual_stats()</code> &amp;
+<code>calc_monthly_stats()</code></td>
 <td><code>&quot;right&quot;</code></td>
 </tr>
 <tr class="odd">
@@ -221,12 +473,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tr>
 <tr class="even">
 <td><code>normal_percentiles</code></td>
-<td><code>calc_annual_outside_normal()</code></td>
+<td><code>calc_annual_normal_days()</code></td>
 <td><code>c(25,75)</code></td>
 </tr>
 </tbody>
 </table>
-<p>With fasstr version 0.4.0, the <code>months</code> argument is now included in the trending function to specify which months of the year to include for trending. For example, selecting <code>months = 7:9</code> means that all annual and monthly statistics will be calculated just from July through September to be tested for trends. This gives the user more flexibility to trend more statistics. Since selecting months may complicate seasonal totals, seasonal yields and seasonal volumes are not included in the results if not all 12 months are selected.</p>
+<p>With fasstr version 0.4.0, the <code>months</code> argument is now
+included in the trending function to specify which months of the year to
+include for trending. For example, selecting <code>months = 7:9</code>
+means that all annual and monthly statistics will be calculated just
+from July through September to be tested for trends. This gives the user
+more flexibility to trend more statistics. Since selecting months may
+complicate seasonal totals, seasonal yields and seasonal volumes are not
+included in the results if not all 12 months are selected.</p>
 <div id="examples" class="section level4">
 <h4>Examples</h4>
 <p>Example with default arguments:</p>
@@ -245,151 +504,191 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>                      <span class="at">lowflow_align =</span> <span class="st">&quot;right&quot;</span>,</span>
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>                      <span class="at">timing_percent =</span> <span class="fu">c</span>(<span class="dv">25</span>,<span class="dv">33</span>,<span class="dv">50</span>,<span class="dv">75</span>),</span>
 <span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>                      <span class="at">normal_percentiles =</span> <span class="fu">c</span>(<span class="dv">25</span>,<span class="dv">75</span>))</span></code></pre></div>
-<p>Example with custom months arguments that will trend data only from May through September:</p>
+<p>Example with custom months arguments that will trend data only from
+May through September:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">compute_annual_trends</span>(<span class="at">station_number =</span> <span class="st">&quot;08NM116&quot;</span>,</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">zyp_method =</span> <span class="st">&quot;zhang&quot;</span>,</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>                      <span class="at">start_year =</span> <span class="dv">1973</span>, <span class="at">end_year =</span> <span class="dv">2013</span>,</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>                      <span class="at">months =</span> <span class="dv">5</span><span class="sc">:</span><span class="dv">9</span>)</span></code></pre></div>
-<p>This annual data is provided in the <strong>Annual_Trends_Data</strong> tibble objects. The following is an example of the output, including all the annual metrics and a first few years of data used for the <code>zyp</code> trends analysis:</p>
-<pre><code>              Statistic          1973          1974          1975
-1        Annual_Maximum        37.700        66.000        48.700
-2           Annual_Mean         3.331         8.430         5.483
-3         Annual_Median         0.980         1.340         1.540
-4        Annual_Minimum         0.025         0.447         0.320
-5            Annual_P10         0.549         0.709         0.580
-6            Annual_P90         8.832        32.980        19.580
-7             Min_1_Day         0.025         0.447         0.320
-8         Min_1_Day_DoY       293.000       333.000        11.000
-9             Min_3_Day         0.045         0.533         0.378
-10        Min_3_Day_DoY       295.000       334.000        39.000
-11            Min_7_Day         0.194         0.602         0.416
-12        Min_7_Day_DoY       299.000       346.000        41.000
-13           Min_30_Day         0.574         0.665         0.494
-14       Min_30_Day_DoY       249.000       358.000        58.000
-15      Total_Volume_m3 105036393.421 265854182.477 172900396.854
-16    Jan-Jun_Volume_m3  84993926.226 223662988.720 136045958.439
-17    Jul-Dec_Volume_m3  20042467.195  42191193.757  36854438.415
-18    Jan-Mar_Volume_m3   5734540.834   8368012.779   5258217.605
-19    Apr-Jun_Volume_m3  79259385.392 215294975.941 130787740.834
-20    Jul-Sep_Volume_m3   7503580.782  35216640.131  24657350.460
-21    Oct-Dec_Volume_m3  12538886.413   6974553.626  12197087.955
-22       Total_Yield_mm       132.121       334.408       217.485
-23     Jan-Jun_Yield_mm       106.911       281.337       171.127
-24     Jul-Dec_Yield_mm        25.211        53.071        46.358
-25     Jan-Mar_Yield_mm         7.213        10.526         6.614
-26     Apr-Jun_Yield_mm        99.697       270.811       164.513
-27     Jul-Sep_Yield_mm         9.438        44.298        31.016
-28     Oct-Dec_Yield_mm        15.772         8.773        15.342
-29     DoY_25pct_TotalQ       138.000       135.000       146.000
-30     DoY_33pct_TotalQ       141.000       146.000       153.000
-31     DoY_50pct_TotalQ       151.000       158.000       162.000
-32     DoY_75pct_TotalQ       172.000       173.000       177.000
-33    Days_Below_Normal       230.000        69.000       129.000
-34    Days_Above_Normal        15.000        75.000        30.000
-35  Days_Outside_Normal       245.000       144.000       159.000
-36             Jan_Mean         0.730         1.023         0.625
-37           Jan_Median         0.705         1.020         0.595
-38          Jan_Maximum         0.963         1.260         1.050
-39          Jan_Minimum         0.595         0.864         0.320
-40              Jan_P10         0.626         0.906         0.507
-41              Jan_P20         0.643         0.934         0.538
-42             Feb_Mean         0.670         0.985         0.490
-43           Feb_Median         0.676         0.984         0.483
-44          Feb_Maximum         0.728         1.060         0.614
-45          Feb_Minimum         0.595         0.830         0.368
-46              Feb_P10         0.619         0.944         0.407
-47              Feb_P20         0.632         0.957         0.449
-48             Mar_Mean         0.806         1.211         0.896
-49           Mar_Median         0.799         1.120         0.943
-50          Mar_Maximum         0.951         2.140         1.390
-51          Mar_Minimum         0.685         0.855         0.677
-52              Mar_P10         0.708         0.937         0.694
-53              Mar_P20         0.736         0.983         0.716
-54             Apr_Mean         1.774         7.761         1.789
-55           Apr_Median         1.510         4.910         1.780
-56          Apr_Maximum         3.450        28.300         3.400
-57          Apr_Minimum         0.852         1.850         0.949
-58              Apr_P10         0.963         1.919         0.984
-59              Apr_P20         1.116         2.070         1.036
-60             May_Mean        16.395        29.845        16.274
-61           May_Median        15.200        30.300        16.800
-62          May_Maximum        37.700        50.400        32.300
-63          May_Minimum         3.450        15.900         3.340
-64              May_P10         4.420        17.500         5.210
-65              May_P20         5.950        20.100         6.820
-66             Jun_Mean        11.863        44.460        31.853
-67           Jun_Median        10.350        44.900        30.850
-68          Jun_Maximum        26.900        66.000        48.700
-69          Jun_Minimum         3.880        20.600        13.000
-70              Jun_P10         6.104        25.610        17.240
-71              Jun_P20         7.204        33.280        23.820
-72             Jul_Mean         1.422         9.966         4.922
-73           Jul_Median         0.926         8.210         3.450
-74          Jul_Maximum         4.980        24.800        10.900
-75          Jul_Minimum         0.462         2.420         1.180
-76              Jul_P10         0.518         3.790         1.250
-77              Jul_P20         0.561         5.380         1.460
-78             Aug_Mean         0.615         1.761         2.274
-79           Aug_Median         0.564         1.610         1.680
-80          Aug_Maximum         1.100         3.710         5.920
-81          Aug_Minimum         0.326         0.960         0.736
-82              Aug_P10         0.453         1.200         0.974
-83              Aug_P20         0.476         1.280         1.180
-84             Sep_Mean         0.789         1.468         2.076
-85           Sep_Median         0.685         1.395         1.750
-86          Sep_Maximum         2.270         2.100         5.100
-87          Sep_Minimum         0.399         1.130         1.390
-88              Sep_P10         0.470         1.199         1.460
-89              Sep_P20         0.496         1.246         1.536
-90             Oct_Mean         1.630         1.231         1.845
-91           Oct_Median         0.867         1.120         1.840
-92          Oct_Maximum         8.070         2.080         2.210
-93          Oct_Minimum         0.025         0.838         1.510
-94              Oct_P10         0.113         0.867         1.650
-95              Oct_P20         0.416         0.903         1.740
-96             Nov_Mean         1.760         0.710         1.488
-97           Nov_Median         1.485         0.711         1.400
-98          Nov_Maximum         3.060         0.943         2.940
-99          Nov_Minimum         1.220         0.447         0.906
-100             Nov_P10         1.327         0.616         1.047
-101             Nov_P20         1.350         0.633         1.128
-102            Dec_Mean         1.349         0.686         1.268
-103          Dec_Median         1.400         0.680         1.290
-104         Dec_Maximum         1.830         0.850         1.590
-105         Dec_Minimum         0.977         0.541         0.991
-106             Dec_P10         1.020         0.609         1.050
-107             Dec_P20         1.210         0.637         1.120</code></pre>
-<p>To provide examples of the outputs, an analysis will be completed on a Mission Creek HYDAT station from 1973 to 2013. The argument <code>zyp_method</code> is described below in the Analysis Results section:</p>
+<p>This annual data is provided in the
+<strong>Annual_Trends_Data</strong> tibble objects. The following is an
+example of the output, including all the annual metrics and a first few
+years of data used for the <code>zyp</code> trends analysis:</p>
+<pre><code>            Statistic          1973          1974          1975
+1      Annual_Maximum        37.700        66.000        48.700
+2         Annual_Mean         3.331         8.430         5.483
+3       Annual_Median         0.980         1.340         1.540
+4      Annual_Minimum         0.025         0.447         0.320
+5          Annual_P10         0.549         0.709         0.580
+6          Annual_P90         8.832        32.980        19.580
+7           Min_1_Day         0.025         0.447         0.320
+8       Min_1_Day_DoY       293.000       333.000        11.000
+9           Min_3_Day         0.045         0.533         0.378
+10      Min_3_Day_DoY       295.000       334.000        39.000
+11          Min_7_Day         0.194         0.602         0.416
+12      Min_7_Day_DoY       299.000       346.000        41.000
+13         Min_30_Day         0.574         0.665         0.494
+14     Min_30_Day_DoY       249.000       358.000        58.000
+15    Total_Volume_m3 105036393.421 265854182.477 172900396.854
+16  Jan-Jun_Volume_m3  84993926.226 223662988.720 136045958.439
+17  Jul-Dec_Volume_m3  20042467.195  42191193.757  36854438.415
+18  Jan-Mar_Volume_m3   5734540.834   8368012.779   5258217.605
+19  Apr-Jun_Volume_m3  79259385.392 215294975.941 130787740.834
+20  Jul-Sep_Volume_m3   7503580.782  35216640.131  24657350.460
+21  Oct-Dec_Volume_m3  12538886.413   6974553.626  12197087.955
+22     Total_Yield_mm       132.121       334.408       217.485
+23   Jan-Jun_Yield_mm       106.911       281.337       171.127
+24   Jul-Dec_Yield_mm        25.211        53.071        46.358
+25   Jan-Mar_Yield_mm         7.213        10.526         6.614
+26   Apr-Jun_Yield_mm        99.697       270.811       164.513
+27   Jul-Sep_Yield_mm         9.438        44.298        31.016
+28   Oct-Dec_Yield_mm        15.772         8.773        15.342
+29   DoY_25pct_TotalQ       138.000       135.000       146.000
+30   DoY_33pct_TotalQ       141.000       146.000       153.000
+31   DoY_50pct_TotalQ       151.000       158.000       162.000
+32   DoY_75pct_TotalQ       172.000       173.000       177.000
+33        Normal_Days       120.000       221.000       206.000
+34  Below_Normal_Days       230.000        69.000       129.000
+35  Above_Normal_Days        15.000        75.000        30.000
+36           Jan_Mean         0.730         1.023         0.625
+37         Jan_Median         0.705         1.020         0.595
+38        Jan_Maximum         0.963         1.260         1.050
+39        Jan_Minimum         0.595         0.864         0.320
+40            Jan_P10         0.626         0.906         0.507
+41            Jan_P20         0.643         0.934         0.538
+42           Feb_Mean         0.670         0.985         0.490
+43         Feb_Median         0.676         0.984         0.483
+44        Feb_Maximum         0.728         1.060         0.614
+45        Feb_Minimum         0.595         0.830         0.368
+46            Feb_P10         0.619         0.944         0.407
+47            Feb_P20         0.632         0.957         0.449
+48           Mar_Mean         0.806         1.211         0.896
+49         Mar_Median         0.799         1.120         0.943
+50        Mar_Maximum         0.951         2.140         1.390
+51        Mar_Minimum         0.685         0.855         0.677
+52            Mar_P10         0.708         0.937         0.694
+53            Mar_P20         0.736         0.983         0.716
+54           Apr_Mean         1.774         7.761         1.789
+55         Apr_Median         1.510         4.910         1.780
+56        Apr_Maximum         3.450        28.300         3.400
+57        Apr_Minimum         0.852         1.850         0.949
+58            Apr_P10         0.963         1.919         0.984
+59            Apr_P20         1.116         2.070         1.036
+60           May_Mean        16.395        29.845        16.274
+61         May_Median        15.200        30.300        16.800
+62        May_Maximum        37.700        50.400        32.300
+63        May_Minimum         3.450        15.900         3.340
+64            May_P10         4.420        17.500         5.210
+65            May_P20         5.950        20.100         6.820
+66           Jun_Mean        11.863        44.460        31.853
+67         Jun_Median        10.350        44.900        30.850
+68        Jun_Maximum        26.900        66.000        48.700
+69        Jun_Minimum         3.880        20.600        13.000
+70            Jun_P10         6.104        25.610        17.240
+71            Jun_P20         7.204        33.280        23.820
+72           Jul_Mean         1.422         9.966         4.922
+73         Jul_Median         0.926         8.210         3.450
+74        Jul_Maximum         4.980        24.800        10.900
+75        Jul_Minimum         0.462         2.420         1.180
+76            Jul_P10         0.518         3.790         1.250
+77            Jul_P20         0.561         5.380         1.460
+78           Aug_Mean         0.615         1.761         2.274
+79         Aug_Median         0.564         1.610         1.680
+80        Aug_Maximum         1.100         3.710         5.920
+81        Aug_Minimum         0.326         0.960         0.736
+82            Aug_P10         0.453         1.200         0.974
+83            Aug_P20         0.476         1.280         1.180
+84           Sep_Mean         0.789         1.468         2.076
+85         Sep_Median         0.685         1.395         1.750
+86        Sep_Maximum         2.270         2.100         5.100
+87        Sep_Minimum         0.399         1.130         1.390
+88            Sep_P10         0.470         1.199         1.460
+89            Sep_P20         0.496         1.246         1.536
+90           Oct_Mean         1.630         1.231         1.845
+91         Oct_Median         0.867         1.120         1.840
+92        Oct_Maximum         8.070         2.080         2.210
+93        Oct_Minimum         0.025         0.838         1.510
+94            Oct_P10         0.113         0.867         1.650
+95            Oct_P20         0.416         0.903         1.740
+96           Nov_Mean         1.760         0.710         1.488
+97         Nov_Median         1.485         0.711         1.400
+98        Nov_Maximum         3.060         0.943         2.940
+99        Nov_Minimum         1.220         0.447         0.906
+100           Nov_P10         1.327         0.616         1.047
+101           Nov_P20         1.350         0.633         1.128
+102          Dec_Mean         1.349         0.686         1.268
+103        Dec_Median         1.400         0.680         1.290
+104       Dec_Maximum         1.830         0.850         1.590
+105       Dec_Minimum         0.977         0.541         0.991
+106           Dec_P10         1.020         0.609         1.050
+107           Dec_P20         1.210         0.637         1.120</code></pre>
+<p>To provide examples of the outputs, an analysis will be completed on
+a Mission Creek HYDAT station from 1973 to 2013. The argument
+<code>zyp_method</code> is described below in the Analysis Results
+section:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>trends_analysis <span class="ot">&lt;-</span> <span class="fu">compute_annual_trends</span>(<span class="at">station_number =</span> <span class="st">&quot;08NM116&quot;</span>,</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>                                         <span class="at">zyp_method =</span> <span class="st">&quot;zhang&quot;</span>,</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>                                         <span class="at">start_year =</span> <span class="dv">1973</span>, <span class="at">end_year =</span> <span class="dv">2013</span>)</span></code></pre></div>
-<p>The following is an example of the outputted <strong>Annual_Trends_Data</strong> tibble:</p>
+<p>The following is an example of the outputted
+<strong>Annual_Trends_Data</strong> tibble:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>trends_analysis<span class="sc">$</span>Annual_Trends_Data</span></code></pre></div>
-<pre><code># A tibble: 107 x 43
-   STATION_NUMBER Statistic  `1973`  `1974` `1975` `1976`  `1977` `1978`  `1979`
-   &lt;chr&gt;          &lt;fct&gt;       &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;
- 1 08NM116        Annual_M~ 3.77e+1  66     48.7   71.1    36     44.5    43    
- 2 08NM116        Annual_M~ 3.33e+0   8.43   5.48   8.18    4.38   6.75    4.40 
- 3 08NM116        Annual_M~ 9.80e-1   1.34   1.54   3.84    1.26   3.28    1.56 
- 4 08NM116        Annual_M~ 2.50e-2   0.447  0.320  0.736   0.564  0.532   0.411
- 5 08NM116        Annual_P~ 5.49e-1   0.709  0.580  0.884   0.776  0.828   0.618
- 6 08NM116        Annual_P~ 8.83e+0  33.0   19.6   25.6    17.2   19.7    15.9  
- 7 08NM116        Min_1_Day 2.50e-2   0.447  0.320  0.736   0.564  0.532   0.411
- 8 08NM116        Min_1_Da~ 2.93e+2 333     11     38      73     55     268    
- 9 08NM116        Min_3_Day 4.53e-2   0.533  0.378  0.741   0.627  0.630   0.416
-10 08NM116        Min_3_Da~ 2.95e+2 334     39     63     252      3     269    
-# ... with 97 more rows, and 34 more variables: 1980 &lt;dbl&gt;, 1981 &lt;dbl&gt;,
-#   1982 &lt;dbl&gt;, 1983 &lt;dbl&gt;, 1984 &lt;dbl&gt;, 1985 &lt;dbl&gt;, 1986 &lt;dbl&gt;, 1987 &lt;dbl&gt;,
-#   1988 &lt;dbl&gt;, 1989 &lt;dbl&gt;, 1990 &lt;dbl&gt;, 1991 &lt;dbl&gt;, 1992 &lt;dbl&gt;, 1993 &lt;dbl&gt;,
-#   1994 &lt;dbl&gt;, 1995 &lt;dbl&gt;, 1996 &lt;dbl&gt;, 1997 &lt;dbl&gt;, 1998 &lt;dbl&gt;, 1999 &lt;dbl&gt;,
-#   2000 &lt;dbl&gt;, 2001 &lt;dbl&gt;, 2002 &lt;dbl&gt;, 2003 &lt;dbl&gt;, 2004 &lt;dbl&gt;, 2005 &lt;dbl&gt;,
-#   2006 &lt;dbl&gt;, 2007 &lt;dbl&gt;, 2008 &lt;dbl&gt;, 2009 &lt;dbl&gt;, 2010 &lt;dbl&gt;, 2011 &lt;dbl&gt;,
-#   2012 &lt;dbl&gt;, 2013 &lt;dbl&gt;</code></pre>
+<pre><code>  STATION_NUMBER      Statistic     X1973     X1974     X1975     X1976
+1        08NM116 Annual_Maximum 37.700001 66.000000 48.700001 71.099998
+2        08NM116    Annual_Mean  3.330682  8.430181  5.482636  8.180694
+3        08NM116  Annual_Median  0.980000  1.340000  1.540000  3.840000
+4        08NM116 Annual_Minimum  0.025000  0.447000  0.320000  0.736000
+5        08NM116     Annual_P10  0.549000  0.709200  0.580000  0.883500
+6        08NM116     Annual_P90  8.832000 32.979999 19.580000 25.550000
+      X1977     X1978     X1979     X1980     X1981     X1982     X1983
+1 36.000000 44.500000 43.000000 46.200001 60.599998 54.500000 60.200001
+2  4.381567  6.747608  4.401564  5.374555  7.669145  8.458134  7.851918
+3  1.260000  3.280000  1.560000  1.880000  2.770000  2.680000  3.130000
+4  0.564000  0.532000  0.411000  0.623000  0.398000  0.815000  0.530000
+5  0.776000  0.827800  0.618200  0.793000  1.500000  1.404000  1.436000
+6 17.200001 19.700001 15.880000 20.100000 22.340000 30.299999 23.480000
+      X1984     X1985     X1986     X1987     X1988     X1989    X1990
+1 52.400002 52.299999 72.500000 43.400002 37.900002 39.000000 69.90000
+2  7.333208  5.017438  6.347041  2.876137  4.547973  5.442384  9.20929
+3  2.185000  1.380000  1.930000  0.880000  1.560000  1.750000  1.98000
+4  0.735000  0.332000  0.635000  0.274000  0.140000  0.498000  0.56000
+5  1.150000  0.870000  0.937000  0.433400  0.341000  1.020000  1.09000
+6 25.800000 12.760000 14.260000  5.874000 14.750000 17.160001 34.10000
+      X1991     X1992     X1993     X1994    X1995     X1996    X1997     X1998
+1 56.700001 29.799999 58.000000 39.700001 33.10000 53.900002 84.50000 44.700001
+2  7.472605  3.256295  6.927921  6.030022  5.64783  8.041762 11.13412  5.538548
+3  1.740000  1.190000  2.570000  1.260000  2.26000  3.000000  3.95000  1.450000
+4  0.439000  0.436000  0.270000  0.430000  0.55600  0.822000  0.81400  0.490000
+5  0.714600  0.632000  0.650000  0.684000  0.73020  1.465000  1.50000  0.775400
+6 27.080000  8.295000 18.340000 22.700001 20.00000 22.550000 36.62000 18.020000
+      X1999    X2000     X2001     X2002     X2003    X2004     X2005     X2006
+1 52.000000 52.50000 34.599998 59.000000 33.000000 40.10000 54.400002 72.000000
+2  8.134885  6.55276  4.628427  6.274479  3.780022  6.03715  6.760318  6.520671
+3  2.860000  1.92500  1.470000  1.170000  0.856000  3.75500  3.490000  1.200000
+4  0.630000  0.29500  0.485000  0.260000  0.340000  0.49000  0.729000  0.353000
+5  0.846200  0.70000  0.704000  0.532400  0.400000  0.60000  1.164000  0.853000
+6 25.180000 21.75000 15.980000 20.900000 10.860000 16.70000 18.780000 21.740000
+      X2007     X2008     X2009    X2010     X2011     X2012     X2013
+1 39.299999 60.700001 33.099998 39.10000 56.200001 86.199997 81.800003
+2  4.419003  5.112333  3.504414  4.50091  6.235263  8.546167  8.015493
+3  1.710000  1.185000  1.110000  1.24000  1.220000  1.580000  2.050000
+4  0.420000  0.440000  0.376000  0.42700  0.520000  0.518000  0.609000
+5  0.560000  0.577500  0.600400  0.53880  0.741200  0.633000  0.884000
+6 14.060000 18.500000 10.200000 14.74000 28.980000 29.950000 27.500000</code></pre>
 </div>
 </div>
 <div id="analysis-results" class="section level3">
 <h3>Analysis Results</h3>
-<p>To complete a trends analysis, a variable to the <code>zyp_method</code> argument must be provided, either <code>&quot;zhang&quot;</code> or <code>&quot;yuepilon&quot;</code>, designating the two different approaches to analyzing data for trends. The <code>zhang</code> method is recommended for hydrologic applications over <code>yuepilon</code> (see <code>zyp</code> documentation for more information on the differences between the two methods). After running the function, the results of the trending analysis will be outputted in the <strong>Annual_Trends_Results</strong> tibble data frame. See the <code>zyp</code> documentation for how to interpret the results. The results tibble contains the following columns:</p>
+<p>To complete a trends analysis, a variable to the
+<code>zyp_method</code> argument must be provided, either
+<code>&quot;zhang&quot;</code> or <code>&quot;yuepilon&quot;</code>, designating the two
+different approaches to analyzing data for trends. The
+<code>zhang</code> method is recommended for hydrologic applications
+over <code>yuepilon</code> (see <code>zyp</code> documentation for more
+information on the differences between the two methods). After running
+the function, the results of the trending analysis will be outputted in
+the <strong>Annual_Trends_Results</strong> tibble data frame. See the
+<code>zyp</code> documentation for how to interpret the results. The
+results tibble contains the following columns:</p>
 <table>
 <colgroup>
 <col width="16%" />
@@ -408,7 +707,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tr>
 <tr class="even">
 <td>lbound</td>
-<td>the lower bound of the trend’s confidence interval (<code>zyp</code>)</td>
+<td>the lower bound of the trend’s confidence interval
+(<code>zyp</code>)</td>
 </tr>
 <tr class="odd">
 <td>trend</td>
@@ -420,27 +720,33 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tr>
 <tr class="odd">
 <td>ubound</td>
-<td>the upper bound of the trend’s confidence interval (<code>zyp</code>)</td>
+<td>the upper bound of the trend’s confidence interval
+(<code>zyp</code>)</td>
 </tr>
 <tr class="even">
 <td>tau</td>
-<td>Kendall’s tau statistic computed on the final detrended timeseries (<code>zyp</code>)</td>
+<td>Kendall’s tau statistic computed on the final detrended timeseries
+(<code>zyp</code>)</td>
 </tr>
 <tr class="odd">
 <td>sig</td>
-<td>Kendall’s P-value computed for the final detrended timeseries (<code>zyp</code>)</td>
+<td>Kendall’s P-value computed for the final detrended timeseries
+(<code>zyp</code>)</td>
 </tr>
 <tr class="even">
 <td>nruns</td>
-<td>the number of runs required to converge upon a trend (<code>zyp</code>)</td>
+<td>the number of runs required to converge upon a trend
+(<code>zyp</code>)</td>
 </tr>
 <tr class="odd">
 <td>autocor</td>
-<td>the autocorrelation of the final detrended timeseries (<code>zyp</code>)</td>
+<td>the autocorrelation of the final detrended timeseries
+(<code>zyp</code>)</td>
 </tr>
 <tr class="even">
 <td>valid_frac</td>
-<td>the fraction of the data which is valid (not NA) once autocorrelation is removed (<code>zyp</code>)</td>
+<td>the fraction of the data which is valid (not NA) once
+autocorrelation is removed (<code>zyp</code>)</td>
 </tr>
 <tr class="odd">
 <td>linear</td>
@@ -480,30 +786,48 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tr>
 </tbody>
 </table>
-<p>The following is an example of the outputted <strong>Annual_Trends_Results</strong> tibble from the Mission Creek HYDAT station from 1973 to 2013:</p>
+<p>The following is an example of the outputted
+<strong>Annual_Trends_Results</strong> tibble from the Mission Creek
+HYDAT station from 1973 to 2013:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>trends_analysis<span class="sc">$</span>Annual_Trends_Results</span></code></pre></div>
-<pre><code># A tibble: 107 x 20
-   STATION_NUMBER Statistic        lbound    trend  trendp  ubound     tau   sig
-   &lt;chr&gt;          &lt;fct&gt;             &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;
- 1 08NM116        Annual_Maximum -0.368    5.71e-2  2.34   0.517    0.0403 0.719
- 2 08NM116        Annual_Mean    -0.0742  -2.10e-2 -0.862  0.0385  -0.0718 0.522
- 3 08NM116        Annual_Median  -0.0353  -1.25e-2 -0.512  0.00769 -0.141  0.204
- 4 08NM116        Annual_Minimum -0.00667 -9.81e-4 -0.0402 0.00409 -0.0487 0.666
- 5 08NM116        Annual_P10     -0.0175  -6.39e-3 -0.262  0.00570 -0.105  0.345
- 6 08NM116        Annual_P90     -0.256   -3.03e-2 -1.24   0.199   -0.0333 0.771
- 7 08NM116        Min_1_Day      -0.00667 -9.81e-4 -0.0402 0.00409 -0.0487 0.666
- 8 08NM116        Min_1_Day_DoY  -0.5      1.74e+0 71.3    6.55     0.151  0.170
- 9 08NM116        Min_3_Day      -0.00694 -1.22e-3 -0.0501 0.00534 -0.0282 0.807
-10 08NM116        Min_3_Day_DoY  -1.65     7.57e-1 31.0    3        0.0758 0.493
-# ... with 97 more rows, and 12 more variables: nruns &lt;dbl&gt;, autocor &lt;dbl&gt;,
-#   valid_frac &lt;dbl&gt;, linear &lt;dbl&gt;, intercept &lt;dbl&gt;, min_year &lt;dbl&gt;,
-#   max_year &lt;dbl&gt;, n_years &lt;int&gt;, mean &lt;dbl&gt;, median &lt;dbl&gt;, min &lt;dbl&gt;,
-#   max &lt;dbl&gt;</code></pre>
+<pre><code>  STATION_NUMBER      Statistic       lbound         trend      trendp
+1        08NM116 Annual_Maximum -0.367741985  0.0570881358  2.34061357
+2        08NM116    Annual_Mean -0.074223140 -0.0210267951 -0.86209860
+3        08NM116  Annual_Median -0.035271167 -0.0124904912 -0.51211014
+4        08NM116 Annual_Minimum -0.006666193 -0.0009808113 -0.04021326
+5        08NM116     Annual_P10 -0.017499298 -0.0063876706 -0.26189449
+6        08NM116     Annual_P90 -0.255726706 -0.0302831595 -1.24160954
+       ubound         tau       sig nruns    autocor valid_frac        linear
+1 0.516666624  0.04026846 0.7192625     1 0.01369972          1  0.1380313468
+2 0.038457647 -0.07179487 0.5216482     4 0.08209108          1 -0.0019323059
+3 0.007693643 -0.14102565 0.2040979     3 0.06425806          1 -0.0088832751
+4 0.004085118 -0.04871795 0.6664041     3 0.08438438          1  0.0004937281
+5 0.005695283 -0.10512821 0.3453057     4 0.47516686          1 -0.0049319510
+6 0.199289847 -0.03333334 0.7708403     3 0.13185011          1  0.0101482580
+   intercept min_year max_year n_years       mean    median       min      max
+1 50.9015322     1973     2013      41 51.9585367 52.299999 29.799999 86.20000
+2  6.9349162     1973     2013      41  6.1988672  6.235263  2.876137 11.13412
+3  1.9761653     1973     2013      41  1.9552683  1.710000  0.856000  3.95000
+4  0.5002090     1973     2013      41  0.4810732  0.485000  0.025000  0.82200
+5  0.8558584     1973     2013      41  0.8147268  0.730200  0.341000  1.50000
+6 20.3637020     1973     2013      41 20.2456342 19.700001  5.874000 36.62000</code></pre>
 </div>
 <div id="annual-trends-plots" class="section level3">
 <h3>Annual Trends Plots</h3>
-<p>To provide the ability to visualize the trends, a time-series plot for each metric is provided when <code>include_plots = TRUE</code> (default; set it to <code>FALSE</code> to produce no plots). Each plot will show the annual value for all years and if a numerical <code>zyp_alpha</code> value, a significance level indicating the trend exists, is provided (typically <code>0.05</code>) then a trend line of the calculated Sen’s Slope will also be plotted through the data. To plot no slopes, set <code>zyp_alpha = NA</code> (default) and to plot the lines regardless of significance, set <code>zyp_alpha = 1</code>. The metric name along with the significance level will be included as the title of the plot.</p>
-<p>The following plots demonstrate examples of where the <code>zyp_alpha</code> value is set to 0.05 and Sen’s Slopes trends are not and are significant, respectively.</p>
+<p>To provide the ability to visualize the trends, a time-series plot
+for each metric is provided when <code>include_plots = TRUE</code>
+(default; set it to <code>FALSE</code> to produce no plots). Each plot
+will show the annual value for all years and if a numerical
+<code>zyp_alpha</code> value, a significance level indicating the trend
+exists, is provided (typically <code>0.05</code>) then a trend line of
+the calculated Sen’s Slope will also be plotted through the data. To
+plot no slopes, set <code>zyp_alpha = NA</code> (default) and to plot
+the lines regardless of significance, set <code>zyp_alpha = 1</code>.
+The metric name along with the significance level will be included as
+the title of the plot.</p>
+<p>The following plots demonstrate examples of where the
+<code>zyp_alpha</code> value is set to 0.05 and Sen’s Slopes trends are
+not and are significant, respectively.</p>
 <p><img src="data:image/png;base64,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" /><!-- --></p>
 <p><img src="data:image/png;base64,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" /><!-- --></p>
 </div>
