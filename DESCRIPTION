@@ -1,6 +1,6 @@
 Package: fasstr
 Title: Analyze, Summarize, and Visualize Daily Streamflow Data
-Version: 0.5.0
+Version: 0.5.1
 Authors@R: c(person("Jon", "Goetz", email = "jon.goetz@gov.bc.ca", role = c("aut", "cre"),
              comment = c(ORCID = "0000-0002-4993-1119")), 
              person("Carl James", "Schwarz", email = "cschwarz.stat.sfu.ca@gmail.com", role = "aut"),
@@ -12,8 +12,7 @@ Description: The Flow Analysis Summary Statistics Tool for R, 'fasstr', provides
      It features useful function arguments for filtering of and handling dates, customizing data and metrics, and the ability to pull daily data directly from the Water Survey of Canada hydrometric database (<https://collaboration.cmc.ec.gc.ca/cmc/hydrometrics/www/>).
 Depends: R (>= 3.3.0)
 License: Apache License 2.0
-URL: https://bcgov.github.io/fasstr/, https://github.com/bcgov/fasstr,
-        https://www2.gov.bc.ca/gov/content/environment/air-land-water/water
+URL: https://bcgov.github.io/fasstr/, https://github.com/bcgov/fasstr
 BugReports: https://github.com/bcgov/fasstr/issues
 Encoding: UTF-8
 Imports: dplyr (>= 0.8.1), e1071 (>= 1.7.0.1), fitdistrplus (>=
@@ -22,10 +21,10 @@ Imports: dplyr (>= 0.8.1), e1071 (>= 1.7.0.1), fitdistrplus (>=
         RcppRoll (>= 0.3.0), scales (>= 1.0.0), tidyhydat (>= 0.4.0),
         tidyr (>= 0.8.3), zyp (>= 0.10.1.1)
 Suggests: knitr, rmarkdown, testthat
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
 VignetteBuilder: knitr
 NeedsCompilation: no
-Packaged: 2022-10-21 18:50:48 UTC; JGOETZ
+Packaged: 2023-03-22 18:08:26 UTC; JGOETZ
 Author: Jon Goetz [aut, cre] (<https://orcid.org/0000-0002-4993-1119>),
   Carl James Schwarz [aut],
   Sam Albers [ctb] (<https://orcid.org/0000-0002-9270-7884>),
@@ -33,4 +32,4 @@ Author: Jon Goetz [aut, cre] (<https://orcid.org/0000-0002-4993-1119>),
   Province of British Columbia [cph]
 Maintainer: Jon Goetz <jon.goetz@gov.bc.ca>
 Repository: CRAN
-Date/Publication: 2022-10-21 19:15:06 UTC
+Date/Publication: 2023-03-22 18:30:03 UTC
