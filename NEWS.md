@@ -1,3 +1,14 @@
+fasstr 0.5.2
+=========================
+
+Updated: 27 Mar 2024
+
+### Bug fixes:
+
+  * added workaround for issue with scales::cut_short_scale() bug caused by scales 1.3.0. https://github.com/r-lib/scales/issues/413. Fix works with previous and new versions of scales.
+  
+
+  
 fasstr 0.5.1
 =========================
 

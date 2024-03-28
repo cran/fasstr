@@ -3,7 +3,7 @@ knitr::opts_chunk$set(eval = nzchar(Sys.getenv('hydat_eval')))
 library(fasstr)
 
 
-## ---- eval=FALSE--------------------------------------------------------------
+## ----eval=FALSE---------------------------------------------------------------
 #  # Check if data is provided and import it
 #  flow_data <- flowdata_import(data = data,
 #                               station_number = station_number)
@@ -19,7 +19,7 @@ library(fasstr)
 #                               groups = as.character(substitute(groups)),
 #                               rm_other_cols = TRUE)
 
-## ---- eval=FALSE--------------------------------------------------------------
+## ----eval=FALSE---------------------------------------------------------------
 #  ## SET UP BASIN AREA
 #  suppressWarnings(flow_data <- add_basin_area(flow_data, basin_area = basin_area))
 #  flow_data$Basin_Area_sqkm_temp <- flow_data$Basin_Area_sqkm
@@ -44,7 +44,7 @@ library(fasstr)
 #  
 #  dplyr::as_tibble(flow_data)
 
-## ---- eval=FALSE--------------------------------------------------------------
+## ----eval=FALSE---------------------------------------------------------------
 #  # Fill missing dates, add date variables
 #  flow_data <- analysis_prep(data = flow_data,
 #                             water_year_start = water_year_start)
@@ -53,12 +53,12 @@ library(fasstr)
 #  flow_data <- add_rolling_means(data = flow_data, roll_days = roll_days, roll_align = roll_align)
 #  colnames(flow_data)[ncol(flow_data)] <- 'RollingValue'
 
-## ---- eval=FALSE--------------------------------------------------------------
+## ----eval=FALSE---------------------------------------------------------------
 #  # Filter for the selected year (remove excluded years after)
 #  flow_data <- dplyr::filter(flow_data, WaterYear >= start_year & WaterYear <= end_year)
 #  flow_data <- dplyr::filter(flow_data, Month %in% months)
 
-## ---- eval=FALSE--------------------------------------------------------------
+## ----eval=FALSE---------------------------------------------------------------
 #  # Calculate basic stats
 #  annual_stats <-   dplyr::summarize(dplyr::group_by(flow_data, STATION_NUMBER, WaterYear),
 #                                     Mean = mean(RollingValue, na.rm = ignore_missing),
@@ -89,7 +89,7 @@ library(fasstr)
 #    }
 #  }
 
-## ---- eval=FALSE--------------------------------------------------------------
+## ----eval=FALSE---------------------------------------------------------------
 #  # Rename year column
 #  annual_stats <- dplyr::rename(annual_stats, Year = WaterYear)
 #  
@@ -124,7 +124,7 @@ library(fasstr)
 #  
 #  dplyr::as_tibble(annual_stats)
 
-## ---- fig.height = 3, fig.width = 7, comment=NA-------------------------------
+## ----fig.height = 3, fig.width = 7, comment=NA--------------------------------
 # Calculate the statistics
 annual_stats <- calc_annual_stats(station_number = c('08NM116', '08NM240'),
                                   start_year = 1985, end_year = 2015)

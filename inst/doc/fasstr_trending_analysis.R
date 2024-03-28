@@ -1,15 +1,15 @@
 ## ----options, include=FALSE---------------------------------------------------
 knitr::opts_chunk$set(eval = nzchar(Sys.getenv("hydat_eval")))
 
-## ---- include=FALSE-----------------------------------------------------------
+## ----include=FALSE------------------------------------------------------------
 library(fasstr)
 
-## ---- eval=FALSE--------------------------------------------------------------
+## ----eval=FALSE---------------------------------------------------------------
 #  compute_annual_trends(station_number = "08NM116",
 #                        zyp_method = "zhang",
 #                        start_year = 1973, end_year = 2013)
 
-## ---- eval=FALSE--------------------------------------------------------------
+## ----eval=FALSE---------------------------------------------------------------
 #  compute_annual_trends(station_number = "08NM116",
 #                        zyp_method = "zhang",
 #                        start_year = 1973, end_year = 2013,
@@ -22,13 +22,13 @@ library(fasstr)
 #                        timing_percent = c(25,33,50,75),
 #                        normal_percentiles = c(25,75))
 
-## ---- eval=FALSE--------------------------------------------------------------
+## ----eval=FALSE---------------------------------------------------------------
 #  compute_annual_trends(station_number = "08NM116",
 #                        zyp_method = "zhang",
 #                        start_year = 1973, end_year = 2013,
 #                        months = 5:9)
 
-## ---- comment=NA, echo=FALSE--------------------------------------------------
+## ----comment=NA, echo=FALSE---------------------------------------------------
 trends <- compute_annual_trends(station_number = "08NM116",
                                 zyp_method = "zhang",
                                 start_year = 1973, end_year = 2013)
@@ -39,35 +39,35 @@ data[3] <- round(data[3],3)
 data[4] <- round(data[4],3)
 data
 
-## ---- echo=TRUE, include=TRUE-------------------------------------------------
+## ----echo=TRUE, include=TRUE--------------------------------------------------
 trends_analysis <- compute_annual_trends(station_number = "08NM116",
                                          zyp_method = "zhang",
                                          start_year = 1973, end_year = 2013)
 
-## ---- echo=TRUE, comment=NA,eval=FALSE----------------------------------------
+## ----echo=TRUE, comment=NA,eval=FALSE-----------------------------------------
 #  trends_analysis$Annual_Trends_Data
 
-## ---- comment=NA, echo=FALSE--------------------------------------------------
+## ----comment=NA, echo=FALSE---------------------------------------------------
 data.frame(head(
   trends_analysis$Annual_Trends_Data
 ))
 
-## ---- echo=TRUE, comment=NA, eval=FALSE---------------------------------------
+## ----echo=TRUE, comment=NA, eval=FALSE----------------------------------------
 #  trends_analysis$Annual_Trends_Results
 
-## ---- comment=NA, echo=FALSE--------------------------------------------------
+## ----comment=NA, echo=FALSE---------------------------------------------------
 data.frame(head(
   trends_analysis$Annual_Trends_Results
 ))
 
-## ---- echo = FALSE, include=FALSE---------------------------------------------
+## ----echo = FALSE, include=FALSE----------------------------------------------
 trends <- compute_annual_trends(station_number = "08NM116",
                                 zyp_method = "zhang", zyp_alpha = 0.05,
                                 start_year = 1973, end_year = 2013)
 
-## ----  echo=FALSE, comment=NA, fig.height = 3, fig.width = 7------------------
+## ----echo=FALSE, comment=NA, fig.height = 3, fig.width = 7--------------------
 trends[[51]]
 
-## ----  echo=FALSE, comment=NA, fig.height = 3, fig.width = 7------------------
+## ----echo=FALSE, comment=NA, fig.height = 3, fig.width = 7--------------------
 trends$`Sep_Maximum`
 

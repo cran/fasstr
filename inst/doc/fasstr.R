@@ -4,14 +4,14 @@ knitr::opts_chunk$set(eval = nzchar(Sys.getenv("hydat_eval")),
 message = FALSE)
 library(fasstr)
 
-## ---- echo=TRUE, eval=FALSE---------------------------------------------------
+## ----echo=TRUE, eval=FALSE----------------------------------------------------
 #  install.packages("fasstr")
 
-## ---- echo=TRUE, eval=FALSE---------------------------------------------------
+## ----echo=TRUE, eval=FALSE----------------------------------------------------
 #  if(!requireNamespace("remotes")) install.packages("remotes")
 #  remotes::install_github("bcgov/fasstr")
 
-## ---- echo=TRUE, eval=FALSE---------------------------------------------------
+## ----echo=TRUE, eval=FALSE----------------------------------------------------
 #  tidyhydat::download_hydat()
 
 ## ----setup, include = FALSE---------------------------------------------------

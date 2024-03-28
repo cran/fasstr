@@ -489,27 +489,27 @@ included in the results if not all 12 months are selected.</p>
 <div id="examples" class="section level4">
 <h4>Examples</h4>
 <p>Example with default arguments:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">compute_annual_trends</span>(<span class="at">station_number =</span> <span class="st">&quot;08NM116&quot;</span>,</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">zyp_method =</span> <span class="st">&quot;zhang&quot;</span>,</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>                      <span class="at">start_year =</span> <span class="dv">1973</span>, <span class="at">end_year =</span> <span class="dv">2013</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">compute_annual_trends</span>(<span class="at">station_number =</span> <span class="st">&quot;08NM116&quot;</span>,</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>                      <span class="at">zyp_method =</span> <span class="st">&quot;zhang&quot;</span>,</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>                      <span class="at">start_year =</span> <span class="dv">1973</span>, <span class="at">end_year =</span> <span class="dv">2013</span>)</span></code></pre></div>
 <p>Example with custom arguments:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">compute_annual_trends</span>(<span class="at">station_number =</span> <span class="st">&quot;08NM116&quot;</span>,</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">zyp_method =</span> <span class="st">&quot;zhang&quot;</span>,</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                      <span class="at">start_year =</span> <span class="dv">1973</span>, <span class="at">end_year =</span> <span class="dv">2013</span>,</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>                      <span class="at">annual_percentiles =</span> <span class="fu">c</span>(<span class="dv">10</span>,<span class="dv">90</span>),</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>                      <span class="at">monthly_percentiles =</span> <span class="fu">c</span>(<span class="dv">10</span>,<span class="dv">20</span>),</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>                      <span class="at">stats_days =</span> <span class="dv">1</span>,</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>                      <span class="at">stats_align =</span> <span class="st">&quot;right&quot;</span>,</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>                      <span class="at">lowflow_days =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">7</span>,<span class="dv">30</span>),</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>                      <span class="at">lowflow_align =</span> <span class="st">&quot;right&quot;</span>,</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>                      <span class="at">timing_percent =</span> <span class="fu">c</span>(<span class="dv">25</span>,<span class="dv">33</span>,<span class="dv">50</span>,<span class="dv">75</span>),</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>                      <span class="at">normal_percentiles =</span> <span class="fu">c</span>(<span class="dv">25</span>,<span class="dv">75</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">compute_annual_trends</span>(<span class="at">station_number =</span> <span class="st">&quot;08NM116&quot;</span>,</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>                      <span class="at">zyp_method =</span> <span class="st">&quot;zhang&quot;</span>,</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>                      <span class="at">start_year =</span> <span class="dv">1973</span>, <span class="at">end_year =</span> <span class="dv">2013</span>,</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>                      <span class="at">annual_percentiles =</span> <span class="fu">c</span>(<span class="dv">10</span>,<span class="dv">90</span>),</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>                      <span class="at">monthly_percentiles =</span> <span class="fu">c</span>(<span class="dv">10</span>,<span class="dv">20</span>),</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>                      <span class="at">stats_days =</span> <span class="dv">1</span>,</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>                      <span class="at">stats_align =</span> <span class="st">&quot;right&quot;</span>,</span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>                      <span class="at">lowflow_days =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">7</span>,<span class="dv">30</span>),</span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>                      <span class="at">lowflow_align =</span> <span class="st">&quot;right&quot;</span>,</span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>                      <span class="at">timing_percent =</span> <span class="fu">c</span>(<span class="dv">25</span>,<span class="dv">33</span>,<span class="dv">50</span>,<span class="dv">75</span>),</span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>                      <span class="at">normal_percentiles =</span> <span class="fu">c</span>(<span class="dv">25</span>,<span class="dv">75</span>))</span></code></pre></div>
 <p>Example with custom months arguments that will trend data only from
 May through September:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">compute_annual_trends</span>(<span class="at">station_number =</span> <span class="st">&quot;08NM116&quot;</span>,</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">zyp_method =</span> <span class="st">&quot;zhang&quot;</span>,</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>                      <span class="at">start_year =</span> <span class="dv">1973</span>, <span class="at">end_year =</span> <span class="dv">2013</span>,</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>                      <span class="at">months =</span> <span class="dv">5</span><span class="sc">:</span><span class="dv">9</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">compute_annual_trends</span>(<span class="at">station_number =</span> <span class="st">&quot;08NM116&quot;</span>,</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>                      <span class="at">zyp_method =</span> <span class="st">&quot;zhang&quot;</span>,</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>                      <span class="at">start_year =</span> <span class="dv">1973</span>, <span class="at">end_year =</span> <span class="dv">2013</span>,</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>                      <span class="at">months =</span> <span class="dv">5</span><span class="sc">:</span><span class="dv">9</span>)</span></code></pre></div>
 <p>This annual data is provided in the
 <strong>Annual_Trends_Data</strong> tibble objects. The following is an
 example of the output, including all the annual metrics and a first few
@@ -626,12 +626,12 @@ years of data used for the <code>zyp</code> trends analysis:</p>
 a Mission Creek HYDAT station from 1973 to 2013. The argument
 <code>zyp_method</code> is described below in the Analysis Results
 section:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>trends_analysis <span class="ot">&lt;-</span> <span class="fu">compute_annual_trends</span>(<span class="at">station_number =</span> <span class="st">&quot;08NM116&quot;</span>,</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>                                         <span class="at">zyp_method =</span> <span class="st">&quot;zhang&quot;</span>,</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>                                         <span class="at">start_year =</span> <span class="dv">1973</span>, <span class="at">end_year =</span> <span class="dv">2013</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>trends_analysis <span class="ot">&lt;-</span> <span class="fu">compute_annual_trends</span>(<span class="at">station_number =</span> <span class="st">&quot;08NM116&quot;</span>,</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>                                         <span class="at">zyp_method =</span> <span class="st">&quot;zhang&quot;</span>,</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>                                         <span class="at">start_year =</span> <span class="dv">1973</span>, <span class="at">end_year =</span> <span class="dv">2013</span>)</span></code></pre></div>
 <p>The following is an example of the outputted
 <strong>Annual_Trends_Data</strong> tibble:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>trends_analysis<span class="sc">$</span>Annual_Trends_Data</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>trends_analysis<span class="sc">$</span>Annual_Trends_Data</span></code></pre></div>
 <pre><code>  STATION_NUMBER      Statistic     X1973     X1974     X1975     X1976
 1        08NM116 Annual_Maximum 37.700001 66.000000 48.700001 71.099998
 2        08NM116    Annual_Mean  3.330682  8.430181  5.482636  8.180694
@@ -789,7 +789,7 @@ autocorrelation is removed (<code>zyp</code>)</td>
 <p>The following is an example of the outputted
 <strong>Annual_Trends_Results</strong> tibble from the Mission Creek
 HYDAT station from 1973 to 2013:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>trends_analysis<span class="sc">$</span>Annual_Trends_Results</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>trends_analysis<span class="sc">$</span>Annual_Trends_Results</span></code></pre></div>
 <pre><code>  STATION_NUMBER      Statistic       lbound         trend     trendp
 1        08NM116 Annual_Maximum -0.367741985  0.0570881358  2.3406136
 2        08NM116    Annual_Mean -0.074223160 -0.0210267927 -0.8620985
