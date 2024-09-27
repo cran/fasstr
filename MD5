@@ -1,6 +1,6 @@
-9c4a5f3fa391b72426f7c850278385a8 *DESCRIPTION
+f9bef3be34c31be72ac11c2e31205abc *DESCRIPTION
 d0c05571a19a41b94eeaacf0e221efe0 *NAMESPACE
-629881057ea79f2ac68211a4d518d29d *NEWS.md
+6ab925c927b298a8703774d90aaacad6 *NEWS.md
 17ad7bc93efc0cd9b09314370426c5ff *R/add_basin_area.R
 8162edf1f58ad4de4b880524e2cd994e *R/add_cumulative_volume.R
 c18e61eb2be5eced90ea3e455c1495b9 *R/add_cumulative_yield.R
@@ -30,7 +30,7 @@ ab663948f1e2a42adbec41c305d8c833 *R/calc_longterm_monthly_stats.R
 e3135937d3e168cf8919a7f2937380c0 *R/calc_monthly_stats.R
 d14ec6813ecde9f945868f7d64f8f5de *R/compute_annual_frequencies.R
 46bcfdfc0704fe3fbf0d26cd940ebbd7 *R/compute_annual_trends.R
-5b69b560ddc2692929b36541e7d2044d *R/compute_frequency_analysis.R
+749a95c7e0ed33f63450077f5ca35fe6 *R/compute_frequency_analysis.R
 15902f54eadf4ed3b18ad401712512b5 *R/compute_frequency_quantile.R
 13cd59b3f0194b327743a0832e87c3f8 *R/compute_full_analysis.R
 ff59026ecb16ff69c262f2b30bcb051c *R/compute_hydat_peak_frequencies.R
@@ -71,13 +71,13 @@ ef0f5716b43b15e5122fa7c5eea7b2a5 *R/plot_monthly_stats2.R
 3e43a227e264988cfea7afaab022bd2d *R/write_plots.R
 7e0b27444351481e22c633a83af0e93d *R/write_results.R
 b0cc0183ecc62843a7bb9e940b181409 *R/zzz.R
-13c7c71769b7281e4af7ae15ca51dd1c *build/vignette.rds
+f1ac702519b6cc66ff6f30c6704d6d0e *build/vignette.rds
 db19e322d9ada99f8963eca12b133050 *inst/doc/fasstr.R
 68530d3bf84ae36bf310392febc34a56 *inst/doc/fasstr.Rmd
 c1c252d7cbef965a26ceb3ec1d30813c *inst/doc/fasstr.html
 0b2c12b2690d647c4f75b779495d3ef0 *inst/doc/fasstr_frequency_analysis.R
 9be3528ad92b7fcd1445d21396573c35 *inst/doc/fasstr_frequency_analysis.Rmd
-1f0df236d60bcc0d474e704f61a9f5ea *inst/doc/fasstr_frequency_analysis.html
+c2f9ffa14103a6a71ba6933994a42fa1 *inst/doc/fasstr_frequency_analysis.html
 da1883373a604941ceb142f94d3505b4 *inst/doc/fasstr_full_analysis.R
 eb7918dfc0d957049065697a49333f21 *inst/doc/fasstr_full_analysis.Rmd
 f4ef5fb4d7f9cf04054f1beca5c90144 *inst/doc/fasstr_full_analysis.html
@@ -89,7 +89,7 @@ c4d0e31702c4a20b70e0601f24af474c *inst/doc/fasstr_under_the_hood.Rmd
 22275663c4518aa634d2e1f995a4a71f *inst/doc/fasstr_under_the_hood.html
 8a71c7656457f4c66dff30722800fe2c *inst/doc/fasstr_users_guide.R
 cb01a4a3717b48f54b67a9239d8dbd8e *inst/doc/fasstr_users_guide.Rmd
-e8e5ae79c3a3fb246aacb3b125294a1d *inst/doc/fasstr_users_guide.html
+c2caf7df402fbb561d1278359d3f5567 *inst/doc/fasstr_users_guide.html
 32dc268dd42c9701231cbf42a833017a *man/add_basin_area.Rd
 4d604f0bce34dd179341b19c17d48fc7 *man/add_cumulative_volume.Rd
 7c0c46da1627e3b6d84b4c56c29ba81b *man/add_cumulative_yield.Rd
